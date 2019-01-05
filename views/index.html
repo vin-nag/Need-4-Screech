@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>COMP 4770</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    </head>
+    <body>
+        <p>Hello World!</p>
+        <script type="text/javascript">
+            const socket = io();
+            socket.on('connect', () => console.log("Connected to socket"));
+            socket.on('disconnect', () => console.log("Disconnected from socket"));     
+        </script>
+    </body>
+</html>
