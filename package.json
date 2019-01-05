@@ -1,0 +1,22 @@
+{
+  "name": "comp4770",
+  "version": "1.0.0",
+  "description": "MUN Winter 2019 COMP 4770 Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moustafaelsisy/COMP4770.git"
+  },
+  "author": "Alaa Ibrahim, Liam Reardon, Moustafa Elsisy, Vineel Nagisetty",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/moustafaelsisy/COMP4770/issues"
+  },
+  "homepage": "https://github.com/moustafaelsisy/COMP4770#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
