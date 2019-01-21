@@ -12,4 +12,4 @@ Make sure you have [node and npm installed](https://nodejs.org)
 
 ## Authors
 
-Alaa, Liam, Moustafa, Vineel
+Alaa, Liam, Moustafa, Vineel, Riley
