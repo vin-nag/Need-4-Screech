@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/moustafaelsisy/COMP4770#readme",
   "dependencies": {
+    "bootstrap": "^3.4.0",
     "express": "^4.16.4",
     "mongojs": "^2.6.0",
     "socket.io": "^2.2.0"
