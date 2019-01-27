@@ -1,7 +1,7 @@
 const express = require("express")
 const http = require("http")
 const socketio = require("socket.io")
-const controllers = require("./controllers")
+const controllers = require("./backend/controllers")
 
 const app = express()
 app.use(controllers)

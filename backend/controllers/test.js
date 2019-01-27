@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
         if(err) console.error(err)
     })
 
-    res.sendFile(path.resolve(`${__dirname}/../views/index.html`))
+    res.sendFile(path.resolve(`${__dirname}/../../frontend/views/index.html`))
 })
 
 module.exports = router
