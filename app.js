@@ -1,17 +1,14 @@
 const express = require("express")
 const http = require("http")
 const socketio = require("socket.io")
-const controllers = require("./backend/controllers")
+const httpControllers = require("./backend/controllers/http")
+const socketControllers = require("./backend/controllers/socket")
 
 const app = express()
-app.use(controllers)
+app.use(httpControllers)
 
 const server = http.createServer(app)
 const io = socketio(server)
-
-io.on("connection", client => {
-    console.log("Client connected")
-    client.on("disconnect", () => console.log("Client disconnected"))
-})
+socketControllers.listen(io)
 
 server.listen(3000, () => console.log("Running on port 3000..."))
