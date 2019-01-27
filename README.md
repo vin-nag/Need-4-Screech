@@ -9,7 +9,8 @@ Make sure you have [node and npm installed](https://nodejs.org)
 3. `npm install`
 4. `cp config-template.json config.json`
 5. Fill in the empty fields in the `config.json` file
-6. `node app.js`
+6. `npm run build` to bundle up the frontend
+7. `npm run start` to run the server
 7. Go to `localhost:3000` or `localhost:3000/test`
 
 ## Authors
