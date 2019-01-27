@@ -1,10 +1,12 @@
 const express = require("express")
 const http = require("http")
+const path = require("path")
 const socketio = require("socket.io")
 const httpControllers = require("./backend/controllers/http")
 const socketControllers = require("./backend/controllers/socket")
 
 const app = express()
+app.use(express.static(path.join(__dirname, 'frontend/js/dist'))) //static resource
 app.use(httpControllers)
 
 const server = http.createServer(app)

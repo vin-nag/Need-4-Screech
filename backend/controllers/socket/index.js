@@ -15,9 +15,9 @@ const connectControllers = (socket) => {
     //connectController and disconnectController should not expect
     //data payloads
     
-    connectController()
-    socket.on("disconnect", () => disconnectController())
-    socket.on("test", data => testController(data))
+    connectController(socket)
+    socket.on("disconnect", () => disconnectController(socket))
+    socket.on("test", data => testController(socket, data))
 }
 
 module.exports = {

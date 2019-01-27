@@ -1,5 +1,5 @@
 
-const controller = () => {
+const controller = (socket) => {
     console.log("Client disconnected")
 }
 
