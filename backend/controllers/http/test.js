@@ -1,6 +1,7 @@
 const express = require("express")
 const path = require("path")
-const { db, mongoUid } = require("../services/db")
+const { db, mongoUid } = require("../../services/db")
+const ResponseService = require("../../services/ResponseService")
 
 const router = express.Router()
 
@@ -14,7 +15,7 @@ router.get("/", (req, res) => {
         if(err) console.error(err)
     })
 
-    res.sendFile(path.resolve(`${__dirname}/../views/index.html`))
+    ResponseService.sendView(res, "index.html")
 })
 
 module.exports = router
