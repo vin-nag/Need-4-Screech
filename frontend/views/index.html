@@ -28,11 +28,8 @@
 <!--===============================================================================================-->
 </head>
 <body>
-
-    
-
     <!-- login form -->
-    <div class="signIn">
+    <div id="signIn" style="display: block;">
     
         <div class="limiter">
             <div class="container-login100">
@@ -72,7 +69,7 @@
                                 Don’t have an account?
                             </span>
 
-                            <a href="#" class="txt3 bo1 hov1">
+                            <a href="#" class="txt3 bo1 hov1" onclick="return toggle();">
                                 Sign up now
                             </a>
                         </div>
@@ -84,7 +81,7 @@
     </div>
 
     <!-- Registration form -->
-    <div class="signUp" style="display: none;">
+    <div id="signUp" style="display: none;">
     
         <div class="limiter">
             <div class="container-login100">
@@ -122,25 +119,45 @@
 
                         <div class="container-login100-form-btn">
                             <button class="login100-form-btn">
-                                Login
+                                Sign Up
                             </button>
                         </div>
                         
                         <div class="flex-col-c p-t-224">
                             <span class="txt2 p-b-10">
-                                Don’t have an account?
+                                Already have an account?
                             </span>
 
-                            <a href="#" class="txt3 bo1 hov1">
-                                Sign up now
+                            <a href="#" class="txt3 bo1 hov1" onclick="return toggle();">
+                                Login
                             </a>
                         </div>
-                        
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- toggle login / sign up -->
+    <script> 
+        function toggle() { 
+
+            if(document.getElementById('signIn').style.display=='none') { 
+                document.getElementById('signIn').style.display='block'; 
+            } 
+            else if (document.getElementById('signIn').style.display=='block') { 
+                document.getElementById('signIn').style.display='none'; 
+            } 
+            if(document.getElementById('signUp').style.display=='none') { 
+                document.getElementById('signUp').style.display='block'; 
+            } 
+            else if (document.getElementById('signUp').style.display=='block') { 
+                document.getElementById('signUp').style.display='none'; 
+            }
+            return false;
+        }
+        
+    </script> 
     
     
 <!--===============================================================================================-->
