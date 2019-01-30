@@ -1,5 +1,3 @@
-var db = require('./db');
-
 // user model
 function user(username, email, password) {
 
@@ -13,7 +11,6 @@ function login() {
 
 	var username = document.getElementById('loginUsername').value;
 	var password = document.getElementById('loginPassword').value;
-
 	
 }
 
@@ -67,14 +64,17 @@ function validateEmail(email) {
 
 function registerUser(user) {
 
+	//const db = require('./db.js').db;
+
 	db.users.ensureIndex({email : 1}, {unique : true});
 	db.users.ensureIndex({username : 1}, {unique : true});
 	db.users.save(user, function(err, savedUser) {
 
 		if (err || !savedUser) { console.log("User " + user.email + " was not saved because of " + err)}
-		else { console.log("User saved successfully!")}
+		else { alert("user saved"); }
 
-	})
+
+	});
 
 }
 
