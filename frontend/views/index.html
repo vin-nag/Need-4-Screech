@@ -6,25 +6,11 @@
 <body>
 
     <div id="login" style="display: block;">
-        <form action="/" method="POST">
-            <div class="form-group">
-                <input
-                    type="username"
-                    id="username"
-                    name="email"
-                    class="form-control"
-                    placeholder="username"/>
-            </div>
-            <div class="form-group">
-            <input
-                type="password"
-                id="password"
-                name="password"
-                class="form-control"
-                placeholder="password"/>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Login</button>
-        </form>
+
+        <input id="loginUsername" type="text" placeholder="username"><br>
+        <input id="loginPassword" type="password" placeholder="password"><br>
+
+        <button id="onLogin" onclick="login();">Login</button><br>
 
         <span>Don't have an account?</span>
         <a href="#" onclick="return toggle();">Sign Up Now</a>
@@ -33,77 +19,20 @@
 
     <div id="signUp" style="display: none;">
 
-        <form action="/" method="POST">
-            <div class="form-group">
-                <input
-                    type="name"
-                    id="name"
-                    name="name"
-                    class="form-control"
-                    placeholder="username"
-                    value=""/>
-                
-            </div>
-                <div class="form-group">
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        class="form-control"
-                        placeholder="email"
-                        value=""/>
-                        
-            </div>
-            <div class="form-group">
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    class="form-control"
-                    placeholder="password"
-                    value=""/>
-                
-            </div>
-            <div class="form-group">
-                <input
-                    type="password"
-                    id="password2"
-                    name="password2"
-                    class="form-control"
-                    placeholder="confirm password"
-                    value=""/>
-                
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">
-              Register
-            </button>
-        </form>
+        <input id="signUpUsername" type="text" placeholder="username"><br>
+        <input id="signUpEmail" type="text" placeholder="email"><br>
+        <input id="signUpPassword" type="password" placeholder="password"><br>
+        <input id="signUpConfirm" type="password" placeholder="confirm password"><br>
+
+        <button id="onSignUp" onclick="onSignUp();">Sign Up</button><br>
 
         <span>Already have an account?</span>
         <a href="#" onclick="return toggle();">Login</a>
 
     </div>
 
-
-    <!-- scripts -->
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    
+    <!-- temporary script tag, will move at later date --> 
     <script> 
-        
-
-        // login
-
-        
-
-        // signup
-        var username = document.getElementById('signUpUsername').value;
-        var email = document.getElementById('signUpEmail').value;
-        var password = document.getElementById('signUpPassword').value;
-        var confirmPass = document.getElementById('signUpConfirm').value;
-        var onSignUp = document.getElementById('onSignUp').value;
-
-
-        //temporary script tag, will move at later date
         function toggle() { 
             if(document.getElementById('login').style.display=='none') { 
                 document.getElementById('login').style.display='block'; 
@@ -122,9 +51,29 @@
         
     </script> 
 
-    <canvas></canvas>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script>
+        var socket = io();
+       
+        var onSignUp = function(){
+            socket.emit('onSignUp',{
+                username: document.getElementById('signUpUsername').value,
+                email: document.getElementById('signUpEmail').value,
+                password: document.getElementById('signUpPassword').value,
+                confirmPass: document.getElementById('signUpConfirm').value
+
+            });
+        }
+       
+        socket.on('serverMsg',function(data){
+            console.log(data.msg); 
+        });
+     
+       
+    </script>
 
 
 </body>
-</html> 
+</html>
+
 
