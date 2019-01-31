@@ -1,3 +1,5 @@
+
+
 // user model
 function user(username, email, password) {
 
@@ -9,17 +11,17 @@ function user(username, email, password) {
 
 function login() {
 
-	var username = document.getElementById('loginUsername').value;
-	var password = document.getElementById('loginPassword').value;
+	// var username = document.getElementById('loginUsername').value;
+	// var password = document.getElementById('loginPassword').value;
 	
 }
 
 function signUp() {
 
-	var username = document.getElementById('signUpUsername').value;
-	var email = document.getElementById('signUpEmail').value;
-	var password = document.getElementById('signUpPassword').value;
-	var confirmPass = document.getElementById('signUpConfirm').value;
+	// var username = document.getElementById('signUpUsername').value;
+	// var email = document.getElementById('signUpEmail').value;
+	// var password = document.getElementById('signUpPassword').value;
+	// var confirmPass = document.getElementById('signUpConfirm').value;
 
 
 	if (username === "" || email === "" || password === "" || confirmPass === "") {
@@ -64,13 +66,13 @@ function validateEmail(email) {
 
 function registerUser(user) {
 
-	//const db = require('./db.js').db;
+	const db = require('./db');
 
 	db.users.ensureIndex({email : 1}, {unique : true});
 	db.users.ensureIndex({username : 1}, {unique : true});
-	db.users.save(user, function(err, savedUser) {
+	db.users.save(user, function(error, savedUser) {
 
-		if (err || !savedUser) { console.log("User " + user.email + " was not saved because of " + err)}
+		if (error || !savedUser) { console.log("User " + user.email + " was not saved because of " + error)}
 		else { alert("user saved"); }
 
 
