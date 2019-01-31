@@ -1,60 +1,12 @@
-
-
+const { db, mongoUid } = require("./db")
 // user model
+// const user = (username, email, password, score=0, levels=[]) => ({username, email, password, score, levels})
+
 function user(username, email, password) {
 
 	this.username = username;
 	this.email = email;
 	this.password = password;
-}
-
-
-function login() {
-
-	// var username = document.getElementById('loginUsername').value;
-	// var password = document.getElementById('loginPassword').value;
-	
-}
-
-function signUp() {
-
-	// var username = document.getElementById('signUpUsername').value;
-	// var email = document.getElementById('signUpEmail').value;
-	// var password = document.getElementById('signUpPassword').value;
-	// var confirmPass = document.getElementById('signUpConfirm').value;
-
-
-	if (username === "" || email === "" || password === "" || confirmPass === "") {
-
-		alert("one or more fields are empty");
-	}
-
-	if (password.length < 6) {
-	
-		alert("password must be at least 6 characters");
-	}
-
-
-	if (username.length < 4) {
-
-		alert("username must be 4 or more characters");
-	}
-
-	if (password !== confirmPass) {
-
-		alert("passwords do not match");
-	}
-
-	if (validateEmail(email) === false) {
-
-		 alert("incorrect email");
-	}
-
-	else {
-
-		user = new user(username, email, password);
-		registerUser(user);
-	}
 
 }
 
@@ -66,19 +18,59 @@ function validateEmail(email) {
 
 function registerUser(user) {
 
-	const db = require('./db');
-
 	db.users.ensureIndex({email : 1}, {unique : true});
 	db.users.ensureIndex({username : 1}, {unique : true});
 	db.users.save(user, function(error, savedUser) {
 
 		if (error || !savedUser) { console.log("User " + user.email + " was not saved because of " + error)}
-		else { alert("user saved"); }
-
+		else { console.log("user saved"); }
 
 	});
 
 }
+
+module.exports = {
+
+	signUp(username, email, password, confirmPass) {
+
+
+		if (username === "" || email === "" || password === "" || confirmPass === "") {
+
+			console.log("one or more fields are empty");
+		}
+
+		if (password.length < 6) {
+		
+			console.log("password must be at least 6 characters");
+		}
+
+
+		if (username.length < 4) {
+
+			console.log("username must be 4 or more characters");
+		}
+
+		if (password !== confirmPass) {
+
+			console.log("passwords do not match");
+		}
+
+		if (validateEmail(email) === false) {
+
+			 console.log("incorrect email");
+		}
+
+		else {
+
+			user = new user(username, email, password);
+			registerUser(user);
+		}
+
+	}
+
+	
+}
+
 
 
 
