@@ -6,11 +6,25 @@
 <body>
 
     <div id="login" style="display: block;">
-
-        <input id="loginUsername" type="text" placeholder="username"><br>
-        <input id="loginPassword" type="password" placeholder="password"><br>
-
-        <button id="onLogin" onclick="login();">Login</button><br>
+        <form action="/" method="POST">
+            <div class="form-group">
+                <input
+                    type="username"
+                    id="username"
+                    name="email"
+                    class="form-control"
+                    placeholder="username"/>
+            </div>
+            <div class="form-group">
+            <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-control"
+                placeholder="password"/>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
 
         <span>Don't have an account?</span>
         <a href="#" onclick="return toggle();">Sign Up Now</a>
@@ -19,21 +33,77 @@
 
     <div id="signUp" style="display: none;">
 
-        <input id="signUpUsername" type="text" placeholder="username"><br>
-        <input id="signUpEmail" type="text" placeholder="email"><br>
-        <input id="signUpPassword" type="password" placeholder="password"><br>
-        <input id="signUpConfirm" type="password" placeholder="confirm password"><br>
-
-        <button id="onSignUp" onclick="signUp();">Sign Up</button><br>
+        <form action="/" method="POST">
+            <div class="form-group">
+                <input
+                    type="name"
+                    id="name"
+                    name="name"
+                    class="form-control"
+                    placeholder="username"
+                    value=""/>
+                
+            </div>
+                <div class="form-group">
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        class="form-control"
+                        placeholder="email"
+                        value=""/>
+                        
+            </div>
+            <div class="form-group">
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-control"
+                    placeholder="password"
+                    value=""/>
+                
+            </div>
+            <div class="form-group">
+                <input
+                    type="password"
+                    id="password2"
+                    name="password2"
+                    class="form-control"
+                    placeholder="confirm password"
+                    value=""/>
+                
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              Register
+            </button>
+        </form>
 
         <span>Already have an account?</span>
         <a href="#" onclick="return toggle();">Login</a>
 
     </div>
 
-    <!-- temporary script tag, will move at later date --> 
-    <script> 
 
+    <!-- scripts -->
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    
+    <script> 
+        
+
+        // login
+
+        
+
+        // signup
+        var username = document.getElementById('signUpUsername').value;
+        var email = document.getElementById('signUpEmail').value;
+        var password = document.getElementById('signUpPassword').value;
+        var confirmPass = document.getElementById('signUpConfirm').value;
+        var onSignUp = document.getElementById('onSignUp').value;
+
+
+        //temporary script tag, will move at later date
         function toggle() { 
             if(document.getElementById('login').style.display=='none') { 
                 document.getElementById('login').style.display='block'; 
@@ -52,10 +122,9 @@
         
     </script> 
 
-    <!--================================================= -->
-    <script type="text/javascript" src="userauth.js"></script>
+    <canvas></canvas>
 
 
 </body>
-</html>
+</html> 
 

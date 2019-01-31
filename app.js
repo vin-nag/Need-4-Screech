@@ -7,8 +7,8 @@ const socketControllers = require("./backend/controllers/socket")
 
 const app = express()
 app.use(express.static(path.join(__dirname, 'frontend/js/dist'))) //static resource
-app.use(express.static(path.join(__dirname, 'backend/services'))) //static resource
 app.use(httpControllers)
+app.use(express.urlencoded({ extended: true }))
 
 const server = http.createServer(app)
 const io = socketio(server)
