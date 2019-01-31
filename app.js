@@ -17,19 +17,24 @@ socketControllers.listen(io)
 
 server.listen(3000, () => console.log("Running on port 3000..."))
 
-io.sockets.on('connection', function(socket){
+io.sockets.on('connection', function(socket) {
     console.log('socket connection');
  
-    socket.on('onSignUp',function(data){
+    socket.on('onSignUp',function(data) {
 
         console.log(data.username);
         console.log(data.email);
         console.log(data.password);
         console.log(data.confirmPass);
 
-        userAuth.signUp(data.username, data.email, data.password, data.confirmPass);
+        userAuth.signUp(data);
        
     });
+
+    socket.on('onLogin', function(data)) {
+
+    	console.log("login");
+    }
    
 });
 

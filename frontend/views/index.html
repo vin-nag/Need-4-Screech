@@ -57,6 +57,7 @@
        
         var onSignUp = function(){
             socket.emit('onSignUp',{
+                
                 username: document.getElementById('signUpUsername').value,
                 email: document.getElementById('signUpEmail').value,
                 password: document.getElementById('signUpPassword').value,

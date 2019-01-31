@@ -1,22 +1,15 @@
 const { db, mongoUid } = require("./db")
+
 // user model
-// const user = (username, email, password, score=0, levels=[]) => ({username, email, password, score, levels})
-
-function user(username, email, password) {
-
-	this.username = username;
-	this.email = email;
-	this.password = password;
-
-}
+user = (username, email, password, score=0, levels=[]) => ({username, email, password, score, levels})
 
 // function to validate email in format anystring@anything.anystring
-function validateEmail(email) {
+const validateEmail = (email) => {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
 }
 
-function registerUser(user) {
+const registerUser = (user) => {
 
 	db.users.ensureIndex({email : 1}, {unique : true});
 	db.users.ensureIndex({username : 1}, {unique : true});
@@ -31,39 +24,38 @@ function registerUser(user) {
 
 module.exports = {
 
-	signUp(username, email, password, confirmPass) {
+	signUp(data) {
 
 
-		if (username === "" || email === "" || password === "" || confirmPass === "") {
+		if (data.username === "" || data.email === "" || data.password === "" || data.confirmPass === "") {
 
 			console.log("one or more fields are empty");
 		}
 
-		if (password.length < 6) {
+		if (data.password.length < 6) {
 		
 			console.log("password must be at least 6 characters");
 		}
 
-
-		if (username.length < 4) {
+		if (data.username.length < 4) {
 
 			console.log("username must be 4 or more characters");
 		}
 
-		if (password !== confirmPass) {
+		if (data.password !== data.confirmPass) {
 
 			console.log("passwords do not match");
 		}
 
-		if (validateEmail(email) === false) {
+		if (validateEmail(data.email) === false) {
 
 			 console.log("incorrect email");
 		}
 
 		else {
 
-			user = new user(username, email, password);
-			registerUser(user);
+			new_user = user(data.username, data.email, data.password);
+			registerUser(new_user);
 		}
 
 	}
