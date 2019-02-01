@@ -1,7 +1,5 @@
 const { db, mongoUid } = require("./db")
-
-// user model
-user = (username, email, password, score=0, levels=[]) => ({username, email, password, score, levels})
+const models = require("../models/models")
 
 // check if fields contain correct data and call signUp() if so
 const signUp = (data) => {
@@ -33,7 +31,7 @@ const signUp = (data) => {
 
 	else {
 
-		new_user = user(data.username, data.email, data.password);
+		new_user = models.user(data.username, data.email, data.password);
 		registerUser(new_user);
 	}
 
