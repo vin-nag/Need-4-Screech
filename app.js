@@ -31,10 +31,14 @@ io.sockets.on('connection', function(socket) {
        
     });
 
-    socket.on('onLogin', function(data)) {
+    socket.on('onLogin', function(data) {
 
-    	console.log("login");
-    }
+    	console.log(data.username);
+    	console.log(data.password);
+
+    	userAuth.login(data);
+
+    });
    
 });
 
