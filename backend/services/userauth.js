@@ -2,62 +2,86 @@ const { db, mongoUid } = require("./db")
 const models = require("../models/models")
 
 // check if fields contain correct data and call signUp() if so
-const signUp = (data) => {
+const signUp = (data, cb) => {
 
 	if (data.username === "" || data.email === "" || data.password === "" || data.confirmPass === "") {
 
 		console.log("one or more fields are empty");
+		cb(true);
 	}
 
 	if (data.password.length < 6) {
 	
 		console.log("password must be at least 6 characters");
+		cb(true);
 	}
 
 	if (data.username.length < 4) {
 
 		console.log("username must be 4 or more characters");
+		cb(true);
 	}
 
 	if (data.password !== data.confirmPass) {
 
 		console.log("passwords do not match");
+		cb(true);
 	}
 
 	if (validateEmail(data.email) === false) {
 
 		 console.log("incorrect email");
+		 cb(true);
 	}
 
 	else {
 
 		new_user = models.user(data.username, data.email, data.password);
-		registerUser(new_user);
+		registerUser(new_user, function(res) {
+
+			if (res) {
+
+			} else {
+
+			}
+		});
 	}
 
 }
 
 // login user if credentials correct
-const login = (data) => {
+const login = (data, cb) => {
 
-	db.users.find({
+	db.users.findOne({
         username: data.username, password: data.password
     }, function(err, doc) {
-        console.log(doc + "login successful" )
-        if(err) console.error(err)
+        
+        if(err || doc == null) {
+        	console.error(err);
+        	cb(true)
+        } 
+        else {
+        	console.log(doc + "login successful")
+        	cb(false);
+        }
     })
 
 }
 
 // save user to database if unique and no errors
-const registerUser = (user) => {
+const registerUser = (user, cb) => {
 
 	db.users.ensureIndex({email : 1}, {unique : true});
 	db.users.ensureIndex({username : 1}, {unique : true});
 	db.users.save(user, function(error, savedUser) {
 
-		if (error || !savedUser) { console.log("User " + user.email + " was not saved because of " + error)}
-		else { console.log("user saved"); }
+		if (error || !savedUser) { 
+			console.log("User " + user.email + " was not saved because of " + error);
+			cb(true);
+		}
+		else { console.log("user saved");
+			cb(false);
+		}
 
 	});
 
