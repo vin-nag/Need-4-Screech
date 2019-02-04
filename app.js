@@ -27,7 +27,16 @@ io.sockets.on('connection', function(socket) {
         console.log(data.password);
         console.log(data.confirmPass);
 
-        userAuth.signUp(data);
+        userAuth.signUp(data, function(res) {
+
+            if(res) {
+                socket.emit('signUpResponse',{success:false});
+            }
+
+            else {
+                socket.emit('signUpResponse',{success:true});
+            }
+        });
        
     });
 
@@ -36,7 +45,16 @@ io.sockets.on('connection', function(socket) {
     	console.log(data.username);
     	console.log(data.password);
 
-    	userAuth.login(data);
+    	userAuth.login(data, function(res) {
+
+            if(res) {
+                socket.emit('signInResponse',{success:false});
+            }
+
+            else {
+                socket.emit('signInResponse',{success:true});
+            }
+        });
 
     });
    
