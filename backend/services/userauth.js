@@ -1,5 +1,4 @@
 const { db, mongoUid } = require("./db")
-const models = require("../models/models")
 
 // check if fields contain correct data and call signUp() if so
 const signUp = (data, cb) => {
@@ -36,15 +35,8 @@ const signUp = (data, cb) => {
 
 	else {
 
-		new_user = models.user(data.username, data.email, data.password);
-		registerUser(new_user, function(res) {
-
-			if (res) {
-
-			} else {
-
-			}
-		});
+		cb(false);
+		
 	}
 
 }
@@ -97,7 +89,8 @@ const validateEmail = (email) => {
 module.exports = {
 
 	signUp,
-	login
+	login,
+	registerUser
 
 }
 

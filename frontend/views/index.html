@@ -70,7 +70,7 @@
         socket.on('signUpResponse',function(data){
             if(data.success){
                 alert("Sign up successul.");
-                hidelogin();
+                hideAuth();
             } else
                 alert("Sign up unsuccessul.");
         });
@@ -84,7 +84,6 @@
 
 
         // functions
-
         const toggle = () => { 
 
             if(document.getElementById('login').style.display=='none') { 
