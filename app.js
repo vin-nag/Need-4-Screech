@@ -5,6 +5,7 @@ const socketio = require("socket.io")
 const httpControllers = require("./backend/controllers/http")
 const socketControllers = require("./backend/controllers/socket")
 const userAuth = require("./backend/services/userauth")
+const models = require("./backend/models/models")
 
 const app = express()
 app.use(express.static(path.join(__dirname, 'frontend/js/dist'))) //static resource
@@ -34,7 +35,18 @@ io.sockets.on('connection', function(socket) {
             }
 
             else {
-                socket.emit('signUpResponse',{success:true});
+
+                new_user = models.user(data.username, data.email, data.password)
+                userAuth.registerUser(new_user, function(res) {
+
+                    if(res) {
+                        socket.emit('signUpResponse',{success:false});
+                    }
+                    else {
+                        socket.emit('signUpResponse',{success:true});
+                    }
+
+                });
             }
         });
        
