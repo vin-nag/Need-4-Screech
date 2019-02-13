@@ -12,6 +12,7 @@ app.use(express.static(path.join(__dirname, 'frontend/js/dist'))) //static resou
 app.use(httpControllers)
 app.use(express.urlencoded({ extended: true }))
 
+
 const server = http.createServer(app)
 const io = socketio(server)
 socketControllers.listen(io)
@@ -23,12 +24,7 @@ io.sockets.on('connection', function(socket) {
  
     socket.on('onSignUp',function(data) {
 
-        console.log(data.username);
-        console.log(data.email);
-        console.log(data.password);
-        console.log(data.confirmPass);
-
-        userAuth.signUp(data, function(res) {
+        userAuth.validateRegistration(data, function(res) {
 
             if(res) {
                 socket.emit('signUpResponse',{success:false});
@@ -45,7 +41,7 @@ io.sockets.on('connection', function(socket) {
                     else {
                         socket.emit('signUpResponse',{success:true});
                     }
-
+                    
                 });
             }
         });
@@ -53,9 +49,6 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('onLogin', function(data) {
-
-    	console.log(data.username);
-    	console.log(data.password);
 
     	userAuth.login(data, function(res) {
 

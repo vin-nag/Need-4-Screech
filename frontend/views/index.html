@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Login</title>
-    
+    <script type="text/javascript" src="index.js"></script>
 </head>
 <body>
 
@@ -32,80 +32,10 @@
 
     </div>
     
-
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script>
-        var socket = io();
        
-        // emit
-        const onSignUp = () => {
-            socket.emit('onSignUp',{
-
-                username: document.getElementById('signUpUsername').value,
-                email: document.getElementById('signUpEmail').value,
-                password: document.getElementById('signUpPassword').value,
-                confirmPass: document.getElementById('signUpConfirm').value
-
-            });
-        }
-
-        const onLogin = () => {
-            socket.emit('onLogin',{
-                
-                username: document.getElementById('loginUsername').value,
-                password: document.getElementById('loginPassword').value
-
-            });
-        }
-       
-        // recieve
-        socket.on('serverMsg',function(data){
-            console.log(data.msg); 
-        });
-
-        socket.on('signUpResponse',function(data){
-            if(data.success){
-                alert("Sign up successul.");
-                hideAuth();
-            } else
-                alert("Sign up unsuccessul.");
-        });
-
-        socket.on('signInResponse',function(data){
-            if(data.success){
-                hideAuth();
-            } else
-                alert("Sign in unsuccessul.");
-        });
-
-
-        // functions
-        const toggle = () => { 
-
-            if(document.getElementById('login').style.display=='none') { 
-                document.getElementById('login').style.display='block'; 
-            } 
-            else if (document.getElementById('login').style.display=='block') { 
-                document.getElementById('login').style.display='none'; 
-            } 
-            if(document.getElementById('signUp').style.display=='none') { 
-                document.getElementById('signUp').style.display='block'; 
-            } 
-            else if (document.getElementById('signUp').style.display=='block') { 
-                document.getElementById('signUp').style.display='none'; 
-            }
-            return false;
-        }
-
-        const hideAuth = () => {
-
-            document.getElementById('login').style.display='none';
-            document.getElementById('signUp').style.display='none';
-        }
-     
        
     </script>
-
 
 </body>
 </html>

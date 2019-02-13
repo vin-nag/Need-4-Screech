@@ -1,7 +1,7 @@
 const { db, mongoUid } = require("./db")
 
 // check if fields contain correct data and call signUp() if so
-const signUp = (data, cb) => {
+const validateRegistration = (data, cb) => {
 
 	if (data.username === "" || data.email === "" || data.password === "" || data.confirmPass === "") {
 
@@ -63,8 +63,8 @@ const login = (data, cb) => {
 // save user to database if unique and no errors
 const registerUser = (user, cb) => {
 
-	db.users.ensureIndex({email : 1}, {unique : true});
-	db.users.ensureIndex({username : 1}, {unique : true});
+	db.users.createIndex({email : 1}, {unique : true});
+	db.users.createIndex({username : 1}, {unique : true});
 	db.users.save(user, function(error, savedUser) {
 
 		if (error || !savedUser) { 
@@ -88,7 +88,7 @@ const validateEmail = (email) => {
 
 module.exports = {
 
-	signUp,
+	validateRegistration,
 	login,
 	registerUser
 
