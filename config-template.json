@@ -5,5 +5,8 @@
         "clusterString": "",
         "database": "",
         "options": {}
+    },
+    "gameSessionService": {
+        "tickRate": 20
     }
 }
