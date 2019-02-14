@@ -1,6 +1,6 @@
 import socketClient from "../socketClient"
 
-// emit
+// emitters
 window.onSignUp = () => {
     socketClient.emit('onSignUp',{
 

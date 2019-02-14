@@ -53,7 +53,7 @@ const login = (data, cb) => {
         	cb(true)
         } 
         else {
-        	console.log(doc + "login successful")
+        	console.log(doc, "login successful")
         	cb(false);
         }
     })

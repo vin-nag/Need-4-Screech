@@ -1,6 +1,8 @@
 const connectController = require("./connect")
 const disconnectController = require("./disconnect")
 const testController = require("./test")
+const userAuth = require("../../services/userauth")
+const models = require("../../models/models")
 
 /**
  * Listens to the io object passed for a connection event,
@@ -18,6 +20,49 @@ const connectControllers = (socket) => {
     connectController(socket)
     socket.on("disconnect", () => disconnectController(socket))
     socket.on("test", data => testController(socket, data))
+
+    // signup listener
+    socket.on('onSignUp',(data) => {
+
+        userAuth.validateRegistration(data, (res) => {
+
+            if(res) {
+                socket.emit('signUpResponse',{success:false});
+            }
+
+            else {
+
+                new_user = models.user(data.username, data.email, data.password)
+                userAuth.registerUser(new_user, (res) => {
+
+                    if(res) {
+                        socket.emit('signUpResponse',{success:false});
+                    }
+                    else {
+                        socket.emit('signUpResponse',{success:true});
+                    }
+                    
+                });
+            }
+        });
+       
+    });
+
+    // login listener
+    socket.on('onLogin', (data) => {
+
+    	userAuth.login(data, function(res) {
+
+            if(res) {
+                socket.emit('signInResponse',{success:false});
+            }
+
+            else {
+                socket.emit('signInResponse',{success:true});
+            }
+        });
+
+    });
 }
 
 module.exports = {
