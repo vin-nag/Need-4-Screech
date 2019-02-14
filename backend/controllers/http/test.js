@@ -18,4 +18,5 @@ router.get("/", (req, res) => {
     ResponseService.sendView(res, "index.html")
 })
 
+
 module.exports = router
