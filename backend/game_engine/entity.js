@@ -10,7 +10,7 @@ class Entity {
         this.id = id;
         this.tag = tag;
         this.active = true;
-        this.componentArray = new Map();
+        this.componentMap = new Map();
     }
 
     addComponent(name, component) {
@@ -18,18 +18,18 @@ class Entity {
          * @param {string} name name of the component
          * @param {object} component component object
          * */
-        if (this.componentArray.prototype.has(name)){
+        if (this.componentMap.prototype.has(name)){
             throw new Error(`Entity@addComponent: Component "${name}" already present in entity "${this.id}"`)
         }
-        this.componentArray.set(name, component);
+        this.componentMap.set(name, component);
     }
 
     getComponent(name){
         /** this function returns a component by its name.
          * @param {string} name name of the component to get
          * */
-        if (this.componentArray.prototype.has(name)){
-            return this.componentArray.prototype.get(name)
+        if (this.componentMap.prototype.has(name)){
+            return this.componentMap.prototype.get(name)
         }
         throw new Error(`Entity@getComponent: Component "${name}" not found in entity "${this.id}"`)
     }
@@ -38,8 +38,8 @@ class Entity {
         /** this function removes a component by its name.
          * @param {string} name name of the component to remove
          * */
-        if (this.componentArray.prototype.has(name)){
-            this.componentArray.prototype.delete(name);
+        if (this.componentMap.prototype.has(name)){
+            this.componentMap.prototype.delete(name);
         }
         throw new Error(`Entity@removeComponent: Component "${name}" not found in entity "${this.id}"`)
     }
