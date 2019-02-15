@@ -1,7 +1,7 @@
 const connectController = require("./connect")
 const disconnectController = require("./disconnect")
 const testController = require("./test")
-const userAuth = require("../../services/userauth")
+const UserAuth = require("../../services/userauth")
 const models = require("../../models/models")
 
 /**
@@ -24,7 +24,7 @@ const connectControllers = (socket) => {
     // signup listener
     socket.on('onSignUp',(data) => {
 
-        userAuth.validateRegistration(data, (res) => {
+        UserAuth.validateRegistration(data, (res) => {
 
             if(res) {
                 socket.emit('signUpResponse',{success:false});
@@ -33,7 +33,7 @@ const connectControllers = (socket) => {
             else {
 
                 new_user = models.user(data.username, data.email, data.password)
-                userAuth.registerUser(new_user, (res) => {
+                UserAuth.registerUser(new_user, (res) => {
 
                     if(res) {
                         socket.emit('signUpResponse',{success:false});
@@ -51,7 +51,7 @@ const connectControllers = (socket) => {
     // login listener
     socket.on('onLogin', (data) => {
 
-    	userAuth.login(data, function(res) {
+    	UserAuth.login(data, function(res) {
 
             if(res) {
                 socket.emit('signInResponse',{success:false});
