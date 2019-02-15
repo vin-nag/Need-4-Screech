@@ -3,69 +3,65 @@
  */
 class Entity {
     /**
-     * @param {tag} tag type of entity needed to group entities together.
-     * @param {id} id of this entity for entiry manager.
+     * @param {string} tag type of entity needed to group entities together.
+     * @param {int} id unique number representing this entity.
      */
-    constructor(tag, id) {
-        this.tag = name;
+    constructor(id, tag=null) {
         this.id = id;
+        this.tag = tag;
         this.active = true;
-        this.componentArray = [];
+        this.componentArray = new Map();
     }
 
-    addComponent(component) {
+    addComponent(name, component) {
         /** this function adds componenets. throws an error if entity already has component
-         * @param {component}
+         * @param {string} name name of the component
+         * @param {object} component component object
          * */
-        if (this.hasComponent(component)){
-            new Error(["component already exists"])
+        if (this.componentArray.prototype.has(name)){
+            throw new Error(`Entity@addComponent: Component "${name}" already present in entity "${this.id}"`)
         }
-
-        this.componentArray.push(component);
+        this.componentArray.set(name, component);
     }
 
-    /** @const @private {!Foo} A short bit of JSDoc. */
-    hasComponent(component){
-        if (this.componentArray.includes(component)) {
-            return true
+    getComponent(name){
+        /** this function returns a component by its name.
+         * @param {string} name name of the component to get
+         * */
+        if (this.componentArray.prototype.has(name)){
+            return this.componentArray.prototype.get(name)
         }
-
-        return false
-
+        throw new Error(`Entity@getComponent: Component "${name}" not found in entity "${this.id}"`)
     }
 
-    removeComponent(component){
-
-        if (this.hasComponent(component)){
-            this.componentArray = this.componentArray.filter(item => item !== component);
+    removeComponent(name){
+        /** this function removes a component by its name.
+         * @param {string} name name of the component to remove
+         * */
+        if (this.componentArray.prototype.has(name)){
+            this.componentArray.prototype.delete(name);
         }
-
+        throw new Error(`Entity@removeComponent: Component "${name}" not found in entity "${this.id}"`)
     }
 
     destroy() {
-        /** This function marks an entity inactive to be removed by entity manager late*/
+        // this function marks an entity inactive to be removed by entity manager later
         this.active = false;
     }
 
     getTag() {
+        // standard getter function
         return this.tag;
     }
 
     getId() {
+        // standard getter function
         return this.id;
     }
 
     isActive(){
+        // standard getter function
         return this.active;
     }
 
-    getComponent(component){
-
-        if (this.hasComponent(component)){
-            return this.componentArray.find(component)
-        }
-
-        new Error(["component not in array"]);
-
-    }
 }
