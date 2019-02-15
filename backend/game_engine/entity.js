@@ -18,7 +18,7 @@ class Entity {
          * @param {string} name name of the component
          * @param {object} component component object
          * */
-        if (this.componentMap.prototype.has(name)){
+        if (this.hasComponent(name)){
             throw new Error(`Entity@addComponent: Component "${name}" already present in entity "${this.id}"`)
         }
         this.componentMap.set(name, component);
@@ -28,8 +28,8 @@ class Entity {
         /** this function returns a component by its name.
          * @param {string} name name of the component to get
          * */
-        if (this.componentMap.prototype.has(name)){
-            return this.componentMap.prototype.get(name)
+        if (this.hasComponent(name)){
+            return this.componentMap.get(name)
         }
         throw new Error(`Entity@getComponent: Component "${name}" not found in entity "${this.id}"`)
     }
@@ -38,10 +38,22 @@ class Entity {
         /** this function removes a component by its name.
          * @param {string} name name of the component to remove
          * */
-        if (this.componentMap.prototype.has(name)){
-            this.componentMap.prototype.delete(name);
+        if (this.hasComponent(name)){
+            this.componentMap.delete(name);
         }
-        throw new Error(`Entity@removeComponent: Component "${name}" not found in entity "${this.id}"`)
+        else {
+            throw new Error(`Entity@removeComponent: Component "${name}" not found in entity "${this.id}"`)
+        }
+    }
+
+    hasComponent(name){
+        /** this function checks if the entity has a component.
+         * @param {string} name name of the component to remove
+         * */
+        if (this.componentMap.has(name)){
+            return true
+        }
+        return false
     }
 
     destroy() {
@@ -59,7 +71,7 @@ class Entity {
         return this.id;
     }
 
-    isActive(){
+    isActive() {
         // standard getter function
         return this.active;
     }
