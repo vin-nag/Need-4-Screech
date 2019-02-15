@@ -8,9 +8,12 @@ const socketControllers = require("./backend/controllers/socket")
 const app = express()
 app.use(express.static(path.join(__dirname, 'frontend/js/dist'))) //static resource
 app.use(httpControllers)
+app.use(express.urlencoded({ extended: true }))
+
 
 const server = http.createServer(app)
 const io = socketio(server)
 socketControllers.listen(io)
 
 server.listen(3000, () => console.log("Running on port 3000..."))
+
