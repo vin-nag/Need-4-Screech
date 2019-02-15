@@ -10,18 +10,18 @@ class Entity {
         this.id = id;
         this.tag = tag;
         this.active = true;
-        this.componentMap = new Map();
+        this.componentMap = {};
     }
 
-    addComponent(name, component) {
+    addComponent(component) {
         /** this function adds componenets. throws an error if entity already has component
          * @param {string} name name of the component
          * @param {object} component component object
          * */
-        if (this.hasComponent(name)){
-            throw new Error(`Entity@addComponent: Component "${name}" already present in entity "${this.id}"`)
+        if (this.hasComponent(component.name)){
+            throw new Error(`Entity@addComponent: Component "${component.name}" already present in entity "${this.id}"`)
         }
-        this.componentMap.set(name, component);
+        this.componentMap[component.name] = component;
     }
 
     getComponent(name){
@@ -29,7 +29,7 @@ class Entity {
          * @param {string} name name of the component to get
          * */
         if (this.hasComponent(name)){
-            return this.componentMap.get(name)
+            return this.componentMap[name]
         }
         throw new Error(`Entity@getComponent: Component "${name}" not found in entity "${this.id}"`)
     }
@@ -39,7 +39,7 @@ class Entity {
          * @param {string} name name of the component to remove
          * */
         if (this.hasComponent(name)){
-            this.componentMap.delete(name);
+            delete this.componentMap[name];
         }
         else {
             throw new Error(`Entity@removeComponent: Component "${name}" not found in entity "${this.id}"`)
@@ -50,10 +50,8 @@ class Entity {
         /** this function checks if the entity has a component.
          * @param {string} name name of the component to remove
          * */
-        if (this.componentMap.has(name)){
-            return true
-        }
-        return false
+        return name in this.componentMap;
+
     }
 
     destroy() {
