@@ -6,32 +6,46 @@ class UserAuth {
     validateRegistration(data, cb){
 
         if (data.username === "" || data.email === "" || data.password === "" || data.confirmPass === "") {
-            console.log("one or more fields are empty"); // print on screen instead of console.
-            cb(true); // Look into call back functions
+            console.log("One or more fields empty.")
+            cb({
+                success: true,
+                errors: ["One or more fields are emtpy."]
+            });
         }
 
         if (data.password.length < 6) {
-            console.log("password must be at least 6 characters");
-            cb(true);
+            cb({
+                success: true,
+                errors: ["Password must be at least 6 characters."]
+            });
         }
 
         if (data.username.length < 4) {
-            console.log("username must be 4 or more characters");
-            cb(true);
+            cb({
+                success: true,
+                errors: ["Username must consist of 4 or more characters."]
+            });
         }
 
         if (data.password !== data.confirmPass) {
-            console.log("passwords do not match");
-            cb(true);
+            cb({
+                success: true,
+                errors: ["Passwords do not match."]
+            });
         }
 
         if (this.validateEmail(data.email) === false) {
-            console.log("incorrect email");
-            cb(true);
+            cb({
+                success: true,
+                errors: ["Incorrect e-mail."]
+            });;
         }
 
         else {
-            cb(false);
+            cb({
+                success: false,
+                errors: []
+            });
         }
 
     }
@@ -43,12 +57,16 @@ class UserAuth {
             username: data.username, password: data.password
         }, function(err, doc) {
             if(err || doc == null) {
-                console.error(err);
-                cb(true)
+                cb({
+                    success: true,
+                    errors: [err]
+                });
             } 
             else {
-                console.log(doc + "login successful")
-                cb(false);
+                cb({
+                    success: false,
+                    errors: [doc, "One or more fields are emtpy."]
+                });
             }
         })
 
@@ -61,11 +79,16 @@ class UserAuth {
         db.users.createIndex({username : 1}, {unique : true});
         db.users.save(user, function(error, savedUser){
             if (error || !savedUser) { 
-                console.log("User " + user.email + " was not saved because of " + error);
-                cb(true);
+                cb({
+                    success: true,
+                    errors: ["User ", user.email, " was not saved because of ", error]
+                });
             }
-            else { console.log("user saved");
-                cb(false);
+            else {
+                cb({
+                    success: false,
+                    errors: ["User saved."]
+                });
             }
 
         });
