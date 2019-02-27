@@ -6,44 +6,43 @@ class UserAuth {
     validateRegistration(data, cb){
 
         if (data.username === "" || data.email === "" || data.password === "" || data.confirmPass === "") {
-            console.log("One or more fields empty.")
             cb({
-                success: true,
+                success: false,
                 errors: ["One or more fields are emtpy."]
             });
         }
 
         if (data.password.length < 6) {
             cb({
-                success: true,
+                success: false,
                 errors: ["Password must be at least 6 characters."]
             });
         }
 
         if (data.username.length < 4) {
             cb({
-                success: true,
+                success: false,
                 errors: ["Username must consist of 4 or more characters."]
             });
         }
 
         if (data.password !== data.confirmPass) {
             cb({
-                success: true,
+                success: false,
                 errors: ["Passwords do not match."]
             });
         }
 
         if (this.validateEmail(data.email) === false) {
             cb({
-                success: true,
-                errors: ["Incorrect e-mail."]
+                success: false,
+                errors: ["Incorrect e-mail"]
             });;
         }
 
         else {
             cb({
-                success: false,
+                success: true,
                 errors: []
             });
         }
@@ -58,14 +57,14 @@ class UserAuth {
         }, function(err, doc) {
             if(err || doc == null) {
                 cb({
-                    success: true,
+                    success: false,
                     errors: [err]
                 });
             } 
             else {
                 cb({
-                    success: false,
-                    errors: ["One or more fields are emtpy."]
+                    success: true,
+                    errors: []
                 });
             }
         })
@@ -80,14 +79,14 @@ class UserAuth {
         db.users.save(user, function(error, savedUser){
             if (error || !savedUser) { 
                 cb({
-                    success: true,
+                    success: false,
                     errors: [error]
                 });
             }
             else {
                 cb({
-                    success: false,
-                    errors: ["User saved."]
+                    success: true,
+                    errors: []
                 });
             }
 
