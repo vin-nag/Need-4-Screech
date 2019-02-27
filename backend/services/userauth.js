@@ -81,7 +81,7 @@ class UserAuth {
             if (error || !savedUser) { 
                 cb({
                     success: true,
-                    errors: ["User ", user.email, " was not saved because of ", error]
+                    errors: [error]
                 });
             }
             else {
@@ -97,7 +97,7 @@ class UserAuth {
 
     // function to validate email in format anystring@anything.anystring
     validateEmail(email){
-        var re = /\S+@\S+\.\S+/;
+        let re = /\S+@\S+\.\S+/;
         return re.test(email);
     }
 }
