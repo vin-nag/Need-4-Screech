@@ -65,7 +65,7 @@ class UserAuth {
             else {
                 cb({
                     success: false,
-                    errors: [doc, "One or more fields are emtpy."]
+                    errors: ["One or more fields are emtpy."]
                 });
             }
         })
