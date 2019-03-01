@@ -1,7 +1,9 @@
 /**
  * Entity Manager class using standard ECS architecture.
  */
-const Entity = require("./entity");
+const entity_file = require("./entity");
+const Entity = new entity_file();
+
 
 class EntityManager {
 
@@ -17,12 +19,12 @@ class EntityManager {
          * @param {string} tag type of the component
          * */
 
-        let entity = new Entity(this.id, tag);
-
+        let entity = new Entity.constructor(this.id, tag);
         this.id++;
         this.entitiesToAdd.push(entity);
 
         return entity
+
     }
 
     removeInactiveEntities(){
@@ -70,6 +72,7 @@ class EntityManager {
         // standard getter function
         return this.size;
     }
+
 
 }
 // export the entity manager
