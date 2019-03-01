@@ -23,7 +23,6 @@ class EntityManager {
 
         this.id++;
         this.entitiesToAdd.push(entity);
-
         return entity
     }
 
@@ -32,10 +31,10 @@ class EntityManager {
          * @param {string} tag type of the component
          * */
 
-        for (let entity in this.entities) {
-            console.log(entity.active);
+        for (let entity of this.entities) {
+            //console.log('in remove inactive entities', entity);
             if (entity.active === false) {
-                console.log('reached here');
+                //console.log('reached active === false reached here');
                 let index = this.entities.indexOf(entity);
                 this.entities.splice(index, 1);
             }
@@ -52,11 +51,13 @@ class EntityManager {
          * */
 
         // add entities to entity map
-        for (let entity in this.entitiesToAdd) {
+        for (let entity of this.entitiesToAdd) {
+            //console.log('adding entities in update. entity:', entity);
 
             if (entity.id in this.entities){
                 throw new Error(`EntityManager@update: Entity "${entity.id}" already found in this.entities.`);
             }
+            //console.log('entity check here:',entity);
             this.entities.push(entity);
         }
 
