@@ -6,32 +6,45 @@ class UserAuth {
     validateRegistration(data, cb){
 
         if (data.username === "" || data.email === "" || data.password === "" || data.confirmPass === "") {
-            console.log("one or more fields are empty"); // print on screen instead of console.
-            cb(true); // Look into call back functions
+            cb({
+                success: false,
+                errors: ["One or more fields are emtpy."]
+            });
         }
 
         if (data.password.length < 6) {
-            console.log("password must be at least 6 characters");
-            cb(true);
+            cb({
+                success: false,
+                errors: ["Password must be at least 6 characters."]
+            });
         }
 
         if (data.username.length < 4) {
-            console.log("username must be 4 or more characters");
-            cb(true);
+            cb({
+                success: false,
+                errors: ["Username must consist of 4 or more characters."]
+            });
         }
 
         if (data.password !== data.confirmPass) {
-            console.log("passwords do not match");
-            cb(true);
+            cb({
+                success: false,
+                errors: ["Passwords do not match."]
+            });
         }
 
         if (this.validateEmail(data.email) === false) {
-            console.log("incorrect email");
-            cb(true);
+            cb({
+                success: false,
+                errors: ["Incorrect e-mail"]
+            });;
         }
 
         else {
-            cb(false);
+            cb({
+                success: true,
+                errors: []
+            });
         }
 
     }
@@ -43,12 +56,16 @@ class UserAuth {
             username: data.username, password: data.password
         }, function(err, doc) {
             if(err || doc == null) {
-                console.error(err);
-                cb(true)
+                cb({
+                    success: false,
+                    errors: [err]
+                });
             } 
             else {
-                console.log(doc + "login successful")
-                cb(false);
+                cb({
+                    success: true,
+                    errors: []
+                });
             }
         })
 
@@ -61,11 +78,16 @@ class UserAuth {
         db.users.createIndex({username : 1}, {unique : true});
         db.users.save(user, function(error, savedUser){
             if (error || !savedUser) { 
-                console.log("User " + user.email + " was not saved because of " + error);
-                cb(true);
+                cb({
+                    success: false,
+                    errors: [error]
+                });
             }
-            else { console.log("user saved");
-                cb(false);
+            else {
+                cb({
+                    success: true,
+                    errors: []
+                });
             }
 
         });
@@ -74,7 +96,7 @@ class UserAuth {
 
     // function to validate email in format anystring@anything.anystring
     validateEmail(email){
-        var re = /\S+@\S+\.\S+/;
+        let re = /\S+@\S+\.\S+/;
         return re.test(email);
     }
 }
