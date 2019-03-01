@@ -2,6 +2,9 @@
  * Entity Manager class using standard ECS architecture.
  */
 
+const entity_file = require("./entity");
+const Entity = new entity_file();
+
 class EntityManager {
 
     constructor() {
@@ -16,10 +19,13 @@ class EntityManager {
          * @param {string} tag type of the component
          * */
 
-        let entity = new Entity(this.id, tag);
+        console.log('entity:',Entity);
+        let entity = new Entity.constructor(this.id, tag);
         this.id++;
 
         this.entitiesToAddMap[entity.id] = entity;
+
+        return entity;
     }
 
     removeInactiveEntities(){
@@ -71,3 +77,4 @@ class EntityManager {
 
 
 }
+module.exports =  EntityManager;

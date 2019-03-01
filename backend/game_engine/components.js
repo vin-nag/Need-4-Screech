@@ -45,3 +45,4 @@ const CBoundingBox = (size, halfSize) => ({name: "CBoundingBox", size, halfSize}
 */
 const CInput = (up, down, left, right, shoot, canShoot) => ({name: "CInput", up, down, left, right, shoot, canShoot});
 
+module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform};
