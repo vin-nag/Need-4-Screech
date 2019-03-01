@@ -1,7 +1,7 @@
 import socketClient from "../socketClient"
 
 // emitters
-window.onSignUp = () => {
+export const onSignUp = () => {
     socketClient.emit('onSignUp',{
 
         username: document.getElementById('signUpUsername').value,
@@ -12,7 +12,7 @@ window.onSignUp = () => {
     });
 }
 
-window.onLogin = () => {
+export const onLogin = () => {
     socketClient.emit('onLogin',{
         
         username: document.getElementById('loginUsername').value,
