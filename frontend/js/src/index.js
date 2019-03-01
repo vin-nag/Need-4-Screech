@@ -1,8 +1,5 @@
-import socketClient from "./socketClient"
-import mainEngine from "./renderingEngine/mainEngine"
-import services from "./services/services"
+import app from "./app"
 
-socketClient.listen()
-
-
-
+window.onload = () => {
+    app.run()
+}

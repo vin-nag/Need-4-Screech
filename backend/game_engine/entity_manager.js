@@ -9,9 +9,9 @@ class EntityManager {
 
     constructor() {
         this.id = 0;
-        this.entitiesMap = {};
-        this.entitiesToAddMap = {};
         this.size = 0;
+        this.entities = [];
+        this.entitiesToAdd = [];
     }
 
     addEntity(tag=null){
@@ -19,13 +19,12 @@ class EntityManager {
          * @param {string} tag type of the component
          * */
 
-        console.log('entity:',Entity);
         let entity = new Entity.constructor(this.id, tag);
+
         this.id++;
+        this.entitiesToAdd.push(entity);
 
-        this.entitiesToAddMap[entity.id] = entity;
-
-        return entity;
+        return entity
     }
 
     removeInactiveEntities(){
@@ -33,16 +32,19 @@ class EntityManager {
          * @param {string} tag type of the component
          * */
 
-        for (var entity in this.entitiesMap) {
+        for (let entity in this.entities) {
+            console.log(entity.active);
             if (entity.active === false) {
-                delete this.entitiesMap[entity];
+                console.log('reached here');
+                let index = this.entities.indexOf(entity);
+                this.entities.splice(index, 1);
             }
         }
     }
 
     getEntities(){
         // standard getter function
-        return this.entitiesMap;
+        return this.entities;
     }
 
     update(){
@@ -50,24 +52,22 @@ class EntityManager {
          * */
 
         // add entities to entity map
-        for (var entity in this.entitiesToAddMap) {
+        for (let entity in this.entitiesToAdd) {
 
-            if (entity.id in this.entitiesMap){
-                this.id++;
-                console.log('entities are overlapping');
-                entity.id = this.id;
+            if (entity.id in this.entities){
+                throw new Error(`EntityManager@update: Entity "${entity.id}" already found in this.entities.`);
             }
-            this.entitiesMap[entity.id] = entity;
+            this.entities.push(entity);
         }
 
         // clear entitiesToAddMap
-        this.entitiesToAddMap = {};
+        this.entitiesToAdd = [];
 
         // remove inactive entities
         this.removeInactiveEntities();
 
         // update size
-        this.size = Object.keys(this.entitiesMap).length;
+        this.size = this.entities.length;
     }
 
     getSize(){
@@ -75,6 +75,6 @@ class EntityManager {
         return this.size;
     }
 
-
 }
-module.exports =  EntityManager;
+// export the entity manager
+module.exports = EntityManager;

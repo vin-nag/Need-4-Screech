@@ -1,26 +1,21 @@
-window.toggle = () => { 
-    if(document.getElementById('login').style.display=='none') { 
-        document.getElementById('login').style.display='block'; 
-    } 
-    else if (document.getElementById('login').style.display=='block') { 
-        document.getElementById('login').style.display='none'; 
-    } 
-    if(document.getElementById('signUp').style.display=='none') { 
-        document.getElementById('signUp').style.display='block'; 
-    } 
-    else if (document.getElementById('signUp').style.display=='block') { 
-        document.getElementById('signUp').style.display='none'; 
+import APP_WINDOWS from "../../enums/app_windows"
+
+const windowToElement = {
+    [APP_WINDOWS.LOGIN]: "login",
+    [APP_WINDOWS.REGISTER]: "signUp",
+    [APP_WINDOWS.LEVEL_EDITOR]: "levelEditor"
+}
+
+const engine = (activeWindow) => {
+    for(let window of Object.values(APP_WINDOWS)){
+        const element = windowToElement[window]
+        if(window == activeWindow){
+             document.getElementById(element).style.display = "initial" 
+        }
+        else{
+            document.getElementById(element).style.display = "none"
+        }
     }
-    return false;
 }
 
-window.hideAuth = () => {
-
-    document.getElementById('login').style.display='none';
-    document.getElementById('signUp').style.display='none';
-}
-
-export default {
-    toggle, 
-    hideAuth
-}
+export default engine

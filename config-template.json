@@ -8,5 +8,8 @@
     },
     "gameSessionService": {
         "tickRate": 20
+    },
+    "frontendApp": {
+        "updateRate": 30
     }
 }

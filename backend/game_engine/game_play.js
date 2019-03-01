@@ -24,13 +24,15 @@ function spawnPlayer() {
 
 
 function play() {
+    //console.log(entity_manager.entities);
     player = spawnPlayer();
     entity_manager.update();
-    console.log(entity_manager);
+    //console.log(entity_manager.entities);
 
     player.destroy();
+    //console.log(player.active);
     entity_manager.update();
-    console.log(entity_manager);
+    console.log(entity_manager.entities);
 
 }
 
