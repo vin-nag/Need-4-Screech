@@ -6,7 +6,11 @@ const httpControllers = require("./backend/controllers/http")
 const socketControllers = require("./backend/controllers/socket")
 
 const app = express()
-app.use(express.static(path.join(__dirname, 'frontend/js/dist'))) //static resource
+
+//static resources
+app.use(express.static(path.join(__dirname, 'frontend/js/dist')))
+app.use(express.static(path.join(__dirname, 'frontend/css')))
+
 app.use(httpControllers)
 app.use(express.urlencoded({ extended: true }))
 

@@ -36,3 +36,5 @@ class LevelEditor {
         //Stub: Map key presses to level editor functions
     }
 }
+
+export default LevelEditor
