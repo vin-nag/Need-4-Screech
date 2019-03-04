@@ -21,6 +21,7 @@ export const listen = () => {
 
     document.getElementById("goToMenu").addEventListener("click", () => app.switchToWindow(APP_WINDOWS.MENU))
     document.addEventListener("keydown", (event) => services.getInput(event))
+    document.addEventListener("keyup", (event) => services.onKeyUp(event))
 }
 
 export default {

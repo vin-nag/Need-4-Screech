@@ -50,9 +50,19 @@ export const getInput = (event) => {
    
 }
 
+export const onKeyUp = (event) => {
+
+    socketClient.emit('onKeyUp', {
+        keyPressed: 0
+    })
+   
+   
+}
+
 
 export default {
 	onSignUp,
     onLogin,
-    getInput
+    getInput, 
+    onKeyUp
 }
