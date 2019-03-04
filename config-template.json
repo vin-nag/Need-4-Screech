@@ -15,12 +15,11 @@
     "player": {
         "jump": 10,
         "speed": 1,
-        "angle": 0
+        "angle": 0,
+        "lifeSpan": 10,
+        "health": 100
     },
-    "keyboard": {
-        "w": "jump",
-        "a": "left",
-        "s": "down",
-        "d": "right"
+    "game_engine": {
+        "gravity": -9.8
     }
 }

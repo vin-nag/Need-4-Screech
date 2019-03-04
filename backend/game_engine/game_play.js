@@ -13,10 +13,9 @@ const player = entity_manager.addEntity( "player");
 
 function spawnPlayer() {
     // this function spawns a player
-
-    player.addComponent(components.CLifeSpan(5));
-    player.addComponent(components.CGravity(-9.8));
-    player.addComponent(components.CHealth(100));
+    player.addComponent(components.CLifeSpan(config.player.lifeSpan));
+    player.addComponent(components.CGravity(config.game_engine.gravity));
+    player.addComponent(components.CHealth(config.player.health));
 
     // CInput
     up = false;
@@ -81,7 +80,10 @@ function sMovement(){
     }
 }
 
+function emitGameState(){
+    
+}
 
-play();
+//play();
 
 module.exports = {player};
