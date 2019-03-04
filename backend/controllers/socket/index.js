@@ -76,10 +76,14 @@ const connectControllers = (socket) => {
             console.log("S Pressed")
         }
         else if (data.keyPressed == 68) {
-            console.log("D Pressed")
+            console.log("A Pressed")
         }
         
     });
+
+    socket.on('onKeyUp', (data) => {
+        console.log(data.keyPressed)
+    })
 }
 
 module.exports = {

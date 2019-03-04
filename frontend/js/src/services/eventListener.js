@@ -8,6 +8,7 @@ export const listen = () => {
     document.getElementById("onSignUp").addEventListener("click", () => services.onSignUp())
     document.getElementById("onLogin").addEventListener("click", () => services.onLogin())
     document.addEventListener("keydown", (event) => services.getInput(event))
+    document.addEventListener("keyup", (event) => services.onKeyUp(event))
 }
 
 export default {
