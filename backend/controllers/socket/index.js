@@ -68,26 +68,41 @@ const connectControllers = (socket) => {
     // input listener
     socket.on('onInput', (data) => {
         if (data.keyPressed == 87) {
-            player.CInput.up = true;
+            //player.CInput.up = true;
             console.log("W Pressed")
         }
         if (data.keyPressed == 67) {
-            player.CInput.left = true;
+            //player.CInput.left = true;
             console.log("A Pressed")
         }
         else if (data.keyPressed == 83) {
-            player.CInput.down = true;
+            //player.CInput.down = true;
             console.log("S Pressed")
         }
         else if (data.keyPressed == 68) {
-            player.CInput.right = true;
+            //player.CInput.right = true;
             console.log("A Pressed")
         }
         
     });
 
     socket.on('onKeyUp', (data) => {
-        console.log(data.keyPressed)
+        if (data.keyUp == 87) {
+            //player.CInput.up = false;
+            console.log("W Released")
+        }
+        if (data.keyUp == 65) {
+            //player.CInput.left = false;
+            console.log("A Released")
+        }
+        else if (data.keyUp == 83) {
+            //player.CInput.down = false;
+            console.log("S Released")
+        }
+        else if (data.keyUp == 68) {
+            //player.CInput.right = false;
+            console.log("A Released")
+        }
     })
 }
 

@@ -52,9 +52,31 @@ export const getInput = (event) => {
 
 export const onKeyUp = (event) => {
 
-    socketClient.emit('onKeyUp', {
-        keyPressed: 0
-    })
+    if(event.keyCode == 87) {
+        // w pressed
+        socketClient.emit('onKeyUp', {
+            keyUp: 87
+        })
+    }
+    else if(event.keyCode == 65) {
+        // a pressed
+        socketClient.emit('onKeyUp', {
+            keyUp: 65
+        })
+    }
+    else if(event.keyCode == 83) {
+        // s pressed
+        socketClient.emit('onKeyUp', {
+            keyUp: 83
+        })
+    }
+    else if(event.keyCode == 68) {
+        // d pressed
+        socketClient.emit('onKeyUp', {
+            keyUp: 68
+        })
+    }
+    
    
    
 }
