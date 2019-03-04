@@ -1,5 +1,6 @@
 import APP_WINDOWS from "../../enums/app_windows"
 import gameRenderEngine from "./gameRenderEngine"
+import levelEditor from "../levelEditor"
 
 const windowToElement = {
     [APP_WINDOWS.LOGIN]: "login",
@@ -23,7 +24,7 @@ const engine = (activeWindow) => {
 
 const delegateRendering = (activeWindow) => {
     if(activeWindow === APP_WINDOWS.LEVEL_EDITOR){
-        gameRenderEngine([])
+        gameRenderEngine(levelEditor.entities)
     }
 }
 

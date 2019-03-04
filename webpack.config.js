@@ -5,7 +5,7 @@ module.exports = {
   mode: "development",
   output: {
     filename: 'index.js',
-    path: path.resolve(__dirname, 'frontend/js/dist/')
+    path: path.resolve(__dirname, 'frontend/static/dist/')
   },
   devtool: "cheap-eval-source-map"
 }

@@ -1,7 +1,23 @@
 class LevelEditor {
     constructor(){
         this.paused = false
-        this.entities = []
+        this.entities = [
+            {
+                componentMap: {
+                    "CAnimation": {
+                        "animName": "coin",
+                        "currentFrame": 0,
+                        "numOfFrames": 10
+                    },
+                    "CTransform": {
+                        position: {
+                            x: 100,
+                            y: 100
+                        }
+                    }
+                }
+            }
+        ]
         this.selectedEntity = null
     }
 

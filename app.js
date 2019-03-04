@@ -8,8 +8,7 @@ const socketControllers = require("./backend/controllers/socket")
 const app = express()
 
 //static resources
-app.use(express.static(path.join(__dirname, 'frontend/js/dist')))
-app.use(express.static(path.join(__dirname, 'frontend/css')))
+app.use(express.static(path.join(__dirname, 'frontend/static')))
 
 app.use(httpControllers)
 app.use(express.urlencoded({ extended: true }))
