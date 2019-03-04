@@ -11,5 +11,16 @@
     },
     "frontendApp": {
         "updateRate": 30
+    },
+    "player": {
+        "jump": 10,
+        "speed": 1,
+        "angle": 0
+    },
+    "keyboard": {
+        "w": "jump",
+        "a": "left",
+        "s": "down",
+        "d": "right"
     }
 }
