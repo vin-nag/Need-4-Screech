@@ -63,6 +63,23 @@ const connectControllers = (socket) => {
         });
 
     });
+
+    // input listener
+    socket.on('onInput', (data) => {
+        if (data.keyPressed == 87) {
+            console.log("W Pressed")
+        }
+        else if (data.keyPressed == 67) {
+            console.log("A Pressed")
+        }
+        else if (data.keyPressed == 83) {
+            console.log("S Pressed")
+        }
+        else if (data.keyPressed == 68) {
+            console.log("D Pressed")
+        }
+        
+    });
 }
 
 module.exports = {
