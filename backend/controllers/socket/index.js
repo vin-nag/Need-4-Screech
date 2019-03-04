@@ -3,6 +3,7 @@ const disconnectController = require("./disconnect")
 const testController = require("./test")
 const UserAuth = require("../../services/UserAuth")
 const models = require("../../models/models")
+const gamePlayState = require("./../../game_engine/game_play");
 
 /**
  * Listens to the io object passed for a connection event,
@@ -67,15 +68,19 @@ const connectControllers = (socket) => {
     // input listener
     socket.on('onInput', (data) => {
         if (data.keyPressed == 87) {
+            player.CInput.up = true;
             console.log("W Pressed")
         }
-        else if (data.keyPressed == 67) {
+        if (data.keyPressed == 67) {
+            player.CInput.left = true;
             console.log("A Pressed")
         }
         else if (data.keyPressed == 83) {
+            player.CInput.down = true;
             console.log("S Pressed")
         }
         else if (data.keyPressed == 68) {
+            player.CInput.right = true;
             console.log("A Pressed")
         }
         
