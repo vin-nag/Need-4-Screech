@@ -1,7 +1,7 @@
 const connectController = require("./connect")
 const disconnectController = require("./disconnect")
 const testController = require("./test")
-const UserAuth = require("../../services/userauth")
+const UserAuth = require("../../services/UserAuth")
 const models = require("../../models/models")
 
 /**
