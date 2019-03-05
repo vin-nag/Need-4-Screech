@@ -21,30 +21,30 @@ export const onLogin = () => {
     });
 }
 
-export const getInput = (event) => {
+export const onKeyDown = (event) => {
 
     if(event.keyCode == 87) {
         // w pressed
-        socketClient.emit('onInput', {
-            keyPressed: 87
+        socketClient.emit('onKeyDown', {
+            keyDown: 87
         })
     }
     else if(event.keyCode == 65) {
         // a pressed
-        socketClient.emit('onInput', {
-            keyPressed: 67
+        socketClient.emit('onKeyDown', {
+            keyDown: 65
         })
     }
     else if(event.keyCode == 83) {
         // s pressed
-        socketClient.emit('onInput', {
-            keyPressed: 83
+        socketClient.emit('onKeyDown', {
+            keyDown: 83
         })
     }
     else if(event.keyCode == 68) {
         // d pressed
-        socketClient.emit('onInput', {
-            keyPressed: 68
+        socketClient.emit('onKeyDown', {
+            keyDown: 68
         })
     }
    
@@ -85,6 +85,6 @@ export const onKeyUp = (event) => {
 export default {
 	onSignUp,
     onLogin,
-    getInput, 
+    onKeyDown, 
     onKeyUp
 }

@@ -7,7 +7,7 @@ export const listen = () => {
     document.getElementById("goToLogin").addEventListener("click", () => app.switchToWindow(APP_WINDOWS.LOGIN))    
     document.getElementById("onSignUp").addEventListener("click", () => services.onSignUp())
     document.getElementById("onLogin").addEventListener("click", () => services.onLogin())
-    document.addEventListener("keydown", (event) => services.getInput(event))
+    document.addEventListener("keydown", (event) => services.onKeyDown(event))
     document.addEventListener("keyup", (event) => services.onKeyUp(event))
 }
 
