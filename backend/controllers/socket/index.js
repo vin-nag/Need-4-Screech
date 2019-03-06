@@ -26,43 +26,34 @@ const connectControllers = (socket) => {
     socket.on('onSignUp',(data) => {
 
         UserAuth.validateRegistration(data, (res) => {
-
-            if(res) {
+            if(!res.success) {
                 socket.emit('signUpResponse',{success:false});
             }
-
             else {
-
                 new_user = models.user(data.username, data.email, data.password)
                 UserAuth.registerUser(new_user, (res) => {
 
-                    if(res) {
+                    if(!res.success) {
                         socket.emit('signUpResponse',{success:false});
                     }
                     else {
                         socket.emit('signUpResponse',{success:true});
                     }
-                    
                 });
             }
         });
-       
     });
 
     // login listener
     socket.on('onLogin', (data) => {
-
     	UserAuth.login(data, function(res) {
-
-            if(res) {
+            if(!res.success) {
                 socket.emit('signInResponse',{success:false});
             }
-
             else {
                 socket.emit('signInResponse',{success:true});
             }
         });
-
     });
 
     // input listeners
