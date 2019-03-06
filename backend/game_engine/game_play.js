@@ -3,19 +3,21 @@ const components = require("./components");
 const entity_manager_file = require("./entity_manager");
 const entity_manager = new entity_manager_file();
 const config = require("./../../config-template.json");
-const vector_file = require("./vector");
-
+const Vector = require("./vector");
 
 const player = entity_manager.addEntity( "player");
 
+let gameStarted = false;
+
 function spawnPlayer() {
+    console.log('spawning player now');
     // this function spawns a player
     player.addComponent(components.CLifeSpan(config.player.lifeSpan));
     player.addComponent(components.CGravity(config.game_engine.gravity));
     player.addComponent(components.CHealth(config.player.health));
 
     // CInput
-    up = false;
+    up = true;
     down = false;
     left = false;
     right = false;
@@ -23,44 +25,47 @@ function spawnPlayer() {
     player.addComponent(components.CInput(up, down, left, right, canShoot));
 
     // CTransform
-    let position = new vector_file(0,0);
-    let previous_position = new vector_file(0,0);
-    let velocity = new vector_file(0,0);
+    let position = new Vector(0,0);
+    let previous_position = new Vector(0,0);
+    let velocity = new Vector(0,0);
     player.addComponent(components.CTransform(position,previous_position,1,velocity,0));
+    console.log('player spawned. player object:', player);
+
 }
 
-function play() {
+function startGame() {
     // this function
-    console.log('entitities', entity_manager.entities);
-
+    console.log('starting game');
     spawnPlayer();
     entity_manager.update();
-    //console.log('player spawned. player object:', player);
-    console.log('entitities: ', entity_manager.entities);
-
-    player.destroy();
-    //console.log(player.active);
-    entity_manager.update();
-    console.log('entities:', entity_manager.entities);
+    console.log('game started');
 }
 
 function update(){
-    entity_manager.update();
-    //getUserInput();
-    //emitGameState();
+
+    if (!gameStarted){
+        startGame();
+        gameStarted = true;
+    }
+    else {
+        console.log('game continuing');
+        sMovement();
+        entity_manager.update();
+        return returnGameState();
+    }
 }
 
 function sMovement(){
 
-    let playerInput = player.CInput;
-    let playerTransform = player.CTransform;
+    let playerInput = player.getComponent('CInput');
+    let playerTransform = player.getComponent('CTransform');
 
     if (playerInput.up) {
         playerTransform.velocity.y = config.player.jump;
     }
 
     if (playerInput.left) {
-        playerTransform.velocity.x = - config.player.speed;
+        playerTransform.velocity.x = -config.player.speed;
         //playerTransform.scale.x = -1
     }
 
@@ -75,10 +80,11 @@ function sMovement(){
     }
 }
 
-function emitGameState(){
-    
+function returnGameState(){
+
+    return entity_manager.getEntities();
 }
 
-//play();
-
+update();
+update();
 module.exports = {player};
