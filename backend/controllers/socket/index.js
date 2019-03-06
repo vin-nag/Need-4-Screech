@@ -5,6 +5,7 @@ const UserAuth = require("../../services/UserAuth")
 const models = require("../../models/models")
 const gamePlayState = require("./../../game_engine/game_play");
 const player = gamePlayState.player;
+const update = gamePlayState.update();
 
 /**
  * Listens to the io object passed for a connection event,
@@ -76,27 +77,38 @@ const connectControllers = (socket) => {
             CInput.right = true;
             console.log("D Pressed")
         }
+        update;
+        console.log(player.getComponent("CInput"));
+        console.log("Update Down: ", update[0].getComponent("CInput"))
         
     });
 
     socket.on('onKeyUp', (data) => {
         let CInput = player.getComponent('CInput');
         if (data.keyUp == 87) {
+            update;
             CInput.up = false;
             console.log("W Released")
         }
         if (data.keyUp == 65) {
+            update;
             CInput.left = false;
             console.log("A Released")
         }
         if (data.keyUp == 83) {
+            update;
             CInput.down = false;
             console.log("S Released")
         }
         if (data.keyUp == 68) {
+            update;
             CInput.right = false;
             console.log("D Released")
         }
+
+        update;
+        console.log(player.getComponent("CInput"));
+        console.log("Update Up: ", update[0].getComponent("CInput"))
     })
 }
 

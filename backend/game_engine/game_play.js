@@ -87,4 +87,4 @@ function returnGameState(){
 
 update();
 update();
-module.exports = {player};
+module.exports = {player, update};
