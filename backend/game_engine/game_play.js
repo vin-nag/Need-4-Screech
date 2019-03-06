@@ -51,8 +51,8 @@ function update(){
         console.log('game continuing');
         sMovement();
         entity_manager.update();
-        return returnGameState();
     }
+    return returnGameState();
 }
 
 function sMovement(){
