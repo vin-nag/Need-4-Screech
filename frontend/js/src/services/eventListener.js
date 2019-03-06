@@ -9,6 +9,15 @@ export const listen = () => {
     document.getElementById("onLogin").addEventListener("click", () => services.onLogin())
     document.addEventListener("keydown", (event) => services.onKeyDown(event))
     document.addEventListener("keyup", (event) => services.onKeyUp(event))
+    document.getElementById("goToLevelEditor").addEventListener("click", () => app.switchToWindow(APP_WINDOWS.LEVEL_EDITOR))
+    document.getElementById("levelEditorCanvas").addEventListener("click", (e) => levelEditor.handleClick(e))
+    document.getElementById("levelEditorCanvas").addEventListener("mousemove", (e) => levelEditor.handleMouseMove(e))
+    document.addEventListener("wheel", (e) => {
+        if(app.getActiveWindow() === APP_WINDOWS.LEVEL_EDITOR){ levelEditor.handleMouseWheel(e) }
+    })
+    document.addEventListener("keypress", (e) => {
+        if(app.getActiveWindow() === APP_WINDOWS.LEVEL_EDITOR){ levelEditor.handleKeyPress(e) }
+    })
 }
 
 export default {

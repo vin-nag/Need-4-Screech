@@ -16,6 +16,10 @@ class App {
         this.state.activeWindow = newWindow
     }
 
+    getActiveWindow(){
+        return this.state.activeWindow
+    }
+
     run(){
         socketClient.listen()
         eventListener.listen()
