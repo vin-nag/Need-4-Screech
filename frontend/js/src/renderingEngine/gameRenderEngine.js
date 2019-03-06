@@ -1,7 +1,7 @@
 import canvasService from "../services/canvas"
 
-const engine = (entities) => {
-    const canvas = document.getElementById("levelEditorCanvas")
+const engine = (entities, canvasID) => {
+    const canvas = document.getElementById(canvasID)
     const ctx = canvas.getContext("2d")
     
     canvasService.draw.rectangle(ctx, 0, 0, canvas.width, canvas.height, "#42adf4")

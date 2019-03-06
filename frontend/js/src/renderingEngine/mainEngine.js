@@ -30,7 +30,10 @@ const engine = (activeWindow) => {
 
 const delegateRendering = (activeWindow) => {
     if(activeWindow === APP_WINDOWS.LEVEL_EDITOR){
-        gameRenderEngine(levelEditor.entities)
+        gameRenderEngine(levelEditor.entities, "levelEditorCanvas")
+    }
+    if(activeWindow === APP_WINDOWS.GAME_PLAY){
+        gameRenderEngine([], "gamePlayCanvas")
     }
     else if(activeWindow === APP_WINDOWS.MENU){
         menuRenderEngine(menuService.getActiveMenuItems())
