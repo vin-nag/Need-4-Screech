@@ -93,5 +93,7 @@ function returnGameState(){
 
 update();
 update();
-module.exports = {player, update};
 console.log('get entities by tag', entity_manager.getEntitiesByTag('player'));
+
+module.exports = {player, update, returnGameState};
+
