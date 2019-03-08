@@ -1,4 +1,4 @@
-const config = require("../../config)
+const config = require("../../config")
 const mongojs = require("mongojs")
 
 const { user, password, clusterString, database, options } = config.db
