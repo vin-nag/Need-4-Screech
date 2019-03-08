@@ -10,8 +10,10 @@ const player = entity_manager.addEntity( "player");
 let gameStarted = false;
 
 function spawnPlayer() {
+    /*
+    This function spawns a player, adding all the necessary components
+     */
     console.log('spawning player now');
-    // this function spawns a player
     player.addComponent(components.CLifeSpan(config.player.lifeSpan));
     player.addComponent(components.CGravity(config.game_engine.gravity));
     player.addComponent(components.CHealth(config.player.health));
@@ -35,7 +37,8 @@ function spawnPlayer() {
 }
 
 function startGame() {
-    // this function
+    // this function starts the game, spawning the player and other necessary things
+
     console.log('starting game');
     spawnPlayer();
     entity_manager.update();
@@ -43,7 +46,7 @@ function startGame() {
 }
 
 function update(){
-
+    // this function handles the update function, starting a game if it hasn't been already
     if (!gameStarted){
         startGame();
         gameStarted = true;
@@ -56,6 +59,7 @@ function update(){
 }
 
 function sMovement(){
+    // movement system
 
     let playerInput = player.getComponent('CInput');
     let playerTransform = player.getComponent('CTransform');
@@ -81,7 +85,9 @@ function sMovement(){
 }
 
 function returnGameState(){
-
+    /*
+    this function returns the game state as an object
+     */
     return {
         'player': entity_manager.getEntitiesByTag('player')[0],
         'enemies': entity_manager.getEntitiesByTag('enemy'),
@@ -90,9 +96,9 @@ function returnGameState(){
     };
 }
 
-update();
-update();
-console.log('get entities by tag', entity_manager.getEntitiesByTag('player'));
+//update();
+//update();
+//console.log('get entities by tag', entity_manager.getEntitiesByTag('player'));
 
 module.exports = {player, update, returnGameState};
 

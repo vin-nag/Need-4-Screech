@@ -5,7 +5,9 @@ const entity_file = require("./entity");
 const Entity = new entity_file();
 
 class EntityManager {
-
+    /*
+    This class manages entities
+     */
     constructor() {
         this.id = 0;
         this.size = 0;
