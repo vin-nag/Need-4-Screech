@@ -25,12 +25,13 @@ function spawnPlayer() {
     player.addComponent(components.CInput(up, down, left, right, canShoot));
 
     // CTransform
-    let position = new Vector(0,0);
-    let previous_position = new Vector(0,0);
-    let velocity = new Vector(0,0);
-    player.addComponent(components.CTransform(position,previous_position,1,velocity,0));
+    let position = new Vector(100, 100);
+    let previous_position = new Vector(0, 0);
+    let velocity = new Vector(0, 0);
+    player.addComponent(components.CTransform(position, previous_position,1, velocity,0));
     console.log('player spawned. player object:', player);
 
+    player.addComponent(components.CAnimation('stand64',1,0,0))
 }
 
 function startGame() {
