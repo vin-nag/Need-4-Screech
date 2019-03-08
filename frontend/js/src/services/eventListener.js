@@ -18,6 +18,8 @@ export const listen = () => {
     document.addEventListener("keypress", (e) => {
         if(app.getActiveWindow() === APP_WINDOWS.LEVEL_EDITOR){ levelEditor.handleKeyPress(e) }
     })
+
+    document.getElementById("goToMenu").addEventListener("click", () => app.switchToWindow(APP_WINDOWS.MENU))
 }
 
 export default {
