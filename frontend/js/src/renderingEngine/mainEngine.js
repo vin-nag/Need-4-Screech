@@ -1,11 +1,16 @@
 import APP_WINDOWS from "../../enums/app_windows"
+
 import gameRenderEngine from "./gameRenderEngine"
+import menuRenderEngine from "./menuRenderEngine"
+
 import levelEditor from "../levelEditor"
+import menuService from "../services/menu"
 
 const windowToElement = {
     [APP_WINDOWS.LOGIN]: "login",
     [APP_WINDOWS.REGISTER]: "signUp",
-    [APP_WINDOWS.LEVEL_EDITOR]: "levelEditor"
+    [APP_WINDOWS.LEVEL_EDITOR]: "levelEditor",
+    [APP_WINDOWS.MENU]: "menu"
 }
 
 const engine = (activeWindow) => {
@@ -25,6 +30,9 @@ const engine = (activeWindow) => {
 const delegateRendering = (activeWindow) => {
     if(activeWindow === APP_WINDOWS.LEVEL_EDITOR){
         gameRenderEngine(levelEditor.entities)
+    }
+    else if(activeWindow === APP_WINDOWS.MENU){
+        menuRenderEngine(menuService.getActiveMenuItems())
     }
 }
 
