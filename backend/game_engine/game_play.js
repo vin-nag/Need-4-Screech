@@ -17,7 +17,7 @@ function spawnPlayer() {
     player.addComponent(components.CHealth(config.player.health));
 
     // CInput
-    up = true;
+    up = false;
     down = false;
     left = false;
     right = false;

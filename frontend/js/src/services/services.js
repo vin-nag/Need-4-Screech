@@ -29,22 +29,28 @@ export const onKeyDown = (event) => {
             keyDown: 87
         })
     }
-    else if(event.keyCode == 65) {
+    if(event.keyCode == 65) {
         // a pressed
         socketClient.emit('onKeyDown', {
             keyDown: 65
         })
     }
-    else if(event.keyCode == 83) {
+    if(event.keyCode == 83) {
         // s pressed
         socketClient.emit('onKeyDown', {
             keyDown: 83
         })
     }
-    else if(event.keyCode == 68) {
+    if(event.keyCode == 68) {
         // d pressed
         socketClient.emit('onKeyDown', {
             keyDown: 68
+        })
+    }
+    if(event.charCode == 32) {
+        // space pressed
+        socketClient.emit('onKeyDown', {
+            keyDown: 32
         })
     }
    
@@ -53,27 +59,33 @@ export const onKeyDown = (event) => {
 export const onKeyUp = (event) => {
 
     if(event.keyCode == 87) {
-        // w pressed
+        // w up
         socketClient.emit('onKeyUp', {
             keyUp: 87
         })
     }
-    else if(event.keyCode == 65) {
-        // a pressed
+    if(event.keyCode == 65) {
+        // a up
         socketClient.emit('onKeyUp', {
             keyUp: 65
         })
     }
-    else if(event.keyCode == 83) {
-        // s pressed
+    if(event.keyCode == 83) {
+        // s up
         socketClient.emit('onKeyUp', {
             keyUp: 83
         })
     }
-    else if(event.keyCode == 68) {
-        // d pressed
+    if(event.keyCode == 68) {
+        // d up
         socketClient.emit('onKeyUp', {
             keyUp: 68
+        })
+    }
+    if(event.keyCode == 32) {
+        // space up
+        socketClient.emit('onKeyUp', {
+            keyDown: 32
         })
     }
     
