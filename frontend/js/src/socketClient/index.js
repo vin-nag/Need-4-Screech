@@ -27,6 +27,12 @@ export const listen = () => {
         } else
             alert("Sign in unsuccessul.");
     });
+
+    socket.on('updateGameState', (data) => {
+        alert(data.gameState[0]);
+    }) 
+        
+    
 }
 
 export const emit = (eventName, data) => {
