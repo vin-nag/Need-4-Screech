@@ -1,9 +1,9 @@
 import APP_WINDOWS from "../../enums/app_windows"
-
 import gameRenderEngine from "./gameRenderEngine"
 import menuRenderEngine from "./menuRenderEngine"
 
 import levelEditor from "../levelEditor"
+import gamePlay from '../gamePlay'
 import menuService from "../services/menu"
 
 const windowToElement = {
@@ -33,7 +33,7 @@ const delegateRendering = (activeWindow) => {
         gameRenderEngine(levelEditor.entities, "levelEditorCanvas")
     }
     if(activeWindow === APP_WINDOWS.GAME_PLAY){
-        gameRenderEngine([], "gamePlayCanvas")
+        gameRenderEngine(gamePlay.entities, "gamePlayCanvas")
     }
     else if(activeWindow === APP_WINDOWS.MENU){
         menuRenderEngine(menuService.getActiveMenuItems())
