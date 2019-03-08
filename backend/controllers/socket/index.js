@@ -6,6 +6,7 @@ const models = require("../../models/models")
 const gamePlayState = require("./../../game_engine/game_play");
 const player = gamePlayState.player;
 const update = gamePlayState.update();
+const gameState = gamePlayState.returnGameState();
 
 /**
  * Listens to the io object passed for a connection event,
@@ -116,9 +117,7 @@ const connectControllers = (socket) => {
     })
 
     // emit player compoents back to frontend
-    socket.emit('updatePlayer', (data) => {
-       
-    })
+    socket.emit('updateGameState',{gameState: gameState});
 
     
 }
