@@ -46,6 +46,17 @@ class EntityManager {
         return this.entities;
     }
 
+    getEntitiesByTag(tag){
+        let returnEntities = [];
+
+        for (let entity of this.entities){
+            if (entity.tag === tag){
+                returnEntities.push(entity);
+            }
+        }
+        return returnEntities;
+    }
+
     update(){
         /** this function does an update, adding entities and removing them.
          * */
