@@ -61,7 +61,7 @@ const connectControllers = (socket) => {
 
     // input listeners
     socket.on('onKeyDown', (data) => {
-        let CInput = getComponent('CInput');
+        let CInput = player.getComponent('CInput');
         if (data.keyDown == 87) {
             CInput.up = true;
             console.log("W Pressed")
@@ -84,12 +84,11 @@ const connectControllers = (socket) => {
         }
         update;
         console.log(player.getComponent("CInput"));
-        console.log("Update Down: ", update[0].getComponent("CInput"))
         
     });
 
     socket.on('onKeyUp', (data) => {
-        let CInput = getComponent('CInput');
+        let CInput = player.getComponent('CInput');
         if (data.keyUp == 87) {
             CInput.up = false;
             console.log("W Released")
@@ -113,7 +112,6 @@ const connectControllers = (socket) => {
 
         update;
         console.log(player.getComponent("CInput"));
-        console.log("Update Up: ", update[0].getComponent("CInput"))
     })
 
     // emit player compoents back to frontend
