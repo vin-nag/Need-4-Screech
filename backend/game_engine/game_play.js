@@ -83,9 +83,15 @@ function sMovement(){
 
 function returnGameState(){
 
-    return entity_manager.getEntities();
+    return {
+        'player': entity_manager.getEntitiesByTag('player')[0],
+        'enemies': entity_manager.getEntitiesByTag('enemy'),
+        'tiles': entity_manager.getEntitiesByTag('tile'),
+        'bullets': entity_manager.getEntitiesByTag('bullet')
+    };
 }
 
 update();
 update();
 module.exports = {player, update};
+console.log('get entities by tag', entity_manager.getEntitiesByTag('player'));
