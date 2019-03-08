@@ -53,7 +53,6 @@ function update(){
         sMovement();
         entity_manager.update();
     }
-    return returnGameState();
 }
 
 function sMovement(){
@@ -93,4 +92,7 @@ function returnGameState(){
 
 update();
 update();
+console.log('get entities by tag', entity_manager.getEntitiesByTag('player'));
+
 module.exports = {player, update, returnGameState};
+
