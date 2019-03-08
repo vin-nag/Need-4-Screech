@@ -1,6 +1,7 @@
 import io from "socket.io-client"
 import connectListener from "./connect"
 import disconnectListener from "./disconnect"
+import levelEditor from "./levelEditor"
 
 export const socket = io()
 
@@ -25,6 +26,34 @@ export const listen = () => {
         } else
             alert("Sign in unsuccessul.");
     });
+
+    // ****************************** Level Editor Listeners ******************************
+    
+    // Save Level Listener
+
+    socket.on('saveLevelResponse', function(data){
+        if(data.success){
+            alert("Level saved successfully.")
+        }
+        else{
+            alert(data.errors[0])
+        }
+    })
+
+
+    // Load level Listener
+
+    socket.on('loadLevelResponse', function(data){
+        if(data.success){
+            levelEditor.setEntities(data.res.entities)
+            alert("Level Loaded Successfully.")
+        }
+        else{
+            alert(data.errors[0])
+        }
+
+    })
+    
 }
 
 export const emit = (eventName, data) => {

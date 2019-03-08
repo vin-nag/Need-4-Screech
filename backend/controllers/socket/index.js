@@ -1,7 +1,7 @@
 const connectController = require("./connect")
 const disconnectController = require("./disconnect")
 const testController = require("./test")
-const UserAuth = require("../../services/userauth")
+const UserAuth = require("../../services/UserAuth")
 const models = require("../../models/models")
 
 /**
@@ -63,6 +63,36 @@ const connectControllers = (socket) => {
         });
 
     });
+
+    // ********************************** Level Editor Listeners *****************************************
+
+    // Save level listener.
+    socket.on('saveLevel', (data) =>{
+
+        db.levels.findOne({levelName: data.levelName}, function(err, res){
+            if(err || res != null){
+                socekt.emit('saveLevelResponse', {success: false, errors: [err]})
+            }
+            else{
+                new_level = models.level(data.levelName, data.entities)
+                db.levels.save(new_level)
+                socket.emit('saveLevelResponse', {success: true, errors:[]})
+            }
+        })
+    })
+
+
+    // Load level listener.
+    socket.on('loadLevel', (data)=>{
+        db.levels.findOne({levelName: data.levelName}, function(err, res){
+            if(err || res == null){
+                socket.emit('loadLevelResponse', {success: false, errors: [err]})
+            }
+            else{
+                socket.emit('loadLevelResponse', {success: true, errors:[], res})
+            }
+        })
+    })
 }
 
 module.exports = {
