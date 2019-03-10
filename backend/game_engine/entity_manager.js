@@ -4,7 +4,9 @@
 const Entity = require("./entity");
 
 class EntityManager {
-
+    /*
+    This class manages entities
+     */
     constructor() {
         this.id = 0;
         this.size = 0;
@@ -18,11 +20,11 @@ class EntityManager {
          * */
 
         let entity = new Entity(this.id, tag);
-
         this.id++;
         this.entitiesToAdd.push(entity);
 
         return entity
+
     }
 
     removeInactiveEntities(){
@@ -30,7 +32,7 @@ class EntityManager {
          * @param {string} tag type of the component
          * */
 
-        for (let entity in this.entities) {
+        for (let entity of this.entities) {
             if (entity.active === false) {
                 let index = this.entities.indexOf(entity);
                 this.entities.splice(index, 1);
@@ -43,12 +45,16 @@ class EntityManager {
         return this.entities;
     }
 
+    getEntitiesByTag(tag){
+        return this.entities.filter(entity => entity.tag === tag)
+    }
+
     update(){
         /** this function does an update, adding entities and removing them.
          * */
 
         // add entities to entity map
-        for (let entity in this.entitiesToAdd) {
+        for (let entity of this.entitiesToAdd) {
 
             if (entity.id in this.entities){
                 throw new Error(`EntityManager@update: Entity "${entity.id}" already found in this.entities.`);
@@ -70,6 +76,7 @@ class EntityManager {
         // standard getter function
         return this.size;
     }
+
 
 }
 // export the entity manager

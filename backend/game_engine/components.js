@@ -52,3 +52,5 @@ const CInput = (up, down, left, right, shoot, canShoot) => ({name: "CInput", up,
  * @param {float} speed The number of frames per second to increment `currentFrame` by.
  */
 const CAnimation = (animName, numOfFrames, currentFrame, speed) => ({name: "CAnimation", animName, numOfFrames, currentFrame, speed})
+
+module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation};
