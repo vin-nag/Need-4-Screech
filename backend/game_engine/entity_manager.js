@@ -1,8 +1,7 @@
 /**
  * Entity Manager class using standard ECS architecture.
  */
-const entity_file = require("./entity");
-const Entity = new entity_file();
+const Entity = require("./entity");
 
 class EntityManager {
     /*
@@ -20,7 +19,7 @@ class EntityManager {
          * @param {string} tag type of the component
          * */
 
-        let entity = new Entity.constructor(this.id, tag);
+        let entity = new Entity(this.id, tag);
         this.id++;
         this.entitiesToAdd.push(entity);
 
@@ -34,9 +33,7 @@ class EntityManager {
          * */
 
         for (let entity of this.entities) {
-            //console.log('in remove inactive entities', entity);
             if (entity.active === false) {
-                //console.log('reached active === false reached here');
                 let index = this.entities.indexOf(entity);
                 this.entities.splice(index, 1);
             }
@@ -49,14 +46,7 @@ class EntityManager {
     }
 
     getEntitiesByTag(tag){
-        let returnEntities = [];
-
-        for (let entity of this.entities){
-            if (entity.tag === tag){
-                returnEntities.push(entity);
-            }
-        }
-        return returnEntities;
+        return this.entities.filter(entity => entity.tag === tag)
     }
 
     update(){
@@ -65,12 +55,10 @@ class EntityManager {
 
         // add entities to entity map
         for (let entity of this.entitiesToAdd) {
-            //console.log('adding entities in update. entity:', entity);
 
             if (entity.id in this.entities){
                 throw new Error(`EntityManager@update: Entity "${entity.id}" already found in this.entities.`);
             }
-            //console.log('entity check here:',entity);
             this.entities.push(entity);
         }
 

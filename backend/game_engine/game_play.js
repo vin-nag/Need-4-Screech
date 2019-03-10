@@ -1,7 +1,7 @@
 // imports
 const components = require("./components");
-const entity_manager_file = require("./entity_manager");
-const entity_manager = new entity_manager_file();
+const EntityManager = require("./entity_manager");
+const entity_manager = new EntityManager();
 const config = require("./../../config-template.json");
 const Vector = require("./vector");
 
@@ -95,10 +95,6 @@ function returnGameState(){
         'bullets': entity_manager.getEntitiesByTag('bullet')
     };
 }
-
-//update();
-//update();
-//console.log('get entities by tag', entity_manager.getEntitiesByTag('player'));
 
 module.exports = {player, update, returnGameState};
 

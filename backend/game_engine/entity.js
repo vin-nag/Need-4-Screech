@@ -56,9 +56,7 @@ class Entity {
 
     destroy() {
         // this function marks an entity inactive to be removed by entity manager later
-        //console.log('reached destroy');
         this.active = false;
-        //console.log(this)
     }
 
     getTag() {
