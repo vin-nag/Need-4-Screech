@@ -1,6 +1,6 @@
 const config = require("../../config")
 const uuid = require("uuid")
-const GameEngine = require("../game_engine")
+const GameEngine = require("../game_engine/game_play");
 const { tickRate } = config.gameSessionService
 
 /**

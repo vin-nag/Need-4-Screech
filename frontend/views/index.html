@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>Login</title>
-    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="dist/index.js"></script>
+    <link rel="stylesheet" href="css/main.css"></link>
 </head>
 <body>
 
@@ -15,6 +16,12 @@
 
         <span>Don't have an account?</span>
         <a href="#" id="goToSignup">Sign Up Now</a>
+        <div style="padding-top: 20px;">
+            <button id="goToLevelEditor">LevelEditor</a>
+        </div>
+        <div style="padding-top: 20px;">
+            <button id="goToMenu">Menu</a>
+        </div>
 
     </div>
 
@@ -33,7 +40,15 @@
     </div>
 
     <div id="levelEditor">
-        <canvas id="levelEditorCanvas" width="1280" height="720"></canvas>
+        <canvas id="levelEditorCanvas" class="centeredCanvas" width="1280" height="720"></canvas>
+    </div>
+
+    <div id="menu">
+        <canvas id="menuCanvas" class="centeredCanvas" width="1280" height="720"></canvas>
+    </div>
+
+    <div id="gamePlay">
+        <canvas id="gamePlayCanvas" class="centeredCanvas" width="1280" height="720"></canvas>
     </div>
 
 </body>
