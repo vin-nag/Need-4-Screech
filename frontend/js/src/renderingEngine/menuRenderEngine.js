@@ -11,7 +11,7 @@ const engine = (menuItems, selectedItemIndex) => {
 
     for(let i = 0; i < menuItems.length; i++){
         const x = canvas.width/2
-        const y = i*menuItemHeight + menuVerticalPadding
+        const y = (i+0.5)*menuItemHeight + menuVerticalPadding
         const color = (i === selectedItemIndex) ? "rgba(255,255,255,0.5)" : "#fff"
         canvasService.draw.text(ctx, menuItems[i], x, y, "48px", color, "Permanent Marker")
     }
