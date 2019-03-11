@@ -38,9 +38,18 @@ class GameSessionService {
         delete this.updateIntervals[sessionId]
     }
 
+    getSession(sessionId){
+        if(!(sessionId in this.sessions)){
+            console.log(`GameSessionService@getSession: Provided sessionId "${sessionId}" not found`)
+            return
+        }
+        return this.sessions[sessionId]
+    }
+
     _updateGame(gameEngine) {
         gameEngine.update()
     }
+
 }
 
 module.exports = new GameSessionService()
