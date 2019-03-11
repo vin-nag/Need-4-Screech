@@ -45,3 +45,12 @@ const CBoundingBox = (size, halfSize) => ({name: "CBoundingBox", size, halfSize}
 */
 const CInput = (up, down, left, right, shoot, canShoot) => ({name: "CInput", up, down, left, right, shoot, canShoot});
 
+/**
+ * @param {string} animName The name of the animation file (should be located in the assets/animations folder)
+ * @param {int} numOfFrames The number of frames contained within the animation
+ * @param {float} currentFrame The current frame. Floor this variable to determine which portion of the animation to render.
+ * @param {float} speed The number of frames per second to increment `currentFrame` by.
+ */
+const CAnimation = (animName, numOfFrames, currentFrame, speed) => ({name: "CAnimation", animName, numOfFrames, currentFrame, speed})
+
+module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation};

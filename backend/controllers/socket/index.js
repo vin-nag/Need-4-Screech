@@ -1,6 +1,8 @@
 const connectController = require("./connect")
 const disconnectController = require("./disconnect")
 const testController = require("./test")
+const authController = require("./auth")
+const inputController = require("./input")
 const UserAuth = require("../../services/UserAuth")
 const models = require("../../models/models")
 
@@ -20,7 +22,7 @@ const connectControllers = (socket) => {
     connectController(socket)
     socket.on("disconnect", () => disconnectController(socket))
     socket.on("test", data => testController(socket, data))
-
+  
     // signup listener
     socket.on('onSignUp',(data) => {
 
@@ -93,8 +95,14 @@ const connectControllers = (socket) => {
             }
         })
     })
+  
+    socket.on("onSignUp", data => authController.onSignUp(socket, data))
+    socket.on("onLogin", data => authController.onLogin(socket, data))
+    // socket.on("onKeyDown", data => inputController.onKeyDown(socket, data))
+    // socket.on("onKeyUp", data => inputController.onKeyUp(socket, data)) 
+
 }
 
 module.exports = {
     listen
-}
+};

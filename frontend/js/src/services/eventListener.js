@@ -9,6 +9,7 @@ export const listen = () => {
     document.getElementById("onSignUp").addEventListener("click", () => services.onSignUp())
     document.getElementById("onLogin").addEventListener("click", () => services.onLogin())
 
+    document.getElementById("goToLevelEditor").addEventListener("click", () => app.switchToWindow(APP_WINDOWS.LEVEL_EDITOR))
     document.getElementById("levelEditorCanvas").addEventListener("click", (e) => levelEditor.handleClick(e))
     document.getElementById("levelEditorCanvas").addEventListener("mousemove", (e) => levelEditor.handleMouseMove(e))
     document.addEventListener("wheel", (e) => {
@@ -17,6 +18,10 @@ export const listen = () => {
     document.addEventListener("keypress", (e) => {
         if(app.getActiveWindow() === APP_WINDOWS.LEVEL_EDITOR){ levelEditor.handleKeyPress(e) }
     })
+
+    document.getElementById("goToMenu").addEventListener("click", () => app.switchToWindow(APP_WINDOWS.MENU))
+    document.addEventListener("keydown", (event) => services.onKeyDown(event))
+    document.addEventListener("keyup", (event) => services.onKeyUp(event))
 }
 
 export default {

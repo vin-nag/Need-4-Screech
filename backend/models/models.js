@@ -5,7 +5,6 @@ user = (username, email, password, score=0, levels=[]) => ({username, email, pas
 level = (levelName, entities=[]) => ({levelName, entities})
 
 module.exports = {
-	
 	user,
 	level
 }
