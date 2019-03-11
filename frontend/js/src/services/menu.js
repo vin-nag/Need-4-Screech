@@ -1,6 +1,5 @@
 import app from "../app"
 import APP_WINDOWS from "../../enums/app_windows"
-import { get } from "http";
 
 /**
  * Shows the menu items for the given menu label
