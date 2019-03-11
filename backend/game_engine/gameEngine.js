@@ -10,7 +10,8 @@ class GameEngine {
         this.sessionId = sessionId;
         this.entity_manager = new EntityManager();
         this.player = this.entity_manager.addEntity( "player");
-        this.gameStarted = false;
+        this.gameStarted = false
+        this.lastInput = 0;
     }
 
      spawnPlayer() {
@@ -57,8 +58,60 @@ class GameEngine {
         }
         else {
             console.log('game continuing');
+            this.sInput();
             this.sMovement();
             this.entity_manager.update();
+        }
+    }
+
+
+    sInput(){
+        // Input system
+        let CInput = this.player.getComponent('CInput');
+        if (this.lastInput.event == onkeydown){
+            if (this.lastInput.key == 87) {
+                CInput.up = true;
+                console.log("W Pressed")
+            }
+            if (this.lastInput.key == 65) {
+                CInput.left = true;
+                console.log("A Pressed")
+            }
+            if (this.lastInput.key == 83) {
+                CInput.down = true;
+                console.log("S Pressed")
+            }
+            if (this.lastInput.key == 68) {
+                CInput.right = true;
+                console.log("D Pressed")
+            }
+            if (this.lastInput.key == 32) {
+                CInput.shoot = true;
+                console.log("Space Pressed")
+            }
+        }
+
+        if (this.lastInput.event == onkeyup){
+            if (this.lastInput.key == 87) {
+                CInput.up = false;
+                console.log("W Released")
+            }
+            if (this.lastInput.key == 65) {
+                CInput.left = false;
+                console.log("A Released")
+            }
+            if (this.lastInput.key == 83) {
+                CInput.down = false;
+                console.log("S Released")
+            }
+            if (this.lastInput.key == 68) {
+                CInput.right = false;
+                console.log("D Released")
+            }
+            if (this.lastInput.key == 32) {
+                CInput.shoot = false;
+                console.log("Space Released")
+            }
         }
     }
 
