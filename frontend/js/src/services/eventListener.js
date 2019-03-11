@@ -2,6 +2,7 @@ import app from "../app"
 import APP_WINDOWS from "../../enums/app_windows"
 import services from "./services"
 import levelEditor from "../levelEditor"
+import gamePlay from "../gamePlay";
 
 export const listen = () => {
     document.getElementById("goToSignup").addEventListener("click", () => app.switchToWindow(APP_WINDOWS.REGISTER))
@@ -17,11 +18,18 @@ export const listen = () => {
     })
     document.addEventListener("keypress", (e) => {
         if(app.getActiveWindow() === APP_WINDOWS.LEVEL_EDITOR){ levelEditor.handleKeyPress(e) }
+        
+    })
+
+    document.addEventListener("keydown", (e) => {
+        if (app.getActiveWindow() === APP_WINDOWS.GAME_PLAY){ gamePlay.handleKeyPress(e) }
+    })
+    document.addEventListener("keyup", (e) => {
+        if (app.getActiveWindow() === APP_WINDOWS.GAME_PLAY){ gamePlay.handleKeyPress(e) }
     })
 
     document.getElementById("goToMenu").addEventListener("click", () => app.switchToWindow(APP_WINDOWS.MENU))
-    document.addEventListener("keydown", (event) => services.onKeyDown(event))
-    document.addEventListener("keyup", (event) => services.onKeyUp(event))
+
 }
 
 export default {

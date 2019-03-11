@@ -7,25 +7,25 @@ const update = gamePlayState.update;
 const gameState = gamePlayState.returnGameState();
 
 const onKeyDown = (socket, data) => {
-    let CInput = player.getComponent('CInput');
+    //let CInput = player.getComponent('CInput');
     if (data.keyDown == 87) {
-        CInput.up = true;
+        //CInput.up = true;
         console.log("W Pressed")
     }
     if (data.keyDown == 65) {
-        CInput.left = true;
+       //CInput.left = true;
         console.log("A Pressed")
     }
     if (data.keyDown == 83) {
-        CInput.down = true;
+        //CInput.down = true;
         console.log("S Pressed")
     }
     if (data.keyDown == 68) {
-        CInput.right = true;
+        //CInput.right = true;
         console.log("D Pressed")
     }
     if (data.keyDown == 32) {
-        CInput.shoot = true;
+        //CInput.shoot = true;
         console.log("Space Pressed")
     }
     update();
@@ -34,30 +34,29 @@ const onKeyDown = (socket, data) => {
 }
 
 const onKeyUp = (socket, data) => {
-    let CInput = player.getComponent('CInput');
+    //let CInput = player.getComponent('CInput');
     if (data.keyUp == 87) {
-        CInput.up = false;
+        //CInput.up = false;
         console.log("W Released")
     }
     if (data.keyUp == 65) {
-        CInput.left = false;
+        //CInput.left = false;
         console.log("A Released")
     }
     if (data.keyUp == 83) {
-        CInput.down = false;
+        //CInput.down = false;
         console.log("S Released")
     }
     if (data.keyUp == 68) {
-        CInput.right = false;
+        //CInput.right = false;
         console.log("D Released")
     }
     if (data.keyUp == 32) {
-        CInput.shoot = false;
+       // CInput.shoot = false;
         console.log("Space Released")
     }
 
     update();
-    console.log(player.getComponent("CInput"));
 }
 
 module.exports = {
