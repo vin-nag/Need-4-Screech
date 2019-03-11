@@ -1,12 +1,13 @@
 import app from "../app"
 import APP_WINDOWS from "../../enums/app_windows"
 
+/**
+ * Shows the menu items for the given menu label
+ * 
+ * @param {*} menu The label of the menu/sub-menu to be set as active
+ */
 const goToMenu = (menu) => {
     menuState.activeMenu = menu
-}
-
-const getMenuState = () => {
-    return {..._menuState} //Using the `...` spread copies the object into a new one
 }
 
 /**
@@ -24,6 +25,33 @@ const getActiveMenuItems = () => {
     return _menuOptions[activeMenu].children
 }
 
+/**
+ * Gets the index of the selected item
+ */
+const getSelectedItemIndex = () => {
+    return _menuState.selectedItemIndex
+}
+
+/**
+ * Handles key inputs for the menu window
+ */
+const handleKeyPress = (event) => {
+    if(event.keyCode === 38){ _shiftSelectedItemUp() } //Up Arrow Key
+    else if(event.keyCode === 40){ _shiftSelectedItemDown() } //Down Arrow Key
+}
+
+//--------------Private Variables and Functions------------//
+
+const _shiftSelectedItemDown = () => {
+    const numOfItems = getActiveMenuItems().length
+    _menuState.selectedItemIndex = (_menuState.selectedItemIndex + 1) % numOfItems
+}
+
+const _shiftSelectedItemUp = () => {
+    const numOfItems = getActiveMenuItems().length
+    _menuState.selectedItemIndex = (_menuState.selectedItemIndex - 1) % numOfItems
+}
+
 const _menuOptions = {
     "Campaign": {handler: () => app.switchToWindow(APP_WINDOWS.OVERWORLD), children: []},
     "Multiplayer": {handler: () => goToMenu("Multiplayer"), children: ["Host Session", "Join Session"]},
@@ -38,11 +66,13 @@ const _menuOptions = {
 }
 
 const _menuState = {
-    activeMenu: "Main"
+    activeMenu: "Main",
+    selectedItemIndex: 0
 }
 
 export default {
     goToMenu,
-    getMenuState,
-    getActiveMenuItems
+    getActiveMenuItems,
+    getSelectedItemIndex,
+    handleKeyPress
 }
