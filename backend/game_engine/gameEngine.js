@@ -1,19 +1,16 @@
 // imports
 const components = require("./components");
 const EntityManager = require("./entity_manager");
-const entity_manager = new EntityManager();
 const config = require("./../../config-template.json");
 const Vector = require("./vector");
 
-
 class GameEngine {
 
-    constructor(){
-        this.player = entity_manager.addEntity( "player");
-
-        let gameStarted = false;
-
-
+    constructor(sessionId){
+        this.sessionId = sessionId;
+        this.entity_manager = new EntityManager();
+        this.player = this.entity_manager.addEntity( "player");
+        this.gameStarted = false;
     }
 
      spawnPlayer() {
@@ -21,55 +18,55 @@ class GameEngine {
         This function spawns a player, adding all the necessary components
          */
         console.log('spawning player now');
-        player.addComponent(components.CLifeSpan(config.player.lifeSpan));
-        player.addComponent(components.CGravity(config.game_engine.gravity));
-        player.addComponent(components.CHealth(config.player.health));
+        this.player.addComponent(components.CLifeSpan(config.player.lifeSpan));
+        this.player.addComponent(components.CGravity(config.game_engine.gravity));
+        this.player.addComponent(components.CHealth(config.player.health));
 
         // CInput
-        up = false;
-        down = false;
-        left = false;
-        right = false;
-        canShoot = false;
-        player.addComponent(components.CInput(up, down, left, right, canShoot));
+        let up = false;
+        let down = false;
+        let left = false;
+        let right = false;
+        let canShoot = false;
+        this.player.addComponent(components.CInput(up, down, left, right, canShoot));
 
         // CTransform
         let position = new Vector(100, 100);
         let previous_position = new Vector(0, 0);
         let velocity = new Vector(0, 0);
-        player.addComponent(components.CTransform(position, previous_position,1, velocity,0));
-        console.log('player spawned. player object:', player);
+        this.player.addComponent(components.CTransform(position, previous_position,1, velocity,0));
+        console.log('player spawned. player object:', this.player);
 
-        player.addComponent(components.CAnimation('stand64',1,0,0))
+        this.player.addComponent(components.CAnimation('stand64',1,0,0))
     }
 
      startGame() {
         // this function starts the game, spawning the player and other necessary things
 
         console.log('starting game');
-        spawnPlayer();
-        entity_manager.update();
+        this.spawnPlayer();
+        this.entity_manager.update();
         console.log('game started');
     }
 
     update(){
         // this function handles the update function, starting a game if it hasn't been already
-        if (!gameStarted){
-            startGame();
-            gameStarted = true;
+        if (!this.gameStarted){
+            this.startGame();
+            this.gameStarted = true;
         }
         else {
             console.log('game continuing');
-            sMovement();
-            entity_manager.update();
+            this.sMovement();
+            this.entity_manager.update();
         }
     }
 
     sMovement(){
         // movement system
 
-        let playerInput = player.getComponent('CInput');
-        let playerTransform = player.getComponent('CTransform');
+        let playerInput = this.player.getComponent('CInput');
+        let playerTransform = this.player.getComponent('CTransform');
 
         if (playerInput.up) {
             playerTransform.velocity.y = config.player.jump;
@@ -96,10 +93,10 @@ class GameEngine {
         this function returns the game state as an object
          */
         return {
-            'player': entity_manager.getEntitiesByTag('player')[0],
-            'enemies': entity_manager.getEntitiesByTag('enemy'),
-            'tiles': entity_manager.getEntitiesByTag('tile'),
-            'bullets': entity_manager.getEntitiesByTag('bullet')
+            'player': this.entity_manager.getEntitiesByTag('player')[0],
+            'enemies': this.entity_manager.getEntitiesByTag('enemy'),
+            'tiles': this.entity_manager.getEntitiesByTag('tile'),
+            'bullets': this.entity_manager.getEntitiesByTag('bullet')
         };
     }
 
@@ -110,10 +107,4 @@ class GameEngine {
 
 }
 
-
-
-
-
-
-module.exports = {player, update, returnGameState};
-
+module.exports = new GameEngine;
