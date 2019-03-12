@@ -24,8 +24,8 @@ const connectControllers = (socket) => {
     socket.on("test", data => testController(socket, data))
     socket.on("onSignUp", data => authController.onSignUp(socket, data))
     socket.on("onLogin", data => authController.onLogin(socket, data))
-    // socket.on("onKeyDown", data => inputController.onKeyDown(socket, data))
-    // socket.on("onKeyUp", data => inputController.onKeyUp(socket, data)) 
+    socket.on("onKeyDown", data => inputController.onKeyDown(socket, data))
+    socket.on("onKeyUp", data => inputController.onKeyUp(socket, data)) 
 
     // ********************************** Level Editor Listeners *****************************************
 
