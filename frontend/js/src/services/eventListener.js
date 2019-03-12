@@ -1,6 +1,7 @@
 import app from "../app"
 import APP_WINDOWS from "../../enums/app_windows"
 import services from "./services"
+import menuService from "./menu"
 import levelEditor from "../levelEditor"
 
 export const listen = () => {
@@ -20,7 +21,10 @@ export const listen = () => {
     })
 
     document.getElementById("goToMenu").addEventListener("click", () => app.switchToWindow(APP_WINDOWS.MENU))
-    document.addEventListener("keydown", (event) => services.onKeyDown(event))
+    document.addEventListener("keydown", (event) => {
+        services.onKeyDown(event)
+        if(app.getActiveWindow() === APP_WINDOWS.MENU){ menuService.handleKeyPress(event) }
+    })
     document.addEventListener("keyup", (event) => services.onKeyUp(event))
 }
 
