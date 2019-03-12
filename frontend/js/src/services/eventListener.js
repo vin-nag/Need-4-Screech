@@ -24,7 +24,7 @@ export const listen = () => {
     })
     document.addEventListener("keydown", (event) => {
         if(app.getActiveWindow() === APP_WINDOWS.MENU){ menuService.handleKeyPress(event) }
-        if (app.getActiveWindow() === APP_WINDOWS.GAME_PLAY){ gamePlay.handleKeyPress(e) }
+        else if (app.getActiveWindow() === APP_WINDOWS.GAME_PLAY){ gamePlay.handleKeyPress(event) }
     })
     document.addEventListener("keyup", (e) => {
         if (app.getActiveWindow() === APP_WINDOWS.GAME_PLAY){ gamePlay.handleKeyPress(e) }

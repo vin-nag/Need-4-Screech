@@ -9,14 +9,14 @@ const gameState = gamePlayState.returnGameState();
 const onKeyDown = (socket, data) => {
 
     // console log keyCode
-    console.log(data.keyCode)
+    console.log("keydown", data.keyCode)
    
 }
 
 const onKeyUp = (socket, data) => {
    
     // console log keyCode 
-    console.log(data.keyCode)
+    console.log("keyup", data.keyCode)
  
 }
 

@@ -17,7 +17,7 @@ class GamePlay {
                 keyCode: event.keyCode
             })   
         }
-        else if (event.type === 'keyup') {
+        if (event.type === 'keyup') {
             socketClient.emit('onKeyUp', {
                 keyCode: event.keyCode
             })
