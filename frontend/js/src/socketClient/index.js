@@ -60,7 +60,7 @@ export const listen = () => {
     })
 
     socket.on('updateGameState', (data) => {
-        gamePlay.getEntities(data.gameState[0])
+        gamePlay.setEntities(data.gameState[0])
         console.log("entities", data.gameState)
 
     })
