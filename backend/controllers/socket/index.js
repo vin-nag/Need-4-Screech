@@ -3,6 +3,7 @@ const disconnectController = require("./disconnect")
 const testController = require("./test")
 const authController = require("./auth")
 const inputController = require("./input")
+const gameStateController = require("./gameState")
 
 const models = require("../../models/models")
 
@@ -26,7 +27,8 @@ const connectControllers = (socket) => {
     socket.on("onLogin", data => authController.onLogin(socket, data))
     socket.on("onKeyDown", data => inputController.onKeyDown(socket, data))
     socket.on("onKeyUp", data => inputController.onKeyUp(socket, data)) 
-    socket.on("newSessionID", data => inputController.onNewSession(socket, data)) 
+    socket.on("newSessionID", data => inputController.onNewSession(socket, data))
+    socket.on("requestGameStateUpdate", data => gameStateController.onRequestGameStateUpdate(socket, data))
 
 
     // ********************************** Level Editor Listeners *****************************************

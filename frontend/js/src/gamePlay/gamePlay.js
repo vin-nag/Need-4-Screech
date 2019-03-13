@@ -7,7 +7,17 @@ class GamePlay {
         this.sessionID = null
     }
 
-    getEntities(entities) {
+    run(){
+        setInterval(() => this.requestStateUpdate(), 50)
+    }
+
+    requestStateUpdate(){
+        socketClient.emit("requestGameStateUpdate", {
+            sessionId: this.sessionID
+        })
+    }
+
+    setEntities(entities) {
         this.entities = entities;
     }
 
