@@ -1,4 +1,4 @@
-const config = require("../../config")
+const config = require("../../config-template")
 const uuid = require("uuid")
 const GameEngine = require("../game_engine/gameEngine");
 const { tickRate } = config.gameSessionService
