@@ -1,6 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
+
 .centeredCanvas {
     transform: translate(-50%, -50%);
     position: absolute;
     top: 50%;
     left: 50%;
 }
+
+
