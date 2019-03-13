@@ -143,7 +143,7 @@ class GameEngine {
             //playerTransform.scale.x = 1
         }
 
-        playerTransform.position.y += config.game_engine.gravity;
+        playerTransform.position.y -= config.game_engine.gravity;
     }
 
     returnGameState(){
