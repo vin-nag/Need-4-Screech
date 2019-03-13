@@ -15,20 +15,36 @@ export const listen = () => {
         console.log(data.msg); 
     });
 
+    // ****************************** Registration Listeners ******************************
+
+    // Sign-up listener
+
     socket.on('signUpResponse', (data) => {
         if(data.success){
             alert("Sign up successful.");
             app.switchToWindow(APP_WINDOW.GAME_PLAY)
-        } else
-            alert("Sign up unsuccessful.");
+        }
+        else{
+            let errMsg = ""
+            for (let i in data.errors){
+                errMsg += data.errors[i] + " \n"
+            }
+            alert(errMsg)
+        }
     });
     
+    // Login listener
+
     socket.on('signInResponse', (data) => {
         if(data.success){
             app.switchToWindow(APP_WINDOW.GAME_PLAY)
-        } else
-            alert("Sign in unsuccessul.");
+        } 
+        else{
+            alert(data.errors[0]);
+        }
     });
+
+
 
     // ****************************** Level Editor Listeners ******************************
     
