@@ -1,26 +1,24 @@
-//TODO: Delegate input => CInput mapping to the gameEngine
-//TODO: Use data.gameSessionId and pass it to the GameSessionService
-    
-const gamePlayState = require("./../../game_engine/game_play");
-const player = gamePlayState.player;
-const update = gamePlayState.update;
-const gameState = gamePlayState.returnGameState();
+const gameSessionService = require("./../../services/GameSessionService");
 
 const onKeyDown = (socket, data) => {
-
-    // console log keyCode
-    console.log("keydown", data.keyCode)
-   
-}
+    let session = gameSessionService.getSession(data.sessionID);
+    session.lastInput = {event:'onKeyDown', key:data.keyCode};
+};
 
 const onKeyUp = (socket, data) => {
-   
-    // console log keyCode 
-    console.log("keyup", data.keyCode)
- 
-}
+    let session = gameSessionService.getSession(data.sessionID);
+    session.lastInput = {event:'onKeyUp', key:data.keyCode};
+};
+
+const onNewSession = (socket, data) => {
+    let sessionID = gameSessionService.addSession()
+    socket.emit('newSessionID', {
+        session: sessionID
+    })
+};
 
 module.exports = {
     onKeyDown,
-    onKeyUp
+    onKeyUp, 
+    onNewSession
 }

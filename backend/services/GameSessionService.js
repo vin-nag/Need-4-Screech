@@ -1,6 +1,6 @@
-const config = require("../../config")
+const config = require("../../config-template")
 const uuid = require("uuid")
-const GameEngine = require("../game_engine/game_play");
+const GameEngine = require("../game_engine/gameEngine");
 const { tickRate } = config.gameSessionService
 
 /**
@@ -15,9 +15,8 @@ class GameSessionService {
     }
 
     addSession(){
-        const sessionEngine = new GameEngine()
-        
         const sessionId = uuid.v4()
+        const sessionEngine = new GameEngine.constructor(sessionId)
         this.sessions[sessionId] = sessionEngine
         this.updateIntervals[sessionId] = setInterval(() => this._updateGame(sessionEngine), 1000/tickRate)
 
@@ -39,9 +38,18 @@ class GameSessionService {
         delete this.updateIntervals[sessionId]
     }
 
-    _updateGame(gameEngine){
+    getSession(sessionId){
+        if(!(sessionId in this.sessions)){
+            console.log(`GameSessionService@getSession: Provided sessionId "${sessionId}" not found`)
+            return
+        }
+        return this.sessions[sessionId]
+    }
+
+    _updateGame(gameEngine) {
         gameEngine.update()
     }
+
 }
 
 module.exports = new GameSessionService()

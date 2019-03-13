@@ -19,6 +19,7 @@ export const listen = () => {
         if(data.success){
             alert("Sign up successful.");
             app.switchToWindow(APP_WINDOW.GAME_PLAY)
+            gamePlay.newSessionId();
         } else
             alert("Sign up unsuccessful.");
     });
@@ -26,6 +27,7 @@ export const listen = () => {
     socket.on('signInResponse', (data) => {
         if(data.success){
             app.switchToWindow(APP_WINDOW.GAME_PLAY)
+            gamePlay.newSessionId();
         } else
             alert("Sign in unsuccessul.");
     });
@@ -60,6 +62,10 @@ export const listen = () => {
     socket.on('updateGameState', (data) => {
         gamePlay.getEntities(data.gameState[0])
 
+    })
+
+    socket.on('newSessionID', (data) => {
+        gamePlay.getSession(data.session)
     }) 
     
 }

@@ -26,6 +26,8 @@ const connectControllers = (socket) => {
     socket.on("onLogin", data => authController.onLogin(socket, data))
     socket.on("onKeyDown", data => inputController.onKeyDown(socket, data))
     socket.on("onKeyUp", data => inputController.onKeyUp(socket, data)) 
+    socket.on("newSessionID", data => inputController.onNewSession(socket, data)) 
+
 
     // ********************************** Level Editor Listeners *****************************************
 
