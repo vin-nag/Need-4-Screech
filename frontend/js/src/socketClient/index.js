@@ -61,11 +61,12 @@ export const listen = () => {
 
     socket.on('updateGameState', (data) => {
         gamePlay.getEntities(data.gameState[0])
+        console.log("entities", data.gameState)
 
     })
 
     socket.on('newSessionID', (data) => {
-        gamePlay.getSession(data.session)
+        gamePlay.setSession(data.session)
     }) 
     
 }

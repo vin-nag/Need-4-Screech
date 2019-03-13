@@ -22,6 +22,7 @@ class GameEngine {
         this.player.addComponent(components.CLifeSpan(config.player.lifeSpan));
         this.player.addComponent(components.CGravity(config.game_engine.gravity));
         this.player.addComponent(components.CHealth(config.player.health));
+        this.player.addComponent(components.CAnimation('stand64',1,0,0))
 
         // CInput
         let up = false;
@@ -38,7 +39,6 @@ class GameEngine {
         this.player.addComponent(components.CTransform(position, previous_position,1, velocity,0));
         console.log('player spawned. player object:', this.player);
 
-        this.player.addComponent(components.CAnimation('stand64',1,0,0))
     }
 
      startGame() {
