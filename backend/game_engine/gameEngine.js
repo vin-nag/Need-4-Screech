@@ -128,7 +128,7 @@ class GameEngine {
 
         if (playerInput.left) {
             playerTransform.velocity.x = -config.player.speed;
-            playerTransform.position.x -= playerTransform.velocity.x;
+            playerTransform.position.x += playerTransform.velocity.x;
             //playerTransform.scale.x = -1
         }
 
