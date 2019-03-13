@@ -12,6 +12,7 @@ class GamePlay {
     }
 
     requestStateUpdate(){
+        console.log("session", this.sessionID)
         socketClient.emit("requestGameStateUpdate", {
             sessionId: this.sessionID
         })
