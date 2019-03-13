@@ -68,7 +68,7 @@ class GameEngine {
     sInput(){
         // Input system
         let CInput = this.player.getComponent('CInput');
-        if (this.lastInput.event == onkeydown){
+        if (this.lastInput.event == "onKeyDown"){
             if (this.lastInput.key == 87) {
                 CInput.up = true;
                 console.log("W Pressed")
@@ -91,7 +91,7 @@ class GameEngine {
             }
         }
 
-        if (this.lastInput.event == onkeyup){
+        if (this.lastInput.event == "onKeyUp"){
             if (this.lastInput.key == 87) {
                 CInput.up = false;
                 console.log("W Released")
