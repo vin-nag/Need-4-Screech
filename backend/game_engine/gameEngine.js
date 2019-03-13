@@ -123,15 +123,18 @@ class GameEngine {
 
         if (playerInput.up) {
             playerTransform.velocity.y = config.player.jump;
+            playerTransform.position.y -= playerTransform.velocity.y;
         }
 
         if (playerInput.left) {
             playerTransform.velocity.x = -config.player.speed;
+            playerTransform.position.x -= playerTransform.velocity.x;
             //playerTransform.scale.x = -1
         }
 
         if (playerInput.right) {
             playerTransform.velocity.x = config.player.speed;
+            playerTransform.position.x += playerTransform.velocity.x;
             //playerTransform.scale.x = 1
         }
 
