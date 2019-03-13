@@ -3,6 +3,7 @@ import socketClient from "./socketClient"
 import mainRenderingEngine from "./renderingEngine/mainEngine"
 import eventListener from "./services/eventListener"
 import { frontendApp as config } from "../../../config"
+import gamePlay from './gamePlay'
 
 class App {
     constructor(){

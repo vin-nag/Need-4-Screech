@@ -57,7 +57,7 @@ class GameEngine {
             this.gameStarted = true;
         }
         else {
-            console.log('game continuing');
+            // console.log('game continuing', this.entity_manager.getEntities());
             this.sInput();
             this.sMovement();
             this.entity_manager.update();
@@ -142,6 +142,7 @@ class GameEngine {
     }
 
     returnGameState(){
+        console.log("entiries", this.entity_manager.getEntities())
         return this.entity_manager.getEntities();
 
         /*
