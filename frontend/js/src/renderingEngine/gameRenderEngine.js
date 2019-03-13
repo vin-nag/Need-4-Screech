@@ -3,6 +3,8 @@ import canvasService from "../services/canvas"
 const engine = (entities, canvasID) => {
     const canvas = document.getElementById(canvasID)
     const ctx = canvas.getContext("2d")
+
+    console.log(entities)
     
     canvasService.draw.rectangle(ctx, 0, 0, canvas.width, canvas.height, "#42adf4")
     
@@ -12,6 +14,7 @@ const engine = (entities, canvasID) => {
 const drawEntity = (ctx, entity) => {
     const animation = entity.componentMap["CAnimation"]
     const transform = entity.componentMap["CTransform"]
+
 
     const img = new Image()
     img.src = `assets/animations/${animation.animName}.png`

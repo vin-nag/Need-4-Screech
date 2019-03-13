@@ -7,14 +7,22 @@ class GamePlay {
         this.sessionID = null
     }
 
-    getEntities(entities) {
-        this.entities = entities;
-        console.log(this.entities)
+    run(){
+        setInterval(() => this.requestStateUpdate(), 50)
     }
 
-    getSession(sessionID) {
+    requestStateUpdate(){
+        socketClient.emit("requestGameStateUpdate", {
+            sessionId: this.sessionID
+        })
+    }
+
+    setEntities(entities) {
+        this.entities = entities;
+    }
+
+    setSession(sessionID) {
         this.sessionID = sessionID
-        alert(this.sessionID)
     }
 
     handleKeyPress(event) {

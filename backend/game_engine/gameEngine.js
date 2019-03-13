@@ -22,6 +22,7 @@ class GameEngine {
         this.player.addComponent(components.CLifeSpan(config.player.lifeSpan));
         this.player.addComponent(components.CGravity(config.game_engine.gravity));
         this.player.addComponent(components.CHealth(config.player.health));
+        this.player.addComponent(components.CAnimation('stand64',1,0,0))
 
         // CInput
         let up = false;
@@ -38,7 +39,6 @@ class GameEngine {
         this.player.addComponent(components.CTransform(position, previous_position,1, velocity,0));
         console.log('player spawned. player object:', this.player);
 
-        this.player.addComponent(components.CAnimation('stand64',1,0,0))
     }
 
      startGame() {
@@ -57,7 +57,7 @@ class GameEngine {
             this.gameStarted = true;
         }
         else {
-            console.log('game continuing');
+            // console.log('game continuing', this.entity_manager.getEntities());
             this.sInput();
             this.sMovement();
             this.entity_manager.update();
@@ -123,15 +123,18 @@ class GameEngine {
 
         if (playerInput.up) {
             playerTransform.velocity.y = config.player.jump;
+            playerTransform.position.y -= playerTransform.velocity.y;
         }
 
         if (playerInput.left) {
             playerTransform.velocity.x = -config.player.speed;
+            playerTransform.position.x += playerTransform.velocity.x;
             //playerTransform.scale.x = -1
         }
 
         if (playerInput.right) {
             playerTransform.velocity.x = config.player.speed;
+            playerTransform.position.x += playerTransform.velocity.x;
             //playerTransform.scale.x = 1
         }
 
@@ -139,18 +142,22 @@ class GameEngine {
             playerTransform.velocity.x = 0;
             //playerTransform.scale.x = 1
         }
+
+        playerTransform.position.y -= config.game_engine.gravity;
     }
 
     returnGameState(){
+        return this.entity_manager.getEntities();
+
         /*
-        this function returns the game state as an object
-         */
         return {
             'player': this.entity_manager.getEntitiesByTag('player')[0],
             'enemies': this.entity_manager.getEntitiesByTag('enemy'),
             'tiles': this.entity_manager.getEntitiesByTag('tile'),
             'bullets': this.entity_manager.getEntitiesByTag('bullet')
         };
+        this function returns the game state as an object
+         */
     }
 
 }
