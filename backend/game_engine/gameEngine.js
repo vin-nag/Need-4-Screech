@@ -142,15 +142,17 @@ class GameEngine {
     }
 
     returnGameState(){
+        return this.entity_manager.getEntities();
+
         /*
-        this function returns the game state as an object
-         */
         return {
             'player': this.entity_manager.getEntitiesByTag('player')[0],
             'enemies': this.entity_manager.getEntitiesByTag('enemy'),
             'tiles': this.entity_manager.getEntitiesByTag('tile'),
             'bullets': this.entity_manager.getEntitiesByTag('bullet')
         };
+        this function returns the game state as an object
+         */
     }
 
 }
