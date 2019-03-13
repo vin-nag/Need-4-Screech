@@ -147,7 +147,6 @@ class GameEngine {
     }
 
     returnGameState(){
-        console.log("entiries", this.entity_manager.getEntities())
         return this.entity_manager.getEntities();
 
         /*
