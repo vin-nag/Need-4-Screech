@@ -10,9 +10,16 @@ const text = (ctx, text, x, y, size="20px", fill="#000", font="sans-serif", alig
     ctx.fillText(text, x, y)
 }
 
+const button = (ctx, icon, x, y, width, height, iconSize=null, fill="rgba(0, 0, 0, 0.5)", color="#fff") => {
+    iconSize = iconSize || Math.floor(width*0.75)+"px"
+    rectangle(ctx, x, y, width, height, fill)
+    text(ctx, icon, (2*x+width)/2, (2*y+height)/2 + 0.33*parseInt(iconSize), iconSize, color, "FontAwesome")
+}
+
 export default {
     draw: {
         rectangle,
-        text
+        text,
+        button
     }
 }
