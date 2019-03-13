@@ -9,12 +9,10 @@ class GamePlay {
 
     getEntities(entities) {
         this.entities = entities;
-        console.log(this.entities)
     }
 
-    getSession(sessionID) {
+    setSession(sessionID) {
         this.sessionID = sessionID
-        alert(this.sessionID)
     }
 
     handleKeyPress(event) {
