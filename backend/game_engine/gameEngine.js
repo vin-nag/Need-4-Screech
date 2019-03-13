@@ -142,6 +142,8 @@ class GameEngine {
             playerTransform.velocity.x = 0;
             //playerTransform.scale.x = 1
         }
+
+        playerTransform.position.y += config.game_engine.gravity;
     }
 
     returnGameState(){
