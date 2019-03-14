@@ -69,46 +69,46 @@ class GameEngine {
         // Input system
         let CInput = this.player.getComponent('CInput');
         if (this.lastInput.event == "onKeyDown"){
-            if (this.lastInput.key == 87) {
+            if (this.lastInput.key == config.controls.up) {
                 CInput.up = true;
                 console.log("W Pressed")
             }
-            if (this.lastInput.key == 65) {
+            if (this.lastInput.key == config.controls.left) {
                 CInput.left = true;
                 console.log("A Pressed")
             }
-            if (this.lastInput.key == 83) {
+            if (this.lastInput.key == config.controls.down) {
                 CInput.down = true;
                 console.log("S Pressed")
             }
-            if (this.lastInput.key == 68) {
+            if (this.lastInput.key == config.controls.right) {
                 CInput.right = true;
                 console.log("D Pressed")
             }
-            if (this.lastInput.key == 32) {
+            if (this.lastInput.key == config.controls.shoot) {
                 CInput.shoot = true;
                 console.log("Space Pressed")
             }
         }
 
         if (this.lastInput.event == "onKeyUp"){
-            if (this.lastInput.key == 87) {
+            if (this.lastInput.key == config.controls.up) {
                 CInput.up = false;
                 console.log("W Released")
             }
-            if (this.lastInput.key == 65) {
+            if (this.lastInput.key == config.controls.left) {
                 CInput.left = false;
                 console.log("A Released")
             }
-            if (this.lastInput.key == 83) {
+            if (this.lastInput.key == config.controls.down) {
                 CInput.down = false;
                 console.log("S Released")
             }
-            if (this.lastInput.key == 68) {
+            if (this.lastInput.key == config.controls.right) {
                 CInput.right = false;
                 console.log("D Released")
             }
-            if (this.lastInput.key == 32) {
+            if (this.lastInput.key == config.controls.shoot) {
                 CInput.shoot = false;
                 console.log("Space Released")
             }
@@ -120,10 +120,11 @@ class GameEngine {
 
         let playerInput = this.player.getComponent('CInput');
         let playerTransform = this.player.getComponent('CTransform');
+        playerTransform.previous_position = playerTransform.position;
 
         if (playerInput.up) {
             playerTransform.velocity.y = config.player.jump;
-            playerTransform.position.y -= playerTransform.velocity.y;
+            playerTransform.position.y += playerTransform.velocity.y;
         }
 
         if (playerInput.left) {
@@ -140,10 +141,17 @@ class GameEngine {
 
         if (playerInput.left && playerInput.right) {
             playerTransform.velocity.x = 0;
+            playerTransform.position.x = playerTransform.previous_position.x;
             //playerTransform.scale.x = 1
         }
 
-        playerTransform.position.y -= config.game_engine.gravity;
+        // add gravity effects to every entity that has CTransform
+        for (let entity of this.entity_manager.getEntities()){
+            if (entity.hasComponent('CTransform')){
+                const eTransform = entity.getComponent('CTransform');
+                eTransform.position.y += config.game_engine.gravity;
+            }
+        }
     }
 
     returnGameState(){
