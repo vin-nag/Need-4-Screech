@@ -3,7 +3,6 @@ const components = require("./components");
 const EntityManager = require("./entity_manager");
 const config = require("./../../config-template.json");
 const Vector = require("./vector");
-const physics = require("./physics");
 
 class GameEngine {
 
@@ -34,37 +33,11 @@ class GameEngine {
         this.player.addComponent(components.CInput(up, down, left, right, canShoot));
 
         // CTransform
-        let position = new Vector(100, 435);
+        let position = new Vector(100, 100);
         let previous_position = new Vector(0, 0);
         let velocity = new Vector(0, 0);
         this.player.addComponent(components.CTransform(position, previous_position,1, velocity,0));
         console.log('player spawned. player object:', this.player);
-
-        //CBoundingBox
-         let size = new Vector(64, 64);
-         let half_size = new Vector(32, 32);
-         this.player.addComponent(components.CBoundingBox(size, half_size));
-     }
-
-    spawnTiles() {
-
-        for (let x = 0; x < 1280; x+=64){
-            let tile = this.entity_manager.addEntity("tile");
-
-            // animation
-            tile.addComponent(components.CAnimation('GreyTile',1,0,0))
-
-            // transform
-            let position = new Vector(x, 500);
-            let previous_position = new Vector(0, 0);
-            let velocity = new Vector(0, 0);
-            tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
-
-            //bounding box
-            let size = new Vector(64, 64);
-            let half_size = new Vector(32, 32);
-            tile.addComponent(components.CBoundingBox(size, half_size));
-        }
 
     }
 
@@ -87,8 +60,6 @@ class GameEngine {
             // console.log('game continuing', this.entity_manager.getEntities());
             this.sInput();
             this.sMovement();
-            this.sCollision();
-            this.spawnTiles();
             this.entity_manager.update();
         }
     }
@@ -168,12 +139,6 @@ class GameEngine {
             //playerTransform.scale.x = 1
         }
 
-        if (playerInput.down) {
-            playerTransform.velocity.y = config.player.speed;
-            playerTransform.position.y += playerTransform.velocity.y;
-            //playerTransform.scale.x = 1
-        }
-
         if (playerInput.left && playerInput.right) {
             playerTransform.velocity.x = 0;
             playerTransform.position.x = playerTransform.previous_position.x;
@@ -185,16 +150,6 @@ class GameEngine {
             if (entity.hasComponent('CTransform')){
                 const eTransform = entity.getComponent('CTransform');
                 eTransform.position.y += config.game_engine.gravity;
-            }
-        }
-    }
-
-    sCollision(){
-
-        for (let tile of this.entity_manager.getEntitiesByTag("tile")){
-            if (tile.hasComponent("CBoundingBox")){
-                let overlap = physics.getOverLap(this.player, tile)
-                console.log(overlap);
             }
         }
     }
