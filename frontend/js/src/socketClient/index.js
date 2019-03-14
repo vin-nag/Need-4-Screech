@@ -23,9 +23,13 @@ export const listen = () => {
         if(data.success){
             alert("Sign up successful.");
             app.switchToWindow(APP_WINDOW.GAME_PLAY)
+<<<<<<< HEAD
             gamePlay.newSessionId();
             gamePlay.run()
         } 
+=======
+        }
+>>>>>>> 25f8061d63f5b6aae80dcac643618091e85fcf83
         else{
             let errMsg = ""
             for (let i in data.errors){
@@ -40,13 +44,18 @@ export const listen = () => {
     socket.on('signInResponse', (data) => {
         if(data.success){
             app.switchToWindow(APP_WINDOW.GAME_PLAY)
+<<<<<<< HEAD
             gamePlay.newSessionId();
             gamePlay.run()
+=======
+>>>>>>> 25f8061d63f5b6aae80dcac643618091e85fcf83
         } 
         else{
             alert(data.errors[0]);
         }
     });
+
+
 
     // ****************************** Level Editor Listeners ******************************
     
