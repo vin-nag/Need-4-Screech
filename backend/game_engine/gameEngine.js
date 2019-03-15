@@ -88,11 +88,8 @@ class GameEngine {
             // console.log('game continuing', this.entity_manager.getEntities());
             this.sInput();
             this.sMovement();
-<<<<<<< HEAD
             this.spawnTiles();
-=======
             this.sCollision();
->>>>>>> d4ebe438a0ea1e9800fff9117c74c19632d3d9a6
             this.entity_manager.update();
         }
     }
@@ -195,7 +192,6 @@ class GameEngine {
 
     sCollision(){
 
-<<<<<<< HEAD
         let playerTransform = this.player.getComponent('CTransform');
 
         for (let tile of this.entity_manager.getEntitiesByTag("tile")){
@@ -206,17 +202,12 @@ class GameEngine {
         }
 
 
-
-
-
-=======
         for (let tile of this.entity_manager.getEntitiesByTag("tile")){
             if (tile.hasComponent("CBoundingBox")){
                 let overlap = physics.getOverLap(this.player, tile);
                 console.log('overlap', overlap);
             }
         }
->>>>>>> d4ebe438a0ea1e9800fff9117c74c19632d3d9a6
     }
 
     returnGameState(){
