@@ -39,7 +39,11 @@ class GameEngine {
         this.player.addComponent(components.CTransform(position, previous_position,1, velocity,0));
         console.log('player spawned. player object:', this.player);
 
-    }
+        //CBoundingBox
+         let size = new Vector(64, 64);
+         let half_size = new Vector(32, 32);
+         this.player.addComponent(components.CBoundingBox(size, half_size));
+     }
 
      startGame() {
         // this function starts the game, spawning the player and other necessary things
