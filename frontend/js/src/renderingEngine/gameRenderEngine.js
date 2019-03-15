@@ -4,8 +4,6 @@ import assetManager from "../services/assetManager"
 const engine = (entities, canvasID) => {
     const canvas = document.getElementById(canvasID)
     const ctx = canvas.getContext("2d")
-
-    console.log(entities)
     
     canvasService.draw.rectangle(ctx, 0, 0, canvas.width, canvas.height, "#42adf4")
     
