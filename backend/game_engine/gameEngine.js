@@ -45,6 +45,17 @@ class GameEngine {
          this.player.addComponent(components.CBoundingBox(size, half_size));
      }
 
+    spawnTiles() {
+
+        const tile = this.entity_manager.addEntity("tile")
+        tile.addComponent(components.CAnimation('GreyTile',1,0,0))
+        let position = new Vector(200, 200);
+        let previous_position = new Vector(0, 0);
+        let velocity = new Vector(0, 0);
+        tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
+
+    }
+
      startGame() {
         // this function starts the game, spawning the player and other necessary things
 
@@ -64,6 +75,7 @@ class GameEngine {
             // console.log('game continuing', this.entity_manager.getEntities());
             this.sInput();
             this.sMovement();
+            this.spawnTiles();
             this.entity_manager.update();
         }
     }
