@@ -1,4 +1,5 @@
 import canvasService from "../services/canvas"
+import assetManager from "../services/assetManager"
 
 const engine = (entities, canvasID) => {
     const canvas = document.getElementById(canvasID)
@@ -15,16 +16,12 @@ const drawEntity = (ctx, entity) => {
     const animation = entity.componentMap["CAnimation"]
     const transform = entity.componentMap["CTransform"]
 
+    const img = assetManager.getAnimationImage(animation.animName)
 
-    const img = new Image()
-    img.src = `assets/animations/${animation.animName}.png`
-
-    img.onload = () => {
-        const currentFrame = Math.floor(animation.currentFrame)
-        const frameWidth = img.width / animation.numOfFrames
-        const frameHeight = img.height
-        ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
-    }
+    const currentFrame = Math.floor(animation.currentFrame)
+    const frameWidth = img.width / animation.numOfFrames
+    const frameHeight = img.height
+    ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
 }
 
 export default engine
