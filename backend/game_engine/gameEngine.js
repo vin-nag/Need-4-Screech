@@ -3,6 +3,7 @@ const components = require("./components");
 const EntityManager = require("./entity_manager");
 const config = require("./../../config-template.json");
 const Vector = require("./vector");
+const physics = require("./physics");
 
 class GameEngine {
 
@@ -86,6 +87,7 @@ class GameEngine {
             // console.log('game continuing', this.entity_manager.getEntities());
             this.sInput();
             this.sMovement();
+            this.sCollision();
             this.spawnTiles();
             this.entity_manager.update();
         }
@@ -189,19 +191,12 @@ class GameEngine {
 
     sCollision(){
 
-        let playerTransform = this.player.getComponent('CTransform');
-
         for (let tile of this.entity_manager.getEntitiesByTag("tile")){
             if (tile.hasComponent("CBoundingBox")){
-                let tileTransform = tile.getComponent("CTransform")
-
+                let overlap = physics.getOverLap(this.player, tile)
+                console.log(overlap);
             }
         }
-
-
-
-
-
     }
 
     returnGameState(){
