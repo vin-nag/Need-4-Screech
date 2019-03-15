@@ -1,4 +1,5 @@
 import canvasService from "../services/canvas"
+import assetManager from "../services/assetManager"
 
 const engine = (entities, canvasID) => {
     const canvas = document.getElementById(canvasID)
@@ -17,16 +18,13 @@ const drawEntity = (ctx, entity) => {
     *Uncomment to draw bounding boxes
     const bounding = entity.componentMap["CBoundingBox"]
     */
-    
-    const img = new Image()
-    img.src = `assets/animations/${animation.animName}.png`
 
-    img.onload = () => {
-        const currentFrame = Math.floor(animation.currentFrame)
-        const frameWidth = img.width / animation.numOfFrames
-        const frameHeight = img.height
-        ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
-    }
+    const img = assetManager.getAnimationImage(animation.animName)
+
+    const currentFrame = Math.floor(animation.currentFrame)
+    const frameWidth = img.width / animation.numOfFrames
+    const frameHeight = img.height
+    ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
 
     /*
     * Uncomment to draw bounding boxes
@@ -34,7 +32,7 @@ const drawEntity = (ctx, entity) => {
     */
     
 
-    
+
 }
 
 export default engine

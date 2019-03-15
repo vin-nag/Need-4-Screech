@@ -4,6 +4,7 @@ const testController = require("./test")
 const authController = require("./auth")
 const inputController = require("./input")
 const gameStateController = require("./gameState")
+const assetsController = require("./assets")
 
 const models = require("../../models/models")
 
@@ -29,6 +30,7 @@ const connectControllers = (socket) => {
     socket.on("onKeyUp", data => inputController.onKeyUp(socket, data)) 
     socket.on("newSessionID", data => inputController.onNewSession(socket, data))
     socket.on("requestGameStateUpdate", data => gameStateController.onRequestGameStateUpdate(socket, data))
+    socket.on("getAnimationsList", data => assetsController.onGetAnimationsList(socket, data))
 
 
     // ********************************** Level Editor Listeners *****************************************

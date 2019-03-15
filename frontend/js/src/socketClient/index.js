@@ -1,6 +1,7 @@
 import io from "socket.io-client"
 import connectListener from "./connect"
 import disconnectListener from "./disconnect"
+import assetsListener from "./assets"
 import levelEditor from "../levelEditor"
 import app from '../app'
 import APP_WINDOW from '../../enums/app_windows'
@@ -9,11 +10,16 @@ import gamePlay from '../gamePlay'
 export const socket = io()
 
 export const listen = () => {
+    socket.on("animationsList", (data) => assetsListener.onAnimationsList(socket, data))
     socket.on('connect', () => connectListener(socket))
     socket.on('disconnect', () => disconnectListener(socket))
     socket.on('serverMsg',(data) => {
         console.log(data.msg); 
     });
+
+    // ****************************** Registration Listeners ******************************
+
+    // Sign-up listener
 
     socket.on('signUpResponse', (data) => {
         if(data.success){
@@ -21,18 +27,30 @@ export const listen = () => {
             app.switchToWindow(APP_WINDOW.GAME_PLAY)
             gamePlay.newSessionId();
             gamePlay.run()
-        } else
-            alert("Sign up unsuccessful.");
+        } 
+        else{
+            let errMsg = ""
+            for (let i in data.errors){
+                errMsg += data.errors[i] + " \n"
+            }
+            alert(errMsg)
+        }
     });
     
+    // Login listener
+
     socket.on('signInResponse', (data) => {
         if(data.success){
             app.switchToWindow(APP_WINDOW.GAME_PLAY)
             gamePlay.newSessionId();
             gamePlay.run()
-        } else
-            alert("Sign in unsuccessul.");
+        } 
+        else{
+            alert(data.errors[0]);
+        }
     });
+
+
 
     // ****************************** Level Editor Listeners ******************************
     

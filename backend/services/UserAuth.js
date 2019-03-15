@@ -4,35 +4,32 @@ class UserAuth {
     
     // calls signUP() if all the fields contain the correct data.
     validateRegistration(data, cb){
-        if (data.username === "" || data.email === "" || data.password === "" || data.confirmPass === "") {
+        let emptyFields = (data.username === "" || data.email === "" || data.password === "" || data.confirmPass === "")
+        let incorrectFields = (data.password.length < 6 || data.username.length < 4 || data.password !== data.confirmPass || this.validateEmail(data.email) === false)
+        if (emptyFields) {
             cb({
                 success: false,
                 errors: ["One or more fields are emtpy."]
-            });
+            })
         }
-        if (data.password.length < 6) {
+        else if(incorrectFields){
+            let errorArray = []
+            if (data.password.length < 6) {
+                errorArray.push("Password must be at least 6 characters.")
+            }
+            if (data.username.length < 4) {
+                errorArray.push("Username must consist of 4 or more characters.")
+            }
+            if (data.password !== data.confirmPass) {
+                errorArray.push("Passwords do not match.")
+            }
+            if (this.validateEmail(data.email) === false) {
+                errorArray.push("Incorrect e-mail")
+            }
             cb({
                 success: false,
-                errors: ["Password must be at least 6 characters."]
-            });
-        }
-        if (data.username.length < 4) {
-            cb({
-                success: false,
-                errors: ["Username must consist of 4 or more characters."]
-            });
-        }
-        if (data.password !== data.confirmPass) {
-            cb({
-                success: false,
-                errors: ["Passwords do not match."]
-            });
-        }
-        if (this.validateEmail(data.email) === false) {
-            cb({
-                success: false,
-                errors: ["Incorrect e-mail"]
-            });;
+                errors: errorArray
+            })
         }
         else {
             cb({
@@ -50,7 +47,7 @@ class UserAuth {
             if(err || doc == null) {
                 cb({
                     success: false,
-                    errors: [err]
+                    errors: ["Missing or Incorrect Login Details."]
                 });
             } 
             else {
