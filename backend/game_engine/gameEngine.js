@@ -73,6 +73,7 @@ class GameEngine {
 
         console.log('starting game');
         this.spawnPlayer();
+        this.spawnTiles();
         this.entity_manager.update();
         console.log('game started');
     }
@@ -88,7 +89,6 @@ class GameEngine {
             this.sInput();
             this.sMovement();
             this.sCollision();
-            this.spawnTiles();
             this.entity_manager.update();
         }
     }
@@ -97,47 +97,47 @@ class GameEngine {
     sInput(){
         // Input system
         let CInput = this.player.getComponent('CInput');
-        if (this.lastInput.event == "onKeyDown"){
-            if (this.lastInput.key == config.controls.up) {
+        if (this.lastInput.event === "onKeyDown"){
+            if (this.lastInput.key === config.controls.up) {
                 CInput.up = true;
                 console.log("W Pressed")
             }
-            if (this.lastInput.key == config.controls.left) {
+            if (this.lastInput.key === config.controls.left) {
                 CInput.left = true;
                 console.log("A Pressed")
             }
-            if (this.lastInput.key == config.controls.down) {
+            if (this.lastInput.key === config.controls.down) {
                 CInput.down = true;
                 console.log("S Pressed")
             }
-            if (this.lastInput.key == config.controls.right) {
+            if (this.lastInput.key === config.controls.right) {
                 CInput.right = true;
                 console.log("D Pressed")
             }
-            if (this.lastInput.key == config.controls.shoot) {
+            if (this.lastInput.key === config.controls.shoot) {
                 CInput.shoot = true;
                 console.log("Space Pressed")
             }
         }
 
-        if (this.lastInput.event == "onKeyUp"){
-            if (this.lastInput.key == config.controls.up) {
+        if (this.lastInput.event === "onKeyUp"){
+            if (this.lastInput.key === config.controls.up) {
                 CInput.up = false;
                 console.log("W Released")
             }
-            if (this.lastInput.key == config.controls.left) {
+            if (this.lastInput.key === config.controls.left) {
                 CInput.left = false;
                 console.log("A Released")
             }
-            if (this.lastInput.key == config.controls.down) {
+            if (this.lastInput.key === config.controls.down) {
                 CInput.down = false;
                 console.log("S Released")
             }
-            if (this.lastInput.key == config.controls.right) {
+            if (this.lastInput.key === config.controls.right) {
                 CInput.right = false;
                 console.log("D Released")
             }
-            if (this.lastInput.key == config.controls.shoot) {
+            if (this.lastInput.key === config.controls.shoot) {
                 CInput.shoot = false;
                 console.log("Space Released")
             }
@@ -193,8 +193,8 @@ class GameEngine {
 
         for (let tile of this.entity_manager.getEntitiesByTag("tile")){
             if (tile.hasComponent("CBoundingBox")){
-                let overlap = physics.getOverLap(this.player, tile)
-                console.log(overlap);
+                let overlap = physics.getOverLap(this.player, tile);
+                console.log('overlap', overlap);
             }
         }
     }
