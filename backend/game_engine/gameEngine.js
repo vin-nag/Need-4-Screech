@@ -139,6 +139,12 @@ class GameEngine {
             //playerTransform.scale.x = 1
         }
 
+        if (playerInput.down) {
+            playerTransform.velocity.y = -config.player.speed;
+            playerTransform.position.y += playerTransform.velocity.y;
+            //playerTransform.scale.x = 1
+        }
+
         if (playerInput.left && playerInput.right) {
             playerTransform.velocity.x = 0;
             playerTransform.position.x = playerTransform.previous_position.x;
