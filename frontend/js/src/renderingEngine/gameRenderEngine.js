@@ -3,8 +3,6 @@ import canvasService from "../services/canvas"
 const engine = (entities, canvasID) => {
     const canvas = document.getElementById(canvasID)
     const ctx = canvas.getContext("2d")
-
-    console.log(entities)
     
     canvasService.draw.rectangle(ctx, 0, 0, canvas.width, canvas.height, "#42adf4")
     
@@ -15,7 +13,11 @@ const drawEntity = (ctx, entity) => {
     const animation = entity.componentMap["CAnimation"]
     const transform = entity.componentMap["CTransform"]
 
-
+    /*
+    *Uncomment to draw bounding boxes
+    const bounding = entity.componentMap["CBoundingBox"]
+    */
+    
     const img = new Image()
     img.src = `assets/animations/${animation.animName}.png`
 
@@ -25,6 +27,14 @@ const drawEntity = (ctx, entity) => {
         const frameHeight = img.height
         ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
     }
+
+    /*
+    * Uncomment to draw bounding boxes
+    canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
+    */
+    
+
+    
 }
 
 export default engine
