@@ -30,7 +30,7 @@ const drawEntity = (ctx, entity) => {
     * Uncomment to draw bounding boxes
     canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
     */
-
+    
 
 
 }
