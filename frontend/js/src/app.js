@@ -23,6 +23,7 @@ class App {
     run(){
         socketClient.listen()
         eventListener.listen()
+        socketClient.emit("getAnimationsList", {})
         setInterval(() => mainRenderingEngine(this.state.activeWindow), this.updateRate)
     }
 }
