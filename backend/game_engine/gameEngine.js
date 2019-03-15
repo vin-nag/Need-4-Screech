@@ -193,19 +193,22 @@ class GameEngine {
     sCollision(){
 
         let playerTransform = this.player.getComponent('CTransform');
+        playerTransform.previous_position = playerTransform.position;
 
-        for (let tile of this.entity_manager.getEntitiesByTag("tile")){
-            if (tile.hasComponent("CBoundingBox")){
-                let tileTransform = tile.getComponent("CTransform")
+        // for (let tile of this.entity_manager.getEntitiesByTag("tile")){
+        //     if (tile.hasComponent("CBoundingBox")){
+        //         let tileTransform = tile.getComponent("CTransform")
 
-            }
-        }
-
+        //     }
+        // }
 
         for (let tile of this.entity_manager.getEntitiesByTag("tile")){
             if (tile.hasComponent("CBoundingBox")){
                 let overlap = physics.getOverLap(this.player, tile);
-                console.log('overlap', overlap);
+                if (overlap.x > 0 && overlap.y > 0) {
+                    this.player.getComponent('CTransform').position = playerTransform.previous_position;
+                    console.log("collision")
+                }
             }
         }
     }
