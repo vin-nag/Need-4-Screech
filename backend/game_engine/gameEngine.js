@@ -47,13 +47,24 @@ class GameEngine {
 
     spawnTiles() {
 
-        const tile = this.entity_manager.addEntity("tile")
-        tile.addComponent(components.CAnimation('GreyTile',1,0,0))
-        let position = new Vector(200, 200);
-        let previous_position = new Vector(0, 0);
-        let velocity = new Vector(0, 0);
-        tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
+        for (let x = 0; x < 640; x+=64){
+            let tile = this.entity_manager.addEntity("tile");
 
+            // animation
+            tile.addComponent(components.CAnimation('GreyTile',1,0,0))
+
+            // transform
+            let position = new Vector(x, 200);
+            let previous_position = new Vector(0, 0);
+            let velocity = new Vector(0, 0);
+            tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
+
+            //bounding box
+            let size = new Vector(64, 64);
+            let half_size = new Vector(32, 32);
+            tile.addComponent(components.CBoundingBox(size, half_size));
+        }
+        
     }
 
      startGame() {
@@ -174,6 +185,23 @@ class GameEngine {
                 eTransform.position.y += config.game_engine.gravity;
             }
         }
+    }
+
+    sCollision(){
+
+        let playerTransform = this.player.getComponent('CTransform');
+
+        for (let tile of this.entity_manager.getEntitiesByTag("tile")){
+            if (tile.hasComponent("CBoundingBox")){
+                let tileTransform = tile.getComponent("CTransform")
+
+            }
+        }
+
+
+
+
+
     }
 
     returnGameState(){
