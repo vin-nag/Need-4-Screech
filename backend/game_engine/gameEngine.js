@@ -33,7 +33,7 @@ class GameEngine {
         this.player.addComponent(components.CInput(up, down, left, right, canShoot));
 
         // CTransform
-        let position = new Vector(100, 100);
+        let position = new Vector(100, 435);
         let previous_position = new Vector(0, 0);
         let velocity = new Vector(0, 0);
         this.player.addComponent(components.CTransform(position, previous_position,1, velocity,0));
@@ -47,14 +47,14 @@ class GameEngine {
 
     spawnTiles() {
 
-        for (let x = 0; x < 640; x+=64){
+        for (let x = 0; x < 1280; x+=64){
             let tile = this.entity_manager.addEntity("tile");
 
             // animation
             tile.addComponent(components.CAnimation('GreyTile',1,0,0))
 
             // transform
-            let position = new Vector(x, 200);
+            let position = new Vector(x, 500);
             let previous_position = new Vector(0, 0);
             let velocity = new Vector(0, 0);
             tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
@@ -64,7 +64,7 @@ class GameEngine {
             let half_size = new Vector(32, 32);
             tile.addComponent(components.CBoundingBox(size, half_size));
         }
-        
+
     }
 
      startGame() {
