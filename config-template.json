@@ -13,14 +13,16 @@
         "updateRate": 30
     },
     "player": {
-        "jump": -5,
-        "speed": 5,
+        "jump": -50,
+        "speed": 10,
         "angle": 0,
         "lifeSpan": 10,
-        "health": 100
+        "health": 100,
+        "maxspeed": 15,
+        "inertia": 1
     },
     "game_engine": {
-        "gravity": 1
+        "gravity": 3
     },
     "controls": {
         "up": 87,

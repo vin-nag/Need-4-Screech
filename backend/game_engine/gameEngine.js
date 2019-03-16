@@ -44,6 +44,9 @@ class GameEngine {
          let size = new Vector(64, 64);
          let half_size = new Vector(32, 32);
          this.player.addComponent(components.CBoundingBox(size, half_size));
+
+         //CState
+         this.player.addComponent(components.CState("grounded"));
      }
 
     spawnTiles() {
@@ -66,23 +69,29 @@ class GameEngine {
             tile.addComponent(components.CBoundingBox(size, half_size));
         }
 
-        //extra tile to jump to
+        // extra tiles to jump to
+        let x = 200;
+        let y = 445;
+        for (let i=0; i<5; i++){
 
-        let tile = this.entity_manager.addEntity("tile");
+            let tile = this.entity_manager.addEntity("tile");
 
-        // animation
-        tile.addComponent(components.CAnimation('GreyTile',1,0,0))
+            // animation
+            tile.addComponent(components.CAnimation('GreyTile',1,0,0))
 
-        // transform
-        let position = new Vector(200, 375);
-        let previous_position = new Vector(200, 375);
-        let velocity = new Vector(0, 0);
-        tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
+            // transform
+            let position = new Vector(x, y);
+            let previous_position = new Vector(x, y);
+            let velocity = new Vector(0, 0);
+            tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
 
-        //bounding box
-        let size = new Vector(64, 64);
-        let half_size = new Vector(32, 32);
-        tile.addComponent(components.CBoundingBox(size, half_size));
+            //bounding box
+            let size = new Vector(64, 64);
+            let half_size = new Vector(32, 32);
+            tile.addComponent(components.CBoundingBox(size, half_size));
+            x += 65;
+            y -= 65;
+        }
 
     }
 
@@ -167,85 +176,105 @@ class GameEngine {
 
         let playerInput = this.player.getComponent('CInput');
         let playerTransform = this.player.getComponent('CTransform');
-        playerTransform.previous_position = playerTransform.position;
 
         if (playerInput.up) {
-            playerTransform.velocity.y = config.player.jump;
-            playerTransform.position.y += playerTransform.velocity.y;
+            let playerState = this.player.getComponent('CState');
+            if (playerState.state === "grounded"){
+                playerTransform.velocity.y = config.player.jump;
+            }
         }
 
         if (playerInput.left) {
             playerTransform.velocity.x = -config.player.speed;
-            playerTransform.position.x += playerTransform.velocity.x;
-            //playerTransform.scale.x = -1
         }
 
         if (playerInput.right) {
             playerTransform.velocity.x = config.player.speed;
-            playerTransform.position.x += playerTransform.velocity.x;
-            //playerTransform.scale.x = 1
         }
 
         if (playerInput.down) {
-            playerTransform.velocity.y = config.player.speed;
-            playerTransform.position.y += playerTransform.velocity.y;
-            //playerTransform.scale.x = 1
+            playerTransform.velocity.y = -config.player.jump;
         }
 
         if (playerInput.left && playerInput.right) {
             playerTransform.velocity.x = 0;
-            playerTransform.position.x = playerTransform.previous_position.x;
-            //playerTransform.scale.x = 1
         }
 
-        // add gravity effects to every entity that has CTransform
+        // add inertia
+        if (!playerInput.left && !playerTransform.right){
+            if (playerTransform.velocity.x > 0){
+                playerTransform.velocity.x -= config.player.inertia;
+            }
+            else if (playerTransform.velocity.x < 0){
+                playerTransform.velocity.x += config.player.inertia;
+            }
+        }
+
+        // update all entities position based on velocity
         for (let entity of this.entity_manager.getEntities()){
-            if (entity.tag === 'tile'){
-                continue;
+            let eTransform = entity.getComponent('CTransform');
+
+            // add gravity effects to every entity that has CGravity
+            if (entity.hasComponent('CGravity')){
+                let eGravity = entity.getComponent('CGravity');
+                eTransform.velocity.y += eGravity.gravity;
             }
-            if (entity.hasComponent('CTransform')){
-                const eTransform = entity.getComponent('CTransform');
-                eTransform.position.y += config.game_engine.gravity;
-            }
+
+            eTransform.previous_position = eTransform.position;
+            eTransform.position = eTransform.position.add(eTransform.velocity);
+            //console.log(entity.tag, eTransform.position);
+        }
+
+        // truncate player speed if above max
+        if (playerTransform.velocity.length() > config.player.maxspeed){
+            playerTransform.velocity.normalize();
+            playerTransform.velocity = playerTransform.velocity.multiply(config.player.maxspeed);
         }
     }
 
     sCollision(){
 
         let playerTransform = this.player.getComponent('CTransform');
-        //playerTransform.previous_position = playerTransform.position;
-
-        // for (let tile of this.entity_manager.getEntitiesByTag("tile")){
-        //     if (tile.hasComponent("CBoundingBox")){
-        //         let tileTransform = tile.getComponent("CTransform")
-
-        //     }
-        // }
 
         for (let tile of this.entity_manager.getEntitiesByTag("tile")){
+
             if (tile.hasComponent("CBoundingBox")){
                 let tileTransform = tile.getComponent("CTransform");
                 let overlap = physics.getOverLap(this.player, tile);
+
                 if (overlap.x > 0 && overlap.y > 0) {
-                    console.log("collision");
+                    // console.log("collision");
                     let prevOverlap = physics.getPrevOverLap(this.player, tile);
-                    console.log('prevoverlap', prevOverlap);
-                    if (prevOverlap.y > 1){
-                        console.log('collision horizontally');
-                        let direction = tileTransform.position.x > playerTransform.previous_position.x ? -1 : 1;
+
+                    // console.log('prevoverlap', prevOverlap);
+                    if (prevOverlap.y > 0){
+                        // console.log('collision horizontally');
+                        let direction = tileTransform.position.x > playerTransform.previous_position.x? -1: 1;
                         playerTransform.position.x += direction * overlap.x
+
                     }
-                    if (prevOverlap.x > 1){
-                        console.log('vertical collision');
+
+                    if (prevOverlap.x > 0){
+                        // console.log('vertical collision');
                         let direction = tileTransform.position.y > playerTransform.previous_position.y? -1: 1;
                         playerTransform.position.y += direction * overlap.y;
-                        playerTransform.velocity.y = 0.0;
+                        //playerTransform.velocity.y = 0.0;
                     }
-                    //playerTransform.position = playerTransform.previous_position;
-                    //this.player.getComponent('CTransform').position = playerTransform.previous_position;
                 }
             }
         }
+
+        //update CState
+        let state = this.player.getComponent("CState");
+        if (playerTransform.position.y !== playerTransform.previous_position.y){
+            state.state = "jumping";
+
+        }
+        else {
+            state.state = "grounded";
+            playerTransform.velocity.y = 0;
+        }
+
     }
 
     returnGameState(){
