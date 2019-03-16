@@ -20,7 +20,7 @@
         "health": 100
     },
     "game_engine": {
-        "gravity": 0
+        "gravity": 1
     },
     "controls": {
         "up": 87,

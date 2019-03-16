@@ -56,7 +56,7 @@ class GameEngine {
 
             // transform
             let position = new Vector(x, 500);
-            let previous_position = new Vector(0, 0);
+            let previous_position = new Vector(x, 500);
             let velocity = new Vector(0, 0);
             tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
 
@@ -75,7 +75,7 @@ class GameEngine {
 
         // transform
         let position = new Vector(200, 375);
-        let previous_position = new Vector(0, 0);
+        let previous_position = new Vector(200, 375);
         let velocity = new Vector(0, 0);
         tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
 
@@ -200,6 +200,9 @@ class GameEngine {
 
         // add gravity effects to every entity that has CTransform
         for (let entity of this.entity_manager.getEntities()){
+            if (entity.tag === 'tile'){
+                continue;
+            }
             if (entity.hasComponent('CTransform')){
                 const eTransform = entity.getComponent('CTransform');
                 eTransform.position.y += config.game_engine.gravity;
@@ -210,7 +213,7 @@ class GameEngine {
     sCollision(){
 
         let playerTransform = this.player.getComponent('CTransform');
-        playerTransform.previous_position = playerTransform.position;
+        //playerTransform.previous_position = playerTransform.position;
 
         // for (let tile of this.entity_manager.getEntitiesByTag("tile")){
         //     if (tile.hasComponent("CBoundingBox")){
@@ -221,11 +224,25 @@ class GameEngine {
 
         for (let tile of this.entity_manager.getEntitiesByTag("tile")){
             if (tile.hasComponent("CBoundingBox")){
+                let tileTransform = tile.getComponent("CTransform");
                 let overlap = physics.getOverLap(this.player, tile);
                 if (overlap.x > 0 && overlap.y > 0) {
-                    playerTransform.position = playerTransform.previous_position;
+                    console.log("collision");
+                    let prevOverlap = physics.getPrevOverLap(this.player, tile);
+                    console.log('prevoverlap', prevOverlap);
+                    if (prevOverlap.y > 1){
+                        console.log('collision horizontally');
+                        let direction = tileTransform.position.x > playerTransform.previous_position.x ? -1 : 1;
+                        playerTransform.position.x += direction * overlap.x
+                    }
+                    if (prevOverlap.x > 1){
+                        console.log('vertical collision');
+                        let direction = tileTransform.position.y > playerTransform.previous_position.y? -1: 1;
+                        playerTransform.position.y += direction * overlap.y;
+                        playerTransform.velocity.y = 0.0;
+                    }
+                    //playerTransform.position = playerTransform.previous_position;
                     //this.player.getComponent('CTransform').position = playerTransform.previous_position;
-                    console.log("collision")
                 }
             }
         }
