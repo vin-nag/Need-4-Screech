@@ -66,6 +66,24 @@ class GameEngine {
             tile.addComponent(components.CBoundingBox(size, half_size));
         }
 
+        //extra tile to jump to
+
+        let tile = this.entity_manager.addEntity("tile");
+
+        // animation
+        tile.addComponent(components.CAnimation('GreyTile',1,0,0))
+
+        // transform
+        let position = new Vector(200, 375);
+        let previous_position = new Vector(0, 0);
+        let velocity = new Vector(0, 0);
+        tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
+
+        //bounding box
+        let size = new Vector(64, 64);
+        let half_size = new Vector(32, 32);
+        tile.addComponent(components.CBoundingBox(size, half_size));
+
     }
 
      startGame() {
@@ -88,7 +106,6 @@ class GameEngine {
             // console.log('game continuing', this.entity_manager.getEntities());
             this.sInput();
             this.sMovement();
-            this.spawnTiles();
             this.sCollision();
             this.entity_manager.update();
         }
@@ -101,46 +118,46 @@ class GameEngine {
         if (this.lastInput.event === "onKeyDown"){
             if (this.lastInput.key === config.controls.up) {
                 CInput.up = true;
-                console.log("W Pressed")
+                //console.log("W Pressed")
             }
             if (this.lastInput.key === config.controls.left) {
                 CInput.left = true;
-                console.log("A Pressed")
+                //console.log("A Pressed")
             }
             if (this.lastInput.key === config.controls.down) {
                 CInput.down = true;
-                console.log("S Pressed")
+                //console.log("S Pressed")
             }
             if (this.lastInput.key === config.controls.right) {
                 CInput.right = true;
-                console.log("D Pressed")
+                //console.log("D Pressed")
             }
             if (this.lastInput.key === config.controls.shoot) {
                 CInput.shoot = true;
-                console.log("Space Pressed")
+                //console.log("Space Pressed")
             }
         }
 
         if (this.lastInput.event === "onKeyUp"){
             if (this.lastInput.key === config.controls.up) {
                 CInput.up = false;
-                console.log("W Released")
+                //console.log("W Released")
             }
             if (this.lastInput.key === config.controls.left) {
                 CInput.left = false;
-                console.log("A Released")
+                //console.log("A Released")
             }
             if (this.lastInput.key === config.controls.down) {
                 CInput.down = false;
-                console.log("S Released")
+                //console.log("S Released")
             }
             if (this.lastInput.key === config.controls.right) {
                 CInput.right = false;
-                console.log("D Released")
+                //console.log("D Released")
             }
             if (this.lastInput.key === config.controls.shoot) {
                 CInput.shoot = false;
-                console.log("Space Released")
+                //console.log("Space Released")
             }
         }
     }
@@ -206,7 +223,8 @@ class GameEngine {
             if (tile.hasComponent("CBoundingBox")){
                 let overlap = physics.getOverLap(this.player, tile);
                 if (overlap.x > 0 && overlap.y > 0) {
-                    this.player.getComponent('CTransform').position = playerTransform.previous_position;
+                    playerTransform.position = playerTransform.previous_position;
+                    //this.player.getComponent('CTransform').position = playerTransform.previous_position;
                     console.log("collision")
                 }
             }
