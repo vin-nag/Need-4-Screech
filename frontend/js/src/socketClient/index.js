@@ -82,7 +82,7 @@ export const listen = () => {
     socket.on('updateGameState', (data) => {
         if(gamePlay.sessionID === data.sessionId) { gamePlay.setEntities(data.gameState) }
         else if(levelEditor.sessionId === data.sessionId) { levelEditor.setEntities(data.gameState) }
-        console.log(data.gameState)
+        //console.log(data.gameState)
     })
 
     socket.on('newSessionID', (data) => {
