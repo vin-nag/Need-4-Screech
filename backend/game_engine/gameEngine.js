@@ -101,6 +101,7 @@ class GameEngine {
         console.log('starting game');
         this.spawnPlayer();
         this.spawnTiles();
+        this.sAnimation();
         this.entity_manager.update();
         console.log('game started');
     }
@@ -263,6 +264,20 @@ class GameEngine {
         }
         else {
             state.state = "grounded";
+        }
+
+    }
+
+    sAnimation() {
+
+        let animation = this.player.getComponent('CAnimation')
+
+        if (animation.numOfFrames < 2) { return; }
+
+        animation.currentFrame++
+
+        if (animation.currentFrame > animation.numOfFrames) {
+            animation.currentFrame = 0
         }
 
     }
