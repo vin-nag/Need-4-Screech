@@ -127,46 +127,36 @@ class GameEngine {
         if (this.lastInput.event === "onKeyDown"){
             if (this.lastInput.keyDown === config.controls.up) {
                 CInput.up = true;
-                //console.log("W Pressed")
             }
             if (this.lastInput.keyDown === config.controls.left) {
                 CInput.left = true;
-                //console.log("A Pressed")
             }
             if (this.lastInput.keyDown === config.controls.down) {
                 CInput.down = true;
-                //console.log("S Pressed")
             }
             if (this.lastInput.keyDown === config.controls.right) {
                 CInput.right = true;
-                //console.log("D Pressed")
             }
             if (this.lastInput.keyDown === config.controls.shoot) {
                 CInput.shoot = true;
-                //console.log("Space Pressed")
             }
         }
 
         if (this.lastInput.event === "onKeyUp"){
             if (this.lastInput.keyUp === config.controls.up) {
                 CInput.up = false;
-                //console.log("W Released")
             }
             if (this.lastInput.keyUp === config.controls.left) {
                 CInput.left = false;
-                //console.log("A Released")
             }
             if (this.lastInput.keyUp === config.controls.down) {
                 CInput.down = false;
-                //console.log("S Released")
             }
             if (this.lastInput.keyUp === config.controls.right) {
                 CInput.right = false;
-                //console.log("D Released")
             }
             if (this.lastInput.keyUp === config.controls.shoot) {
                 CInput.shoot = false;
-                //console.log("Space Released")
             }
         }
     }
@@ -227,7 +217,6 @@ class GameEngine {
 
             eTransform.previous_position = eTransform.position;
             eTransform.position = eTransform.position.add(eTransform.velocity);
-            //console.log(entity.tag, eTransform.position);
         }
 
         // truncate player speed if above max
@@ -248,19 +237,16 @@ class GameEngine {
                 let overlap = physics.getOverLap(this.player, tile);
 
                 if (overlap.x > 0 && overlap.y > 0) {
-                    // console.log("collision");
+
                     let prevOverlap = physics.getPrevOverLap(this.player, tile);
 
-                    // console.log('prevoverlap', prevOverlap);
                     if (prevOverlap.y > 0){
-                        // console.log('collision horizontally');
                         let direction = tileTransform.position.x > playerTransform.previous_position.x? -1: 1;
                         playerTransform.position.x += direction * overlap.x
 
                     }
 
                     if (prevOverlap.x > 0){
-                        // console.log('vertical collision');
                         let direction = tileTransform.position.y > playerTransform.previous_position.y? -1: 1;
                         playerTransform.position.y += direction * overlap.y;
                         playerTransform.velocity.y = 0.0;
@@ -277,7 +263,6 @@ class GameEngine {
         }
         else {
             state.state = "grounded";
-            //playerTransform.velocity.y = 0;
         }
 
     }
