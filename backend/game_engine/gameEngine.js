@@ -23,7 +23,7 @@ class GameEngine {
         this.player.addComponent(components.CLifeSpan(config.player.lifeSpan));
         this.player.addComponent(components.CGravity(config.game_engine.gravity));
         this.player.addComponent(components.CHealth(config.player.health));
-        this.player.addComponent(components.CAnimation('stand64',1,0,0))
+        this.player.addComponent(components.CAnimation('run64',3,0,3))
 
         // CInput
         let up = false;
