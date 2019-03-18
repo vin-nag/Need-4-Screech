@@ -24,6 +24,14 @@ const drawEntity = (ctx, entity) => {
     const currentFrame = Math.floor(animation.currentFrame)
     const frameWidth = img.width / animation.numOfFrames
     const frameHeight = img.height
+
+    /*
+
+    if (transform.scale === -1){
+        ctx.scale(-1, 1)
+    }
+     */
+
     ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
 
     /*
