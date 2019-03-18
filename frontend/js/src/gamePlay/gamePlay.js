@@ -53,7 +53,7 @@ class GamePlay {
 
     newSessionId() {
         socketClient.emit('newSessionID', {
-            sessionID: this.sessionID
+            issuer: "GAME_PLAY"
         })
     }
 }
