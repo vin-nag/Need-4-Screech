@@ -168,39 +168,48 @@ class GameEngine {
         let playerInput = this.player.getComponent('CInput');
         let playerTransform = this.player.getComponent('CTransform');
         let playerState = this.player.getComponent('CState');
+        let newState = playerState.state;
 
         if (playerInput.up) {
-            if (playerState.state === "grounded"){
+            if (playerState.state === "grounded" || playerState.state === "running"){
+                newState = "jumping";
+                //playerState.state = "jumping";
                 playerTransform.velocity.y = config.player.jump;
-                playerState.state = "jumping";
-                this.updatePlayerAnimation();
+                //this.updatePlayerAnimation();
             }
         }
 
         if (playerInput.left) {
             playerTransform.velocity.x = -config.player.speed;
+            playerTransform.scale = -1;
+            newState = "running"
         }
 
         if (playerInput.right) {
             playerTransform.velocity.x = config.player.speed;
+            playerTransform.scale = 1;
+            newState = "running"
         }
 
         if (playerInput.down) {
             playerTransform.velocity.y = -config.player.jump;
+            newState = "jumping";
         }
 
         if (playerInput.left && playerInput.right) {
             playerTransform.velocity.x = 0;
+            playerTransform.scale = -1;
+            newState = "grounded";
         }
 
         // add inertia
         if (!playerInput.left && !playerTransform.right){
 
             // if slow enough, stop to 0
-            if (Math.abs(playerTransform.velocity.x) < 0.25){
+            if (Math.abs(playerTransform.velocity.x) < config.player.minSpeed){
                 playerTransform.velocity.x = 0;
-                playerState.state = "grounded";
-                this.updatePlayerAnimation();
+                newState = "grounded";
+                //this.updatePlayerAnimation();
                 }
 
             }
@@ -208,21 +217,12 @@ class GameEngine {
             if (playerTransform.velocity.x > 0){
                 playerTransform.velocity.x *= config.player.inertia;
                 playerTransform.scale = 1;
-
-
-                if (playerState.state === "grounded"){
-                    playerState.state = "running";
-                    this.updatePlayerAnimation();
-                }
+                newState = "running"
             }
             else if (playerTransform.velocity.x < 0){
                 playerTransform.velocity.x *= config.player.inertia;
                 playerTransform.scale = -1;
-
-                if (playerState.state === "grounded"){
-                    playerState.state = "running";
-                    this.updatePlayerAnimation();
-                }
+                newState = "running";
             }
 
         // update all entities position based on velocity
@@ -243,6 +243,12 @@ class GameEngine {
         if (playerTransform.velocity.length() > config.player.maxspeed){
             playerTransform.velocity.normalize();
             playerTransform.velocity = playerTransform.velocity.multiply(config.player.maxspeed);
+        }
+
+        if (playerState.state !== newState){
+            //console.log('state change from ', playerState.state, ' to ', newState);
+            playerState.state = newState;
+            this.updatePlayerAnimation();
         }
     }
 
@@ -272,17 +278,22 @@ class GameEngine {
                         playerTransform.velocity.y = 0.0;
                     }
                 }
+
+
             }
         }
 
         //update CState
         let state = this.player.getComponent("CState");
+        let newState = state.state;
         if (playerTransform.position.y !== playerTransform.previous_position.y){
-            state.state = "jumping";
+            newState = "jumping";
 
         }
-        else {
-            state.state = "grounded";
+
+        if (state.state !== newState){
+            state.state = newState;
+            this.updatePlayerAnimation();
         }
 
     }
@@ -293,8 +304,9 @@ class GameEngine {
 
         if (animation.numOfFrames < 2) { return; }
 
+        //console.log('before', animation);
         animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames;
-        console.log(animation);
+        //console.log('after', animation);
 
     }
 
