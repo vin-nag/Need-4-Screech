@@ -258,7 +258,7 @@ class GameEngine {
                         // console.log('vertical collision');
                         let direction = tileTransform.position.y > playerTransform.previous_position.y? -1: 1;
                         playerTransform.position.y += direction * overlap.y;
-                        //playerTransform.velocity.y = 0.0;
+                        playerTransform.velocity.y = 0.0;
                     }
                 }
             }
@@ -272,7 +272,7 @@ class GameEngine {
         }
         else {
             state.state = "grounded";
-            playerTransform.velocity.y = 0;
+            //playerTransform.velocity.y = 0;
         }
 
     }
