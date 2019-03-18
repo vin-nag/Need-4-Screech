@@ -14,25 +14,29 @@ const drawEntity = (ctx, entity) => {
     const animation = entity.componentMap["CAnimation"]
     const transform = entity.componentMap["CTransform"]
 
-    /*
-    *Uncomment to draw bounding boxes
     const bounding = entity.componentMap["CBoundingBox"]
-    */
+
 
     const img = assetManager.getAnimationImage(animation.animName)
 
-    const currentFrame = Math.floor(animation.currentFrame)
-    const frameWidth = img.width / animation.numOfFrames
-    const frameHeight = img.height
+    const currentFrame = Math.floor(animation.currentFrame);
+    const frameWidth = img.width / animation.numOfFrames;
+    const frameHeight = img.height;
 
-    /*
 
     if (transform.scale === -1){
-        ctx.scale(-1, 1)
-    }
-     */
+        console.log('drawing reverse');
 
-    ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
+        ctx.save();
+        ctx.translate(transform.position.x, transform.position.y);  //location on the canvas to draw your sprite, this is important.
+        ctx.scale(-1, 1);  //This does your mirroring/flipping
+        ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, 0, 0, frameWidth, frameHeight);
+        ctx.restore();
+    }
+    else {
+        ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
+    }
+
 
     /*
     * Uncomment to draw bounding boxes

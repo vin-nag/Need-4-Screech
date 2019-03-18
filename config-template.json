@@ -19,7 +19,8 @@
         "lifeSpan": 10,
         "health": 100,
         "maxspeed": 15,
-        "inertia": 0.9
+        "inertia": 0.9,
+        "minSpeed": 1.5
     },
     "game_engine": {
         "gravity": 3
