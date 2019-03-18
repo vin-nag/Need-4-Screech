@@ -202,11 +202,16 @@ class GameEngine {
 
         // add inertia
         if (!playerInput.left && !playerTransform.right){
+            // if slow enough, stop to 0
+            if (Math.abs(playerTransform.velocity.x) < 0.25){
+                playerTransform.velocity.x = 0
+            }
+
             if (playerTransform.velocity.x > 0){
-                playerTransform.velocity.x -= config.player.inertia;
+                playerTransform.velocity.x *= config.player.inertia;
             }
             else if (playerTransform.velocity.x < 0){
-                playerTransform.velocity.x += config.player.inertia;
+                playerTransform.velocity.x *= config.player.inertia;
             }
         }
 
