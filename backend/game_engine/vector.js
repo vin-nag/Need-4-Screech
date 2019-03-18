@@ -17,7 +17,7 @@ class Vector {
         this function adds two vectors
         * @param {vector} vector object
          */
-        return new Vector(Math.abs(this.x + vector.x), Math.abs(this.y + vector.y));
+        return new Vector(this.x + vector.x, this.y + vector.y);
     }
 
     subtract(vector){
@@ -25,7 +25,7 @@ class Vector {
         this function subtracts two vectors
         * @param {vector} vector object
         */
-        return new Vector(Math.abs(this.x - vector.x), Math.abs(this.y - vector.y));
+        return new Vector(this.x - vector.x, this.y - vector.y);
     }
 
     divide(val){
