@@ -23,7 +23,7 @@ class GameEngine {
         this.player.addComponent(components.CLifeSpan(config.player.lifeSpan));
         this.player.addComponent(components.CGravity(config.game_engine.gravity));
         this.player.addComponent(components.CHealth(config.player.health));
-        this.player.addComponent(components.CAnimation('run64',3,0,3))
+        this.player.addComponent(components.CAnimation('run64',3,1,0.5))
 
         // CInput
         let up = false;
@@ -101,7 +101,6 @@ class GameEngine {
         console.log('starting game');
         this.spawnPlayer();
         this.spawnTiles();
-        this.sAnimation();
         this.entity_manager.update();
         console.log('game started');
     }
@@ -117,6 +116,7 @@ class GameEngine {
             this.sInput();
             this.sMovement();
             this.sCollision();
+            this.sAnimation();
             this.entity_manager.update();
         }
     }
@@ -270,15 +270,11 @@ class GameEngine {
 
     sAnimation() {
 
-        let animation = this.player.getComponent('CAnimation')
+        let animation = this.player.getComponent('CAnimation');
 
         if (animation.numOfFrames < 2) { return; }
 
-        animation.currentFrame++
-
-        if (animation.currentFrame > animation.numOfFrames) {
-            animation.currentFrame = 0
-        }
+        animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames
 
     }
 
