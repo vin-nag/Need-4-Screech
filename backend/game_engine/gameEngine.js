@@ -272,7 +272,7 @@ class GameEngine {
         }
         else {
             state.state = "grounded";
-            playerTransform.velocity.y = 0;
+            //playerTransform.velocity.y = 0;
         }
 
     }
