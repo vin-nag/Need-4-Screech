@@ -80,12 +80,18 @@ export const listen = () => {
     })
 
     socket.on('updateGameState', (data) => {
-        gamePlay.setEntities(data.gameState)
+        if(gamePlay.sessionID === data.sessionId) { gamePlay.setEntities(data.gameState) }
+        else if(levelEditor.sessionId === data.sessionId) { levelEditor.setEntities(data.gameState) }
         console.log(data.gameState)
     })
 
     socket.on('newSessionID', (data) => {
-        gamePlay.setSession(data.session)
+        if(data.issuer === "LEVEL_EDITOR"){
+            levelEditor.setSession(data.session)
+        }
+        else{
+            gamePlay.setSession(data.session)
+        }
     }) 
     
 }

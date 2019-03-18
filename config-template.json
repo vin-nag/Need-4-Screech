@@ -12,6 +12,9 @@
     "frontendApp": {
         "updateRate": 30
     },
+    "levelEditor": {
+        "updateRate": 30
+    },
     "player": {
         "jump": -75,
         "speed": 10,

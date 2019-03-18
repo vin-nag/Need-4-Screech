@@ -13,7 +13,8 @@ const onKeyUp = (socket, data) => {
 const onNewSession = (socket, data) => {
     let sessionID = gameSessionService.addSession()
     socket.emit('newSessionID', {
-        session: sessionID
+        session: sessionID,
+        issuer: data.issuer
     })
 };
 

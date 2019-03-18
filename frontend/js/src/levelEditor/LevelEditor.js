@@ -1,32 +1,53 @@
-import { socket } from "../socketClient";
+import socketClient from "../socketClient";
+import { levelEditor as config } from "../../../../config"
 
 class LevelEditor {
     constructor(){
         this.paused = false
-        this.entities = [
-            {
-                componentMap: {
-                    "CAnimation": {
-                        "animName": "coin",
-                        "currentFrame": 0,
-                        "numOfFrames": 10
-                    },
-                    "CTransform": {
-                        position: {
-                            x: 100,
-                            y: 100
-                        }
-                    }
-                }
-            }
-        ]
+        this.sessionId = null
+        this.entities = []
         this.selectedEntity = null
+        this.updateStateInterval = null
+    }
+
+    newSessionId() {
+        socketClient.emit('newSessionID', {
+            issuer: "LEVEL_EDITOR"
+        })
+    }
+
+    run(){
+        this.updateStateInterval = setInterval(() => this.requestStateUpdate(), config.updateRate)
+    }
+
+    stop(){
+        clearInterval(this.updateStateInterval)
+        this.updateStateInterval = null
+
+        socketClient.emit("removeSession", {
+            sessionId: this.sessionId
+        })
+        this.sessionId = null
+    }
+
+    requestStateUpdate(){
+        socketClient.emit("requestGameStateUpdate", {
+            sessionId: this.sessionId
+        })
+    }
+
+    setEntities(entities) {
+        this.entities = entities
+    }
+
+    setSession(sessionId) {
+        this.sessionId = sessionId
     }
 
     saveLevel(levelName){
         //Stub: Sends the entities array to the backend, in order to
         //save the level, and awaits confirmation
-        socket.emit("saveLevel", {
+        socketClient.emit("saveLevel", {
             "name": levelName,
             "entities": this.entities
         })
@@ -36,7 +57,7 @@ class LevelEditor {
         //Stub: Calls the backend to request the entities stored for
         //the given level. On success, updates the local gameState
         //accordingly. On failure, displays the corresponding error message
-        socket.emit('loadLevel', levelName)
+        socketClient.emit('loadLevel', levelName)
 
 
     }
