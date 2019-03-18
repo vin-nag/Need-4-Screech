@@ -1,0 +1,21 @@
+#editor-buttons {
+    right: 20px;
+    text-align: center;
+    width: 50px;
+    height: calc(720px - 200px);
+    position: absolute;
+    margin-top: 100px;
+}
+
+#editor-buttons tr{
+    vertical-align: top;
+}
+
+#editor-buttons div{
+    height: 50px;
+    width: 50px;
+}
+
+#editor-buttons div:hover{
+    background: rgba(255, 255, 255, 0.1);
+}
