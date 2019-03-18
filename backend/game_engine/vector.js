@@ -17,7 +17,7 @@ class Vector {
         this function adds two vectors
         * @param {vector} vector object
          */
-        return Vector(this.x + vector.x, this.y + vector.y);
+        return new Vector(this.x + vector.x, this.y + vector.y);
     }
 
     subtract(vector){
@@ -25,7 +25,7 @@ class Vector {
         this function subtracts two vectors
         * @param {vector} vector object
         */
-        return Vector(this.x - vector.x, this.y - vector.y);
+        return new Vector(this.x - vector.x, this.y - vector.y);
     }
 
     divide(val){
@@ -33,7 +33,8 @@ class Vector {
         this function divides a vector by the given value
         * @param {float} val value
          */
-        return Vector(this.x / val, this.y / val);
+        this.x /= val;
+        this.y /= val;
     }
 
     multiply(val){
@@ -41,7 +42,7 @@ class Vector {
         this function multiples the vector by the given value
         * @param {float} val value
          */
-        return Vector(this.x * val, this.y * val);
+        return new Vector(this.x * val, this.y * val);
     }
 
     equals(vector){
@@ -65,23 +66,21 @@ class Vector {
         this function normalize the current vector
          */
         const len = this.length();
-        this.x = this.divide(len);
-        this.y = this.divide(len);
-        return this;
+        this.divide(len);
     }
 
     abs(){
         /*
         this function returns the current vector with absolute values
          */
-        return Vector(this.x < 0 ? -1 * this.x : this.x, this.y < 0 ? -1 * this.y: this.y );
+        return new Vector(this.x < 0 ? -1 * this.x : this.x, this.y < 0 ? -1 * this.y: this.y );
     }
 
     length(){
         /*
         this function gives the length of the current vector
          */
-        return Math.sqrt(Math.pow(this.x,2) + Math.pow(this.y,2) );
+        return Math.sqrt((Math.pow(this.x,2) + Math.pow(this.y,2)));
     }
 }
 
