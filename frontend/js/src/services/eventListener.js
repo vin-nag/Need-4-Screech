@@ -13,6 +13,10 @@ export const listen = () => {
     document.getElementById("onSignUp").addEventListener("click", () => services.onSignUp())
     document.getElementById("onLogin").addEventListener("click", () => services.onLogin())
 
+    document.getElementById("levelEditorLoadLevel").addEventListener("click", () =>levelEditor.loadLevel())
+    document.getElementById("levelEditorSaveLevel").addEventListener("click", ()=> levelEditor.saveLevel())
+    document.getElementById("levelEditorSetActive").addEventListener("click", () => levelEditor.setActive())
+
     document.getElementById("levelEditorCanvas").addEventListener("click", (e) => levelEditor.handleClick(e))
     document.getElementById("levelEditorCanvas").addEventListener("mousemove", (e) => levelEditor.handleMouseMove(e))
     document.addEventListener("wheel", (e) => {
