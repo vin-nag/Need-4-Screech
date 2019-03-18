@@ -23,7 +23,7 @@
         "health": 100,
         "maxspeed": 15,
         "inertia": 0.9,
-        "minSpeed": 1.5
+        "minSpeed": 2.75
     },
     "game_engine": {
         "gravity": 3

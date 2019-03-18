@@ -70,8 +70,8 @@ class GameEngine {
         }
 
         // extra tiles to jump to
-        let x = 200;
-        let y = 445;
+        let x = 192;
+        let y = 436;
         for (let i=0; i<5; i++){
 
             let tile = this.entity_manager.addEntity("tile");
@@ -289,6 +289,9 @@ class GameEngine {
         if (playerTransform.position.y !== playerTransform.previous_position.y){
             newState = "jumping";
 
+        }
+        else {
+            newState = state.state;
         }
 
         if (state.state !== newState){
