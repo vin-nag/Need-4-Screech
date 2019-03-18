@@ -125,46 +125,46 @@ class GameEngine {
         // Input system
         let CInput = this.player.getComponent('CInput');
         if (this.lastInput.event === "onKeyDown"){
-            if (this.lastInput.key === config.controls.up) {
+            if (this.lastInput.keyDown === config.controls.up) {
                 CInput.up = true;
                 //console.log("W Pressed")
             }
-            if (this.lastInput.key === config.controls.left) {
+            if (this.lastInput.keyDown === config.controls.left) {
                 CInput.left = true;
                 //console.log("A Pressed")
             }
-            if (this.lastInput.key === config.controls.down) {
+            if (this.lastInput.keyDown === config.controls.down) {
                 CInput.down = true;
                 //console.log("S Pressed")
             }
-            if (this.lastInput.key === config.controls.right) {
+            if (this.lastInput.keyDown === config.controls.right) {
                 CInput.right = true;
                 //console.log("D Pressed")
             }
-            if (this.lastInput.key === config.controls.shoot) {
+            if (this.lastInput.keyDown === config.controls.shoot) {
                 CInput.shoot = true;
                 //console.log("Space Pressed")
             }
         }
 
         if (this.lastInput.event === "onKeyUp"){
-            if (this.lastInput.key === config.controls.up) {
+            if (this.lastInput.keyUp === config.controls.up) {
                 CInput.up = false;
                 //console.log("W Released")
             }
-            if (this.lastInput.key === config.controls.left) {
+            if (this.lastInput.keyUp === config.controls.left) {
                 CInput.left = false;
                 //console.log("A Released")
             }
-            if (this.lastInput.key === config.controls.down) {
+            if (this.lastInput.keyUp === config.controls.down) {
                 CInput.down = false;
                 //console.log("S Released")
             }
-            if (this.lastInput.key === config.controls.right) {
+            if (this.lastInput.keyUp === config.controls.right) {
                 CInput.right = false;
                 //console.log("D Released")
             }
-            if (this.lastInput.key === config.controls.shoot) {
+            if (this.lastInput.keyUp === config.controls.shoot) {
                 CInput.shoot = false;
                 //console.log("Space Released")
             }
@@ -258,7 +258,7 @@ class GameEngine {
                         // console.log('vertical collision');
                         let direction = tileTransform.position.y > playerTransform.previous_position.y? -1: 1;
                         playerTransform.position.y += direction * overlap.y;
-                        //playerTransform.velocity.y = 0.0;
+                        playerTransform.velocity.y = 0.0;
                     }
                 }
             }
