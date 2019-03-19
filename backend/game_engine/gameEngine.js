@@ -162,7 +162,6 @@ class GameEngine {
         this.spawnEnemy();
         this.entity_manager.update();
         console.log('game started');
-        console.log(this.entity_manager.getEntitiesByTag("enemy"));
     }
 
     update(){
@@ -340,7 +339,7 @@ class GameEngine {
 
                 }
 
-                else if (prevOverlap.x > 0){
+                if (prevOverlap.x > 0){
                     let direction = tileTransform.position.y > playerTransform.previous_position.y? -1: 1;
                     playerTransform.position.y += direction * overlap.y;
                     playerTransform.velocity.y = 0.0;
@@ -363,7 +362,7 @@ class GameEngine {
 
                     }
 
-                    else if (prevOverlap.x > 0){
+                    if (prevOverlap.x > 0){
                         let direction = tileTransform.position.y > enemyTransform.previous_position.y? -1: 1;
                         enemyTransform.position.y += direction * overlap.y;
                         enemyTransform.velocity.y = 0.0;
@@ -371,52 +370,8 @@ class GameEngine {
                 }
 
             }
-        }
 
-        for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
 
-            let overlap = physics.getOverLap(enemy, this.player);
-            let playerHealth = this.player.getComponent('CHealth');
-
-            if (overlap.x > 0 && overlap.y > 0){
-
-                if (!playerHealth.invincible) {
-                    playerHealth.invincible = true;
-                    playerHealth.health -= 20;
-                    // Invincibility frames
-                    setTimeout(() => playerHealth.invincible = false, 800)
-                }
-                
-                if (playerHealth.health === 0) {
-                    this.player.destroy();
-                    console.log('player dead');
-                }
-            }
-        }
-
-        // bullet / enemy collision
-        for (let enemy of this.entity_manager.getEntitiesByTag("enemy")) {
-            for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
-                let overlap = physics.getOverLap(enemy, bullet);
-                if (overlap.x > 0 && overlap.y > 0){
-                    bullet.destroy();
-                    enemy.getComponent('CHealth').health--;
-                    if (enemy.getComponent('CHealth').health === 0) {
-                        enemy.destroy();
-                        bullet.destroy();
-                    }
-                }
-            }
-        }
-
-        // bullet / tile collision
-        for (let tile of this.entity_manager.getEntitiesByTag("tile")) {
-            for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
-                let overlap = physics.getOverLap(tile, bullet);
-                if (overlap.x > 0 && overlap.y > 0){
-                    bullet.destroy();
-                }
-            }
         }
 
         //update CState
@@ -438,19 +393,14 @@ class GameEngine {
     }
 
     sAnimation() {
-        this.entity_manager.getEntities().forEach(entity => {
+
+        for (let entity of this.entity_manager.getEntities()){
             if (entity.hasComponent('CAnimation')){
+
                 let animation = entity.getComponent('CAnimation');
                 if (animation.numOfFrames < 2) { return; }
                 animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames;
             }
-        })
-    }
-
-    sLifespan() {
-        // bullet lifespan
-        for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
-            setTimeout(() => bullet.destroy(), bullet.getComponent('CLifeSpan').lifespan)
         }
     }
 
