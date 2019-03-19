@@ -1,19 +1,15 @@
 const gameSessionService = require("./../../services/GameSessionService");
-//const config = require("./../../config-template.json");
 
 const onKeyDown = (socket, data) => {
     let session = gameSessionService.getSession(data.sessionID);
-    let key = data.keyCode;
     session.lastInput.event = 'onKeyDown';
-    session.lastInput[key] = true;
+    session.lastInput[data.keyCode] = true;
 };
 
 const onKeyUp = (socket, data) => {
     let session = gameSessionService.getSession(data.sessionID);
-    let key = data.keyCode;
     session.lastInput.event = 'onKeyUp';
-    session.lastInput[key] = false;
-    //session.lastInput = {event:'onKeyUp', keyUp:data.keyCode};
+    session.lastInput[data.keyCode] = false;
 };
 
 const onNewSession = (socket, data) => {
