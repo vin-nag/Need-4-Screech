@@ -57,6 +57,35 @@ class GameEngine {
          this.player.addComponent(components.CState("grounded"));
     }
 
+    spawnEnemy() {
+        /*
+        This function spawns a player, adding all the necessary components
+         */
+
+        let enemy = this.entity_manager.addEntity("enemy");
+
+        console.log('spawning enemy now');
+        enemy.addComponent(components.CLifeSpan(config.player.lifeSpan));
+        enemy.addComponent(components.CGravity(config.game_engine.gravity));
+        enemy.addComponent(components.CHealth(config.player.health));
+        enemy.addComponent(components.CAnimation('minotaur',8,0,0.5));
+
+        // CTransform
+        let position = new Vector(700, 415);
+        let previous_position = new Vector(700, 435);
+        let velocity = new Vector(0, 0);
+        enemy.addComponent(components.CTransform(position, previous_position,1, velocity,0));
+        console.log('enemy spawned. enemy object:', enemy);
+
+        //CBoundingBox
+        let size = new Vector(64, 64);
+        let half_size = new Vector(32, 32);
+        enemy.addComponent(components.CBoundingBox(size, half_size));
+
+        //CState
+        enemy.addComponent(components.CState("grounded"));
+    }
+
     spawnBullet() {
         /*
         This function spawns a bullet, adding all the necessary components
@@ -72,33 +101,6 @@ class GameEngine {
         bullet.addComponent(components.CAnimation('buster', 1, 0, 0));
         bullet.addComponent(components.CState('shooting'));
         bullet.addComponent(components.CLifeSpan(1500))
-
-    }
-
-    spawnNPC() {
-        /*
-        This function spawns a NPC, adding all the necessary components
-         */
-        let npc = this.entity_manager.addEntity("npc");
-
-        // animation
-        npc.addComponent(components.CAnimation("goombawalk", 2, 0, 0.5))
-
-        // transform
-        let position = new Vector(800, 436);
-        let previous_position = new Vector(100, 700);
-        let velocity = new Vector(0, 0);
-        npc.addComponent(components.CTransform(position, previous_position,1, velocity,0));
-
-        //bounding box
-        let size = new Vector(64, 64);
-        let half_size = new Vector(32, 32);
-        npc.addComponent(components.CBoundingBox(size, half_size));
-
-        //AI
-        /*
-        Need to create AI Component, add logic for Patrol and Follow NPC types
-        */
 
     }
 
@@ -154,7 +156,7 @@ class GameEngine {
         console.log('starting game');
         this.spawnPlayer();
         this.spawnTiles();
-        this.spawnNPC();
+        this.spawnEnemy();
         this.entity_manager.update();
         console.log('game started');
     }
@@ -284,7 +286,7 @@ class GameEngine {
         // bullet movement
         for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
             let bulletTransform = bullet.getComponent('CTransform');
-            
+
         }
     }
 
@@ -294,27 +296,54 @@ class GameEngine {
 
         for (let tile of this.entity_manager.getEntitiesByTag("tile")){
 
-            if (tile.hasComponent("CBoundingBox")){
-                let tileTransform = tile.getComponent("CTransform");
-                let overlap = physics.getOverLap(this.player, tile);
+            if (!tile.hasComponent("CBoundingBox")) {continue;}
+
+            let tileTransform = tile.getComponent("CTransform");
+            let overlap = physics.getOverLap(this.player, tile);
+
+            if (overlap.x > 0 && overlap.y > 0) {
+
+                let prevOverlap = physics.getPrevOverLap(this.player, tile);
+
+                if (prevOverlap.y > 0){
+                    let direction = tileTransform.position.x > playerTransform.previous_position.x? -1: 1;
+                    playerTransform.position.x += direction * overlap.x
+
+                }
+
+                if (prevOverlap.x > 0){
+                    let direction = tileTransform.position.y > playerTransform.previous_position.y? -1: 1;
+                    playerTransform.position.y += direction * overlap.y;
+                    playerTransform.velocity.y = 0.0;
+                }
+            }
+
+            // enemy collision
+            for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
+
+                let enemyTransform = enemy.getComponent("CTransform");
+                let overlap = physics.getOverLap(enemy, tile);
 
                 if (overlap.x > 0 && overlap.y > 0) {
 
-                    let prevOverlap = physics.getPrevOverLap(this.player, tile);
+                    let prevOverlap = physics.getPrevOverLap(enemy, tile);
 
                     if (prevOverlap.y > 0){
-                        let direction = tileTransform.position.x > playerTransform.previous_position.x? -1: 1;
-                        playerTransform.position.x += direction * overlap.x
+                        let direction = tileTransform.position.x > enemyTransform.previous_position.x? -1: 1;
+                        enemyTransform.position.x += direction * overlap.x
 
                     }
 
                     if (prevOverlap.x > 0){
-                        let direction = tileTransform.position.y > playerTransform.previous_position.y? -1: 1;
-                        playerTransform.position.y += direction * overlap.y;
-                        playerTransform.velocity.y = 0.0;
+                        let direction = tileTransform.position.y > enemyTransform.previous_position.y? -1: 1;
+                        enemyTransform.position.y += direction * overlap.y;
+                        enemyTransform.velocity.y = 0.0;
                     }
                 }
+
             }
+
+
         }
 
         //update CState
@@ -337,12 +366,14 @@ class GameEngine {
 
     sAnimation() {
 
-        let animation = this.player.getComponent('CAnimation');
+        for (let entity of this.entity_manager.getEntities()){
+            if (entity.hasComponent('CAnimation')){
 
-        if (animation.numOfFrames < 2) { return; }
-
-        animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames;
-
+                let animation = entity.getComponent('CAnimation');
+                if (animation.numOfFrames < 2) { return; }
+                animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames;
+            }
+        }
     }
 
     sLifespan() {
