@@ -130,48 +130,40 @@ class GameEngine {
         if (this.lastInput.event === "onKeyDown"){
             if (this.lastInput.keyDown === config.controls.up) {
                 CInput.up = true;
-                console.log("W Pressed")
             }
             if (this.lastInput.keyDown === config.controls.left) {
                 CInput.left = true;
-                console.log("A Pressed")
             }
             if (this.lastInput.keyDown === config.controls.down) {
                 CInput.down = true;
-                console.log("S Pressed")
             }
             if (this.lastInput.keyDown === config.controls.right) {
                 CInput.right = true;
-                console.log("D Pressed")
             }
             if (this.lastInput.keyDown === config.controls.shoot) {
                 CInput.shoot = true;
-                console.log("Space Pressed")
             }
         }
 
         if (this.lastInput.event === "onKeyUp"){
             if (this.lastInput.keyUp === config.controls.up) {
                 CInput.up = false;
-                console.log("W Released")
             }
             if (this.lastInput.keyUp === config.controls.left) {
                 CInput.left = false;
-                console.log("A Released")
             }
             if (this.lastInput.keyUp === config.controls.down) {
                 CInput.down = false;
-                console.log("S Released")
             }
             if (this.lastInput.keyUp === config.controls.right) {
                 CInput.right = false;
-                console.log("D Released")
             }
             if (this.lastInput.keyUp === config.controls.shoot) {
                 CInput.shoot = false;
-                console.log("Space Released")
             }
         }
+
+        console.log(CInput)
     }
 
     sMovement(){
