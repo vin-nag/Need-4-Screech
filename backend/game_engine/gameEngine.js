@@ -42,8 +42,8 @@ class GameEngine {
         this.player.addComponent(components.CInput(up, down, left, right, shoot, canShoot));
 
         // CTransform
-        let position = new Vector(100, 435);
-        let previous_position = new Vector(0, 0);
+        let position = new Vector(100, 415);
+        let previous_position = new Vector(100, 415);
         let velocity = new Vector(0, 0);
         this.player.addComponent(components.CTransform(position, previous_position,1, velocity,0));
         console.log('player spawned. player object:', this.player);
@@ -68,11 +68,11 @@ class GameEngine {
         enemy.addComponent(components.CLifeSpan(config.player.lifeSpan));
         enemy.addComponent(components.CGravity(config.game_engine.gravity));
         enemy.addComponent(components.CHealth(config.player.health));
-        enemy.addComponent(components.CAnimation('minotaur',8,0,0.5));
+        enemy.addComponent(components.CAnimation('snake_walk',7,0,0.5));
 
         // CTransform
         let position = new Vector(700, 415);
-        let previous_position = new Vector(700, 435);
+        let previous_position = new Vector(700, 415);
         let velocity = new Vector(0, 0);
         enemy.addComponent(components.CTransform(position, previous_position,1, velocity,0));
         console.log('enemy spawned. enemy object:', enemy);
@@ -311,7 +311,7 @@ class GameEngine {
 
                 }
 
-                if (prevOverlap.x > 0){
+                else if (prevOverlap.x > 0){
                     let direction = tileTransform.position.y > playerTransform.previous_position.y? -1: 1;
                     playerTransform.position.y += direction * overlap.y;
                     playerTransform.velocity.y = 0.0;
@@ -334,7 +334,7 @@ class GameEngine {
 
                     }
 
-                    if (prevOverlap.x > 0){
+                    else if (prevOverlap.x > 0){
                         let direction = tileTransform.position.y > enemyTransform.previous_position.y? -1: 1;
                         enemyTransform.position.y += direction * overlap.y;
                         enemyTransform.velocity.y = 0.0;
