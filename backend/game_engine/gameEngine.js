@@ -195,12 +195,12 @@ class GameEngine {
 
             if (playerTransform.velocity.x > 0){
                 playerTransform.velocity.x *= config.player.inertia;
-                playerTransform.scale = 1;
+                //playerTransform.scale = 1;
                 newState = "running"
             }
             else if (playerTransform.velocity.x < 0){
                 playerTransform.velocity.x *= config.player.inertia;
-                playerTransform.scale = -1;
+                //playerTransform.scale = -1;
                 newState = "running";
             }
 
