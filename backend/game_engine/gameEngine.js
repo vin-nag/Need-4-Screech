@@ -286,9 +286,7 @@ class GameEngine {
 
         if (animation.numOfFrames < 2) { return; }
 
-        //console.log('before', animation);
         animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames;
-        //console.log('after', animation);
 
     }
 
@@ -326,16 +324,6 @@ class GameEngine {
 
     returnGameState(){
         return this.entity_manager.getEntities();
-
-        /*
-        return {
-            'player': this.entity_manager.getEntitiesByTag('player')[0],
-            'enemies': this.entity_manager.getEntitiesByTag('enemy'),
-            'tiles': this.entity_manager.getEntitiesByTag('tile'),
-            'bullets': this.entity_manager.getEntitiesByTag('bullet')
-        };
-        this function returns the game state as an object
-         */
     }
 
 }
