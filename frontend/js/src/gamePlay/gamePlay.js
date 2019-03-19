@@ -5,10 +5,21 @@ class GamePlay {
         this.paused = false
         this.entities = []
         this.sessionID = null
+        this.updateStateInterval = null
     }
 
     run(){
-        setInterval(() => this.requestStateUpdate(), 50)
+        this.updateStateInterval = setInterval(() => this.requestStateUpdate(), 50)
+    }
+
+    stop(){
+        clearInterval(this.updateStateInterval)
+        this.updateStateInterval = null
+
+        socketClient.emit("removeSession", {
+            sessionId: this.sessionID
+        })
+        this.sessionID = null
     }
 
     requestStateUpdate(){
@@ -42,7 +53,7 @@ class GamePlay {
 
     newSessionId() {
         socketClient.emit('newSessionID', {
-            sessionID: this.sessionID
+            issuer: "GAME_PLAY"
         })
     }
 }

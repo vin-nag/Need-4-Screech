@@ -4,12 +4,18 @@ const onRequestGameStateUpdate = (socket, data) => {
     if(!data.sessionId) { return }
     const gameEngine = gameSessionService.getSession(data.sessionId)
     socket.emit("updateGameState", {
-        gameState: gameEngine.returnGameState()
+        gameState: gameEngine.returnGameState(),
+        sessionId: data.sessionId
     })
 
 }
 
+const onRemoveSession = (socket, data) => {
+    if(!data.sessionId) { return }
+    gameSessionService.removeSession(data.sessionId) 
+}
 
 module.exports = {
-    onRequestGameStateUpdate
+    onRequestGameStateUpdate,
+    onRemoveSession
 }

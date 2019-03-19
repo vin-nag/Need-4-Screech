@@ -32,7 +32,6 @@ class GameSessionService {
         clearInterval(this.updateIntervals[sessionId])
 
         const sessionEngine = this.sessions[sessionId]
-        sessionEngine.cleanup()
 
         delete this.sessions[sessionId]
         delete this.updateIntervals[sessionId]

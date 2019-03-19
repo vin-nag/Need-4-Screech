@@ -29,6 +29,7 @@ const connectControllers = (socket) => {
     socket.on("onKeyDown", data => inputController.onKeyDown(socket, data))
     socket.on("onKeyUp", data => inputController.onKeyUp(socket, data)) 
     socket.on("newSessionID", data => inputController.onNewSession(socket, data))
+    socket.on("removeSession", data => gameStateController.removeSession(socket, data))
     socket.on("requestGameStateUpdate", data => gameStateController.onRequestGameStateUpdate(socket, data))
     socket.on("getAnimationsList", data => assetsController.onGetAnimationsList(socket, data))
 
