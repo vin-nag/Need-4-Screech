@@ -22,7 +22,7 @@ class GameEngine {
         this.lastInput[config.controls.shoot] = false;
     }
 
-     spawnPlayer() {
+    spawnPlayer() {
         /*
         This function spawns a player, adding all the necessary components
          */
@@ -55,7 +55,52 @@ class GameEngine {
 
          //CState
          this.player.addComponent(components.CState("grounded"));
-     }
+    }
+
+    spawnBullet() {
+        /*
+        This function spawns a bullet, adding all the necessary components
+         */
+        let bullet = this.entity_manager.addEntity("bullet")
+        let playerTransform = this.player.getComponent('CTransform')
+        let velocity = new Vector(0, 0);
+        let size = new Vector(24, 24);
+        let half_size = new Vector(12, 12);
+
+        bullet.addComponent(components.CTransform(playerTransform.position, playerTransform.previous_position, 1, velocity, 0));
+        bullet.addComponent(components.CBoundingBox(size, half_size));
+        bullet.addComponent(components.CAnimation('buster', 1, 0, 0));
+        bullet.addComponent(components.CState('shooting'));
+        bullet.addComponent(components.CLifeSpan(1500))
+
+    }
+
+    spawnNPC() {
+        /*
+        This function spawns a NPC, adding all the necessary components
+         */
+        let npc = this.entity_manager.addEntity("npc");
+
+        // animation
+        npc.addComponent(components.CAnimation("goombawalk", 2, 0, 0.5))
+
+        // transform
+        let position = new Vector(800, 436);
+        let previous_position = new Vector(100, 700);
+        let velocity = new Vector(0, 0);
+        npc.addComponent(components.CTransform(position, previous_position,1, velocity,0));
+
+        //bounding box
+        let size = new Vector(64, 64);
+        let half_size = new Vector(32, 32);
+        npc.addComponent(components.CBoundingBox(size, half_size));
+
+        //AI
+        /*
+        Need to create AI Component, add logic for Patrol and Follow NPC types
+        */
+
+    }
 
     spawnTiles() {
 
@@ -103,12 +148,13 @@ class GameEngine {
 
     }
 
-     startGame() {
+    startGame() {
         // this function starts the game, spawning the player and other necessary things
 
         console.log('starting game');
         this.spawnPlayer();
         this.spawnTiles();
+        this.spawnNPC();
         this.entity_manager.update();
         console.log('game started');
     }
@@ -125,6 +171,7 @@ class GameEngine {
             this.sMovement();
             this.sCollision();
             this.sAnimation();
+            this.sLifespan();
             this.entity_manager.update();
         }
     }
@@ -139,6 +186,10 @@ class GameEngine {
         CInput.left = this.lastInput[config.controls.left];
         CInput.right = this.lastInput[config.controls.right];
         CInput.shoot = this.lastInput[config.controls.shoot];
+
+        if (CInput.shoot) {
+            this.spawnBullet();
+        }
     }
 
     sMovement(){
@@ -229,6 +280,12 @@ class GameEngine {
             playerState.state = newState;
             this.updatePlayerAnimation();
         }
+
+        // bullet movement
+        for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
+            let bulletTransform = bullet.getComponent('CTransform');
+            
+        }
     }
 
     sCollision(){
@@ -286,6 +343,15 @@ class GameEngine {
 
         animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames;
 
+    }
+
+    sLifespan() {
+        // Stub: add lifespan to entities that have lifespan component
+
+        // bullet lifespan
+        for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
+            setTimeout(() => bullet.destroy(), bullet.getComponent('CLifeSpan').lifespan)
+        }
     }
 
     updatePlayerAnimation(){
