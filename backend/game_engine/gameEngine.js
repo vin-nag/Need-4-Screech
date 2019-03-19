@@ -88,8 +88,8 @@ class GameEngine {
         console.log('spawning enemy now');
         enemy.addComponent(components.CLifeSpan(config.player.lifeSpan));
         enemy.addComponent(components.CGravity(config.game_engine.gravity));
-        enemy.addComponent(components.CHealth(2));
-        enemy.addComponent(components.CAnimation('snake_walk',7,0,0.25));
+        enemy.addComponent(components.CHealth(config.player.health));
+        enemy.addComponent(components.CAnimation('snake_walk',7,0,0.5));
 
         // CTransform
         let position = new Vector(700, 415);
@@ -242,30 +242,30 @@ class GameEngine {
         }
 
         // add inertia
-        if (!playerInput.left && !playerTransform.right) {
+        if (!playerInput.left && !playerTransform.right){
 
             // if slow enough, stop to 0
-            if (Math.abs(playerTransform.velocity.x) < config.player.minSpeed) {
+            if (Math.abs(playerTransform.velocity.x) < config.player.minSpeed){
                 playerTransform.velocity.x = 0;
                 newState = "grounded";
                 //this.updatePlayerAnimation();
+                }
+
             }
 
-
-            if (playerTransform.velocity.x > 0) {
+            if (playerTransform.velocity.x > 0){
                 playerTransform.velocity.x *= config.player.inertia;
                 //playerTransform.scale = 1;
                 newState = "running"
-            } else if (playerTransform.velocity.x < 0) {
+            }
+            else if (playerTransform.velocity.x < 0){
                 playerTransform.velocity.x *= config.player.inertia;
                 //playerTransform.scale = -1;
                 newState = "running";
             }
-        }
 
         // update all entities position based on velocity
         for (let entity of this.entity_manager.getEntities()){
-            //console.log(entity.tag);
             let eTransform = entity.getComponent('CTransform');
 
             // add gravity effects to every entity that has CGravity
@@ -339,7 +339,7 @@ class GameEngine {
 
                 }
 
-                if (prevOverlap.x > 0){
+                else if (prevOverlap.x > 0){
                     let direction = tileTransform.position.y > playerTransform.previous_position.y? -1: 1;
                     playerTransform.position.y += direction * overlap.y;
                     playerTransform.velocity.y = 0.0;
@@ -362,7 +362,7 @@ class GameEngine {
 
                     }
 
-                    if (prevOverlap.x > 0){
+                    else if (prevOverlap.x > 0){
                         let direction = tileTransform.position.y > enemyTransform.previous_position.y? -1: 1;
                         enemyTransform.position.y += direction * overlap.y;
                         enemyTransform.velocity.y = 0.0;
