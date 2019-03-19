@@ -42,8 +42,8 @@ class GameEngine {
         this.player.addComponent(components.CInput(up, down, left, right, shoot, canShoot));
 
         // CTransform
-        let position = new Vector(100, 435);
-        let previous_position = new Vector(0, 0);
+        let position = new Vector(100, 415);
+        let previous_position = new Vector(100, 415);
         let velocity = new Vector(0, 0);
         this.player.addComponent(components.CTransform(position, previous_position,1, velocity,0));
         console.log('player spawned. player object:', this.player);
@@ -102,6 +102,35 @@ class GameEngine {
 
     }
 
+    spawnEnemy() {
+        /*
+        This function spawns a player, adding all the necessary components
+         */
+
+        let enemy = this.entity_manager.addEntity("enemy");
+
+        console.log('spawning enemy now');
+        enemy.addComponent(components.CLifeSpan(config.player.lifeSpan));
+        enemy.addComponent(components.CGravity(config.game_engine.gravity));
+        enemy.addComponent(components.CHealth(config.player.health));
+        enemy.addComponent(components.CAnimation('snake_walk',7,0,0.5));
+
+        // CTransform
+        let position = new Vector(700, 415);
+        let previous_position = new Vector(700, 415);
+        let velocity = new Vector(0, 0);
+        enemy.addComponent(components.CTransform(position, previous_position,1, velocity,0));
+        console.log('enemy spawned. enemy object:', enemy);
+
+        //CBoundingBox
+        let size = new Vector(64, 64);
+        let half_size = new Vector(32, 32);
+        enemy.addComponent(components.CBoundingBox(size, half_size));
+
+        //CState
+        enemy.addComponent(components.CState("grounded"));
+    }
+
     spawnTiles() {
 
         for (let x = 0; x < 1280; x+=64){
@@ -154,7 +183,7 @@ class GameEngine {
         console.log('starting game');
         this.spawnPlayer();
         this.spawnTiles();
-        this.spawnNPC();
+        this.spawnEnemy();
         this.entity_manager.update();
         console.log('game started');
     }
@@ -233,27 +262,26 @@ class GameEngine {
         }
 
         // add inertia
-        if (!playerInput.left && !playerTransform.right){
+        if (!playerInput.left && !playerTransform.right) {
 
             // if slow enough, stop to 0
-            if (Math.abs(playerTransform.velocity.x) < config.player.minSpeed){
+            if (Math.abs(playerTransform.velocity.x) < config.player.minSpeed) {
                 playerTransform.velocity.x = 0;
                 newState = "grounded";
                 //this.updatePlayerAnimation();
-                }
-
             }
 
-            if (playerTransform.velocity.x > 0){
+
+            if (playerTransform.velocity.x > 0) {
                 playerTransform.velocity.x *= config.player.inertia;
                 //playerTransform.scale = 1;
                 newState = "running"
-            }
-            else if (playerTransform.velocity.x < 0){
+            } else if (playerTransform.velocity.x < 0) {
                 playerTransform.velocity.x *= config.player.inertia;
                 //playerTransform.scale = -1;
                 newState = "running";
             }
+        }
 
         // update all entities position based on velocity
         for (let entity of this.entity_manager.getEntities()){
@@ -263,6 +291,23 @@ class GameEngine {
             if (entity.hasComponent('CGravity')){
                 let eGravity = entity.getComponent('CGravity');
                 eTransform.velocity.y += eGravity.gravity;
+            }
+
+            if (entity.tag === 'enemy'){
+                let direction = playerTransform.position.subtract(eTransform.position);
+                //console.log('direction', direction);
+                direction.normalize();
+                direction = direction.multiply(config.player.maxspeed * 0.1);
+                direction.y = eTransform.velocity.y;
+                direction.x += eTransform.velocity.x / 2;
+                eTransform.velocity = direction;
+
+                if (eTransform.velocity.x < 0){
+                    eTransform.scale = 1;
+                }
+                if (eTransform.velocity.x > 0){
+                    eTransform.scale = -1;
+                }
             }
 
             eTransform.previous_position = eTransform.position;
@@ -294,26 +339,61 @@ class GameEngine {
 
         for (let tile of this.entity_manager.getEntitiesByTag("tile")){
 
-            if (tile.hasComponent("CBoundingBox")){
-                let tileTransform = tile.getComponent("CTransform");
-                let overlap = physics.getOverLap(this.player, tile);
+            if (!tile.hasComponent("CBoundingBox")) {continue;}
+
+            let tileTransform = tile.getComponent("CTransform");
+            let overlap = physics.getOverLap(this.player, tile);
+
+            if (overlap.x > 0 && overlap.y > 0) {
+
+                let prevOverlap = physics.getPrevOverLap(this.player, tile);
+
+                if (prevOverlap.y > 0){
+                    let direction = tileTransform.position.x > playerTransform.previous_position.x? -1: 1;
+                    playerTransform.position.x += direction * overlap.x
+
+                }
+
+                else if (prevOverlap.x > 0){
+                    let direction = tileTransform.position.y > playerTransform.previous_position.y? -1: 1;
+                    playerTransform.position.y += direction * overlap.y;
+                    playerTransform.velocity.y = 0.0;
+                }
+            }
+
+            // enemy collision
+            for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
+
+                let enemyTransform = enemy.getComponent("CTransform");
+                let overlap = physics.getOverLap(enemy, tile);
 
                 if (overlap.x > 0 && overlap.y > 0) {
 
-                    let prevOverlap = physics.getPrevOverLap(this.player, tile);
+                    let prevOverlap = physics.getPrevOverLap(enemy, tile);
 
                     if (prevOverlap.y > 0){
-                        let direction = tileTransform.position.x > playerTransform.previous_position.x? -1: 1;
-                        playerTransform.position.x += direction * overlap.x
+                        let direction = tileTransform.position.x > enemyTransform.previous_position.x? -1: 1;
+                        enemyTransform.position.x += direction * overlap.x
 
                     }
 
-                    if (prevOverlap.x > 0){
-                        let direction = tileTransform.position.y > playerTransform.previous_position.y? -1: 1;
-                        playerTransform.position.y += direction * overlap.y;
-                        playerTransform.velocity.y = 0.0;
+                    else if (prevOverlap.x > 0){
+                        let direction = tileTransform.position.y > enemyTransform.previous_position.y? -1: 1;
+                        enemyTransform.position.y += direction * overlap.y;
+                        enemyTransform.velocity.y = 0.0;
                     }
                 }
+
+            }
+        }
+
+        for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
+
+            let overlap = physics.getOverLap(enemy, this.player);
+
+            if (overlap.x > 0 && overlap.y > 0){
+                this.player.destroy();
+                console.log('player dead');
             }
         }
 
@@ -337,12 +417,14 @@ class GameEngine {
 
     sAnimation() {
 
-        let animation = this.player.getComponent('CAnimation');
+        for (let entity of this.entity_manager.getEntities()){
+            if (entity.hasComponent('CAnimation')){
 
-        if (animation.numOfFrames < 2) { return; }
-
-        animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames;
-
+                let animation = entity.getComponent('CAnimation');
+                if (animation.numOfFrames < 2) { return; }
+                animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames;
+            }
+        }
     }
 
     sLifespan() {
