@@ -12,7 +12,7 @@ class GameEngine {
         this.entity_manager = new EntityManager();
         this.player = this.entity_manager.addEntity("player");
         this.gameStarted = false;
-        this.lastInput = 0;
+        this.lastInput = {event: "initialized", "87": false, "83": false, "65": false, "68": false, "32": false};
     }
 
      spawnPlayer() {
@@ -128,37 +128,37 @@ class GameEngine {
         
         let CInput = this.player.getComponent('CInput');
         if (this.lastInput.event === "onKeyDown"){
-            if (this.lastInput.keyDown === config.controls.up) {
+            if (this.lastInput["87"] === true) {
                 CInput.up = true;
             }
-            if (this.lastInput.keyDown === config.controls.left) {
+            if (this.lastInput["65"] === true) {
                 CInput.left = true;
             }
-            if (this.lastInput.keyDown === config.controls.down) {
+            if (this.lastInput["83"] === true) {
                 CInput.down = true;
             }
-            if (this.lastInput.keyDown === config.controls.right) {
+            if (this.lastInput["68"] === true) {
                 CInput.right = true;
             }
-            if (this.lastInput.keyDown === config.controls.shoot) {
+            if (this.lastInput["32"] === true) {
                 CInput.shoot = true;
             }
         }
 
         if (this.lastInput.event === "onKeyUp"){
-            if (this.lastInput.keyUp === config.controls.up) {
+            if (this.lastInput["87"] === false) {
                 CInput.up = false;
             }
-            if (this.lastInput.keyUp === config.controls.left) {
+            if (this.lastInput["65"] === false) {
                 CInput.left = false;
             }
-            if (this.lastInput.keyUp === config.controls.down) {
+            if (this.lastInput["83"] === false) {
                 CInput.down = false;
             }
-            if (this.lastInput.keyUp === config.controls.right) {
+            if (this.lastInput["68"] === false) {
                 CInput.right = false;
             }
-            if (this.lastInput.keyUp === config.controls.shoot) {
+            if (this.lastInput["32"] === false) {
                 CInput.shoot = false;
             }
         }
