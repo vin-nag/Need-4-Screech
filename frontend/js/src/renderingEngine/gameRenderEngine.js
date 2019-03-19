@@ -18,8 +18,8 @@ const drawEntity = (ctx, entity) => {
     const frameWidth = img.width / animation.numOfFrames;
     const frameHeight = img.height;
 
+    // drawing reverse
     if (transform.scale === -1){
-        console.log('drawing reverse');
         ctx.save();
         ctx.translate(transform.position.x, transform.position.y);  //location on the canvas to draw your sprite, this is important.
         ctx.scale(-1, 1);  //This does your mirroring/flipping
