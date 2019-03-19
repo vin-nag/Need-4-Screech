@@ -139,8 +139,6 @@ class GameEngine {
         CInput.left = this.lastInput[config.controls.left];
         CInput.right = this.lastInput[config.controls.right];
         CInput.shoot = this.lastInput[config.controls.shoot];
-
-        console.log(CInput)
     }
 
     sMovement(){
