@@ -22,16 +22,17 @@
         "lifeSpan": 10,
         "health": 100,
         "maxspeed": 15,
-        "inertia": 0.9
+        "inertia": 0.9,
+        "minSpeed": 2.75
     },
     "game_engine": {
         "gravity": 3
     },
     "controls": {
-        "up": 87,
-        "down": 83,
-        "left": 65,
-        "right": 68,
-        "shoot": 32
+        "up": "87",
+        "down": "83",
+        "left": "65",
+        "right": "68",
+        "shoot": "32"
      }
 }

@@ -10,9 +10,16 @@ class GameEngine {
     constructor(sessionId){
         this.sessionId = sessionId;
         this.entity_manager = new EntityManager();
-        this.player = this.entity_manager.addEntity( "player");
-        this.gameStarted = false
-        this.lastInput = 0;
+        this.player = this.entity_manager.addEntity("player");
+        this.gameStarted = false;
+
+        // last input
+        this.lastInput = {event: "initialized"} ;
+        this.lastInput[config.controls.up] = false;
+        this.lastInput[config.controls.down] = false;
+        this.lastInput[config.controls.left] = false;
+        this.lastInput[config.controls.right] = false;
+        this.lastInput[config.controls.shoot] = false;
     }
 
      spawnPlayer() {
@@ -23,15 +30,16 @@ class GameEngine {
         this.player.addComponent(components.CLifeSpan(config.player.lifeSpan));
         this.player.addComponent(components.CGravity(config.game_engine.gravity));
         this.player.addComponent(components.CHealth(config.player.health));
-        this.player.addComponent(components.CAnimation('stand64',1,0,0))
+        this.player.addComponent(components.CAnimation('stand64',1,0,0));
 
         // CInput
         let up = false;
         let down = false;
         let left = false;
         let right = false;
-        let canShoot = false;
-        this.player.addComponent(components.CInput(up, down, left, right, canShoot));
+        let shoot = false;
+        let canShoot = true;
+        this.player.addComponent(components.CInput(up, down, left, right, shoot, canShoot));
 
         // CTransform
         let position = new Vector(100, 435);
@@ -70,8 +78,8 @@ class GameEngine {
         }
 
         // extra tiles to jump to
-        let x = 200;
-        let y = 445;
+        let x = 192;
+        let y = 436;
         for (let i=0; i<5; i++){
 
             let tile = this.entity_manager.addEntity("tile");
@@ -116,6 +124,7 @@ class GameEngine {
             this.sInput();
             this.sMovement();
             this.sCollision();
+            this.sAnimation();
             this.entity_manager.update();
         }
     }
@@ -124,41 +133,12 @@ class GameEngine {
     sInput(){
         // Input system
         let CInput = this.player.getComponent('CInput');
-        if (this.lastInput.event === "onKeyDown"){
-            if (this.lastInput.keyDown === config.controls.up) {
-                CInput.up = true;
-            }
-            if (this.lastInput.keyDown === config.controls.left) {
-                CInput.left = true;
-            }
-            if (this.lastInput.keyDown === config.controls.down) {
-                CInput.down = true;
-            }
-            if (this.lastInput.keyDown === config.controls.right) {
-                CInput.right = true;
-            }
-            if (this.lastInput.keyDown === config.controls.shoot) {
-                CInput.shoot = true;
-            }
-        }
 
-        if (this.lastInput.event === "onKeyUp"){
-            if (this.lastInput.keyUp === config.controls.up) {
-                CInput.up = false;
-            }
-            if (this.lastInput.keyUp === config.controls.left) {
-                CInput.left = false;
-            }
-            if (this.lastInput.keyUp === config.controls.down) {
-                CInput.down = false;
-            }
-            if (this.lastInput.keyUp === config.controls.right) {
-                CInput.right = false;
-            }
-            if (this.lastInput.keyUp === config.controls.shoot) {
-                CInput.shoot = false;
-            }
-        }
+        CInput.up = this.lastInput[config.controls.up];
+        CInput.down = this.lastInput[config.controls.down];
+        CInput.left = this.lastInput[config.controls.left];
+        CInput.right = this.lastInput[config.controls.right];
+        CInput.shoot = this.lastInput[config.controls.shoot];
     }
 
     sMovement(){
@@ -166,44 +146,63 @@ class GameEngine {
 
         let playerInput = this.player.getComponent('CInput');
         let playerTransform = this.player.getComponent('CTransform');
+        let playerState = this.player.getComponent('CState');
+        let newState = playerState.state;
 
         if (playerInput.up) {
-            let playerState = this.player.getComponent('CState');
-            if (playerState.state === "grounded"){
+            if (playerState.state === "grounded" || playerState.state === "running"){
+                newState = "jumping";
+                //playerState.state = "jumping";
                 playerTransform.velocity.y = config.player.jump;
+                //this.updatePlayerAnimation();
             }
         }
 
         if (playerInput.left) {
             playerTransform.velocity.x = -config.player.speed;
+            playerTransform.scale = -1;
+            newState = "running"
         }
 
         if (playerInput.right) {
             playerTransform.velocity.x = config.player.speed;
+            playerTransform.scale = 1;
+            newState = "running"
         }
 
         if (playerInput.down) {
             playerTransform.velocity.y = -config.player.jump;
+            newState = "jumping";
         }
 
         if (playerInput.left && playerInput.right) {
             playerTransform.velocity.x = 0;
+            playerTransform.scale = -1;
+            newState = "grounded";
         }
 
         // add inertia
         if (!playerInput.left && !playerTransform.right){
+
             // if slow enough, stop to 0
-            if (Math.abs(playerTransform.velocity.x) < 0.25){
-                playerTransform.velocity.x = 0
+            if (Math.abs(playerTransform.velocity.x) < config.player.minSpeed){
+                playerTransform.velocity.x = 0;
+                newState = "grounded";
+                //this.updatePlayerAnimation();
+                }
+
             }
 
             if (playerTransform.velocity.x > 0){
                 playerTransform.velocity.x *= config.player.inertia;
+                //playerTransform.scale = 1;
+                newState = "running"
             }
             else if (playerTransform.velocity.x < 0){
                 playerTransform.velocity.x *= config.player.inertia;
+                //playerTransform.scale = -1;
+                newState = "running";
             }
-        }
 
         // update all entities position based on velocity
         for (let entity of this.entity_manager.getEntities()){
@@ -223,6 +222,12 @@ class GameEngine {
         if (playerTransform.velocity.length() > config.player.maxspeed){
             playerTransform.velocity.normalize();
             playerTransform.velocity = playerTransform.velocity.multiply(config.player.maxspeed);
+        }
+
+        if (playerState.state !== newState){
+            //console.log('state change from ', playerState.state, ' to ', newState);
+            playerState.state = newState;
+            this.updatePlayerAnimation();
         }
     }
 
@@ -257,28 +262,66 @@ class GameEngine {
 
         //update CState
         let state = this.player.getComponent("CState");
+        let newState = state.state;
         if (playerTransform.position.y !== playerTransform.previous_position.y){
-            state.state = "jumping";
+            newState = "jumping";
 
         }
         else {
-            state.state = "grounded";
+            newState = state.state;
+        }
+
+        if (state.state !== newState){
+            state.state = newState;
+            this.updatePlayerAnimation();
+        }
+
+    }
+
+    sAnimation() {
+
+        let animation = this.player.getComponent('CAnimation');
+
+        if (animation.numOfFrames < 2) { return; }
+
+        animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames;
+
+    }
+
+    updatePlayerAnimation(){
+
+        let state = this.player.getComponent("CState").state;
+        let animation = this.player.getComponent("CAnimation");
+        //console.log('called player animation', state);
+
+        switch (state) {
+
+            case "grounded":
+                animation.animName = 'stand64';
+                animation.numOfFrames = 1;
+                animation.currentFrame = 0;
+                animation.speed = 0;
+                break;
+
+            case "jumping":
+                animation.animName = 'air64';
+                animation.numOfFrames = 1;
+                animation.currentFrame = 0;
+                animation.speed = 0;
+                break;
+
+            case "running":
+                animation.animName = 'run64';
+                animation.numOfFrames = 3;
+                animation.currentFrame = 0;
+                animation.speed = 0.5;
+                break;
         }
 
     }
 
     returnGameState(){
         return this.entity_manager.getEntities();
-
-        /*
-        return {
-            'player': this.entity_manager.getEntitiesByTag('player')[0],
-            'enemies': this.entity_manager.getEntitiesByTag('enemy'),
-            'tiles': this.entity_manager.getEntitiesByTag('tile'),
-            'bullets': this.entity_manager.getEntitiesByTag('bullet')
-        };
-        this function returns the game state as an object
-         */
     }
 
 }
