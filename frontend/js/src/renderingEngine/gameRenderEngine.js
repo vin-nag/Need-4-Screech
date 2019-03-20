@@ -18,6 +18,7 @@ const drawEntity = (ctx, entity) => {
     const frameWidth = img.width / animation.numOfFrames;
     const frameHeight = img.height;
 
+
     // drawing reverse
     if (transform.scale === -1){
         ctx.save();
@@ -30,10 +31,8 @@ const drawEntity = (ctx, entity) => {
         ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
     }
 
-    /*
     const bounding = entity.componentMap["CBoundingBox"]
     canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
-    */
 
 
 }

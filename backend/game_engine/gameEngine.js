@@ -42,15 +42,15 @@ class GameEngine {
         this.player.addComponent(components.CInput(up, down, left, right, shoot, canShoot));
 
         // CTransform
-        let position = new Vector(100, 415);
+        let position = new Vector(100, 435);
         let previous_position = new Vector(100, 415);
         let velocity = new Vector(0, 0);
         this.player.addComponent(components.CTransform(position, previous_position,1, velocity,0));
         console.log('player spawned. player object:', this.player);
 
         //CBoundingBox
-         let size = new Vector(48, 48);
-         let half_size = new Vector(24, 24);
+         let size = new Vector(64, 64);
+         let half_size = new Vector(32, 32);
          this.player.addComponent(components.CBoundingBox(size, half_size));
 
          //CState
@@ -467,7 +467,7 @@ class GameEngine {
                 animation.animName = 'skeet_run';
                 animation.numOfFrames = 6;
                 animation.currentFrame = 0;
-                animation.speed = 0.5;
+                animation.speed = 0.25;
                 break;
         }
     }
