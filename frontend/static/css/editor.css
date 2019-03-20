@@ -34,3 +34,22 @@
 #saveLevelModal form {
     margin-top: 50px;
 }
+
+#loadLevelModal {
+    background: rgba(125, 125, 125, 0.85);
+    padding: 50px 25px;
+    display: none;
+}
+
+#loadLevelModal h3 {
+    text-align: center;
+    color: #fff;
+}
+
+#loadLevelModal form {
+    margin-top: 50px;
+}
+
+#loadLevelModal select {
+    min-width: 500px;
+}
