@@ -57,13 +57,22 @@
     </div>
 
     <div id="levelEditor" class="centeredCanvas">
-            <table id="editor-buttons">
-                <tbody>
-                    <tr><td><div id="levelEditorSaveLevel"></div></td></tr>
-                    <tr><td><div id="levelEditorLoadLevel"></div></td></tr>
-                    <tr><td><div id="levelEditorSetActive"></div></td></tr>
-                </tbody>
-            </table>
+            <div id="saveLevelModal" class="centeredModal">
+                <h3 class="nes-text">Save Level</h3>
+                <form>
+                    <input id="saveLevelName" type="text" class="nes-input" placeholder="Level Name"></input>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button id="saveLevelButton" class="nes-btn">Save</button>
+                    </div>
+                </form>
+            </div>
+        <table id="editor-buttons">
+            <tbody>
+                <tr><td><div id="levelEditorSaveLevel"></div></td></tr>
+                <tr><td><div id="levelEditorLoadLevel"></div></td></tr>
+                <tr><td><div id="levelEditorSetActive"></div></td></tr>
+            </tbody>
+        </table>
         <canvas id="levelEditorCanvas" width="1280" height="720"></canvas>
     </div>
 

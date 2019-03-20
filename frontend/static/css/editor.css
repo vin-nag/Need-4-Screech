@@ -19,3 +19,18 @@
 #editor-buttons div:hover{
     background: rgba(255, 255, 255, 0.1);
 }
+
+#saveLevelModal {
+    background: rgba(125, 125, 125, 0.85);
+    padding: 50px 25px;
+    display: none;
+}
+
+#saveLevelModal h3 {
+    text-align: center;
+    color: #fff;
+}
+
+#saveLevelModal form {
+    margin-top: 50px;
+}
