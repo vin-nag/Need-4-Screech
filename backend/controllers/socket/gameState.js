@@ -43,7 +43,7 @@ const onSaveLevel = (socket, data ) => {
             //TODO: Change the owner to the user id once auth is working fully
             const level = models.level(data.levelName, entities, "test3")
 
-            db.levels.createIndex({name : 1, owner: 1}, {unique : true})
+            db.levels.createIndex({levelName : 1, owner: 1}, {unique : true})
             db.levels.save(level, (err, element) => {
                 if(err || !element){ errors.push(JSON.stringify(err) || "Failed to save level") }
                 socket.emit("saveLevelResponse", {
