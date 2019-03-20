@@ -303,17 +303,13 @@ class GameEngine {
             playerState.state = newState;
             this.updatePlayerAnimation();
         }
-
-        // bullet movement
-        for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
-            let bulletTransform = bullet.getComponent('CTransform');
-
-            }
     }
 
     sCollision(){
 
         let playerTransform = this.player.getComponent('CTransform');
+        let state = this.player.getComponent("CState");
+        let newState = state.state;
 
         for (let tile of this.entity_manager.getEntitiesByTag("tile")){
 
@@ -367,14 +363,36 @@ class GameEngine {
 
             let overlap = physics.getOverLap(enemy, this.player);
             let playerHealth = this.player.getComponent('CHealth');
+            let enemyTransform = enemy.getComponent('CTransform');
 
             if (overlap.x > 0 && overlap.y > 0){
 
+                let prevOverlap = physics.getPrevOverLap(enemy, this.player);
+
+                if (prevOverlap.y > 0){
+                    let direction = enemyTransform.position.x > playerTransform.previous_position.x? -1: 1;
+                    playerTransform.position.x += direction * (overlap.x + 5);
+                }
+
+                else if (prevOverlap.x > 0){
+                    let direction = enemyTransform.position.y > playerTransform.previous_position.y? -1: 1;
+                    playerTransform.position.y += direction * overlap.y;
+                }
+
                 if (!playerHealth.invincible) {
+
+                    state.state = "hurt";
+                    this.updatePlayerAnimation();
+
                     playerHealth.invincible = true;
                     playerHealth.health -= 20;
                     // Invincibility frames
-                    setTimeout(() => playerHealth.invincible = false, 800)
+                    setTimeout(() => {
+                        playerHealth.invincible = false;
+                        state.state = "grounded";
+                        this.updatePlayerAnimation();
+
+                    }, 800)
                 }
                 
                 if (playerHealth.health === 0) {
@@ -410,8 +428,6 @@ class GameEngine {
         }
 
         //update CState
-        let state = this.player.getComponent("CState");
-        let newState = state.state;
         if (playerTransform.position.y !== playerTransform.previous_position.y){
             newState = "jumping";
 
@@ -468,6 +484,13 @@ class GameEngine {
                 animation.numOfFrames = 6;
                 animation.currentFrame = 0;
                 animation.speed = 0.25;
+                break;
+
+            case "hurt":
+                animation.animName = 'skeet_hurt';
+                animation.numOfFrames = 1;
+                animation.currentFrame = 0;
+                animation.speed = 0;
                 break;
         }
     }
