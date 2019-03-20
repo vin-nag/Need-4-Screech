@@ -74,34 +74,7 @@ class GameEngine {
         bullet.addComponent(components.CBoundingBox(size, half_size));
         bullet.addComponent(components.CAnimation('buster', 1, 0, 0));
         bullet.addComponent(components.CState('shooting'));
-        bullet.addComponent(components.CLifeSpan(1500))
-
-    }
-
-    spawnNPC() {
-        /*
-        This function spawns a NPC, adding all the necessary components
-         */
-        let npc = this.entity_manager.addEntity("npc");
-
-        // animation
-        npc.addComponent(components.CAnimation("goombawalk", 2, 0, 0.5))
-
-        // transform
-        let position = new Vector(800, 436);
-        let previous_position = new Vector(100, 700);
-        let velocity = new Vector(0, 0);
-        npc.addComponent(components.CTransform(position, previous_position,1, velocity,0));
-
-        //bounding box
-        let size = new Vector(64, 64);
-        let half_size = new Vector(32, 32);
-        npc.addComponent(components.CBoundingBox(size, half_size));
-
-        //AI
-        /*
-        Need to create AI Component, add logic for Patrol and Follow NPC types
-        */
+        bullet.addComponent(components.CLifeSpan(1000))
 
     }
 
@@ -116,7 +89,7 @@ class GameEngine {
         enemy.addComponent(components.CLifeSpan(config.player.lifeSpan));
         enemy.addComponent(components.CGravity(config.game_engine.gravity));
         enemy.addComponent(components.CHealth(config.player.health));
-        enemy.addComponent(components.CAnimation('snake_walk',7,0,0.5));
+        enemy.addComponent(components.CAnimation('snake_walk',7,0,0.25));
 
         // CTransform
         let position = new Vector(700, 415);
@@ -126,8 +99,8 @@ class GameEngine {
         console.log('enemy spawned. enemy object:', enemy);
 
         //CBoundingBox
-        let size = new Vector(44, 44);
-        let half_size = new Vector(22, 22);
+        let size = new Vector(64, 64);
+        let half_size = new Vector(32, 32);
         enemy.addComponent(components.CBoundingBox(size, half_size));
 
         //CState
@@ -226,9 +199,6 @@ class GameEngine {
                 setTimeout(() => CInput.canShoot = true, 200)
             }
         }
-
-
-
     }
 
     sMovement() {
@@ -449,16 +419,14 @@ class GameEngine {
 
     }
 
-    sAnimation(){
-
-        for (let entity of this.entity_manager.getEntities()){
+    sAnimation() {
+        this.entity_manager.getEntities().forEach(entity => {
             if (entity.hasComponent('CAnimation')){
-
                 let animation = entity.getComponent('CAnimation');
                 if (animation.numOfFrames < 2) { return; }
                 animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames;
             }
-        }
+        })
     }
 
     sLifespan() {
@@ -469,13 +437,11 @@ class GameEngine {
     }
 
     updatePlayerAnimation(){
-
         let state = this.player.getComponent("CState").state;
         let animation = this.player.getComponent("CAnimation");
         //console.log('called player animation', state);
 
         switch (state) {
-
             case "grounded":
                 animation.animName = 'stand64';
                 animation.numOfFrames = 1;
