@@ -47,9 +47,10 @@ class LevelEditor {
     saveLevel(levelName){
         //Stub: Sends the entities array to the backend, in order to
         //save the level, and awaits confirmation
+        console.log("HIT")
         socketClient.emit("saveLevel", {
-            "name": levelName,
-            "entities": this.entities
+            "levelName": levelName,
+            "sessionId": this.sessionId
         })
     }
 

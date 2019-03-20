@@ -2,6 +2,7 @@ import app from "../app"
 import APP_WINDOWS from "../../enums/app_windows"
 import services from "./services"
 import menuService from "./menu"
+import domService from "./dom"
 import levelEditor from "../levelEditor"
 import gamePlay from "../gamePlay";
 
@@ -13,12 +14,18 @@ export const listen = () => {
     document.getElementById("onSignUp").addEventListener("click", () => services.onSignUp())
     document.getElementById("onLogin").addEventListener("click", () => services.onLogin())
 
-    document.getElementById("levelEditorLoadLevel").addEventListener("click", () =>levelEditor.loadLevel())
-    document.getElementById("levelEditorSaveLevel").addEventListener("click", ()=> levelEditor.saveLevel())
+    document.getElementById("levelEditorLoadLevel").addEventListener("click", () => levelEditor.loadLevel())
+    document.getElementById("levelEditorSaveLevel").addEventListener("click", ()=> domService.showElement("saveLevelModal"))
     document.getElementById("levelEditorSetActive").addEventListener("click", () => levelEditor.setActive())
 
     document.getElementById("levelEditorCanvas").addEventListener("click", (e) => levelEditor.handleClick(e))
     document.getElementById("levelEditorCanvas").addEventListener("mousemove", (e) => levelEditor.handleMouseMove(e))
+
+    document.getElementById("saveLevelButton").addEventListener("click", () => {
+        const levelName = document.getElementById("saveLevelName").value
+        levelEditor.saveLevel(levelName)
+    })
+
     document.addEventListener("wheel", (e) => {
         if(app.getActiveWindow() === APP_WINDOWS.LEVEL_EDITOR){ levelEditor.handleMouseWheel(e) }
     })
