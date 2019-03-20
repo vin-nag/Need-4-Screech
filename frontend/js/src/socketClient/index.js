@@ -85,8 +85,8 @@ export const listen = () => {
 
     socket.on('loadLevelResponse', function(data){
         if(data.success){
-            levelEditor.setEntities(data.res.entities)
             alert("Level Loaded Successfully.")
+            domService.hideElement("loadLevelModal")
         }
         else{
             alert(data.errors[0])
@@ -97,7 +97,6 @@ export const listen = () => {
     socket.on('updateGameState', (data) => {
         if(gamePlay.sessionID === data.sessionId) { gamePlay.setEntities(data.gameState) }
         else if(levelEditor.sessionId === data.sessionId) { levelEditor.setEntities(data.gameState) }
-        //console.log(data.gameState)
     })
 
     socket.on('newSessionID', (data) => {

@@ -29,6 +29,10 @@ export const listen = () => {
         const levelName = document.getElementById("saveLevelName").value
         levelEditor.saveLevel(levelName)
     })
+    document.getElementById("loadLevelButton").addEventListener("click", () => {
+        const levelId = document.getElementById("loadLevelsList").value
+        levelEditor.loadLevel(levelId)
+    })
 
     document.addEventListener("wheel", (e) => {
         if(app.getActiveWindow() === APP_WINDOWS.LEVEL_EDITOR){ levelEditor.handleMouseWheel(e) }

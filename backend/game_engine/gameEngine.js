@@ -22,6 +22,12 @@ class GameEngine {
         this.lastInput[config.controls.shoot] = false;
     }
 
+    loadSerializedEntities(entities){
+        this.entity_manager = new EntityManager()
+        this.entity_manager.loadSerializedEntities(entities)
+        this.player = this.entity_manager.getEntitiesByTag("player")[0]
+    }
+
      spawnPlayer() {
         /*
         This function spawns a player, adding all the necessary components
