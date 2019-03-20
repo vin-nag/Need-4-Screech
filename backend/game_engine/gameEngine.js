@@ -212,9 +212,7 @@ class GameEngine {
         if (playerInput.up) {
             if (playerState.state === "grounded" || playerState.state === "running") {
                 newState = "jumping";
-                //playerState.state = "jumping";
                 playerTransform.velocity.y = config.player.jump;
-                //this.updatePlayerAnimation();
             }
         }
 
@@ -248,24 +246,21 @@ class GameEngine {
             if (Math.abs(playerTransform.velocity.x) < config.player.minSpeed) {
                 playerTransform.velocity.x = 0;
                 newState = "grounded";
-                //this.updatePlayerAnimation();
             }
-
 
             if (playerTransform.velocity.x > 0) {
                 playerTransform.velocity.x *= config.player.inertia;
-                //playerTransform.scale = 1;
                 newState = "running"
+
             } else if (playerTransform.velocity.x < 0) {
                 playerTransform.velocity.x *= config.player.inertia;
-                //playerTransform.scale = -1;
                 newState = "running";
             }
         }
 
-            // update all entities position based on velocity
-            for (let entity of this.entity_manager.getEntities()) {
-                let eTransform = entity.getComponent('CTransform');
+        // update all entities position based on velocity
+        for (let entity of this.entity_manager.getEntities()){
+            let eTransform = entity.getComponent('CTransform');
 
                 // add gravity effects to every entity that has CGravity
                 if (entity.hasComponent('CGravity')) {
@@ -273,14 +268,14 @@ class GameEngine {
                     eTransform.velocity.y += eGravity.gravity;
                 }
 
-                if (entity.tag === 'enemy') {
-                    let direction = playerTransform.position.subtract(eTransform.position);
-                    //console.log('direction', direction);
-                    direction.normalize();
-                    direction = direction.multiply(config.player.maxspeed * 0.1);
-                    direction.y = eTransform.velocity.y;
-                    direction.x += eTransform.velocity.x / 2;
-                    eTransform.velocity = direction;
+            if (entity.tag === 'enemy'){
+                let direction = playerTransform.position.subtract(eTransform.position);
+
+                direction.normalize();
+                direction = direction.multiply(config.player.maxspeed * 0.1);
+                direction.y = eTransform.velocity.y;
+                direction.x += eTransform.velocity.x / 2;
+                eTransform.velocity = direction;
 
                     if (eTransform.velocity.x < 0) {
                         eTransform.scale = 1;
@@ -304,15 +299,14 @@ class GameEngine {
                 playerTransform.velocity = playerTransform.velocity.multiply(config.player.maxspeed);
             }
 
-            if (playerState.state !== newState) {
-                //console.log('state change from ', playerState.state, ' to ', newState);
-                playerState.state = newState;
-                this.updatePlayerAnimation();
-            }
+        if (playerState.state !== newState){
+            playerState.state = newState;
+            this.updatePlayerAnimation();
+        }
 
-            // bullet movement
-            for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
-                let bulletTransform = bullet.getComponent('CTransform');
+        // bullet movement
+        for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
+            let bulletTransform = bullet.getComponent('CTransform');
 
             }
     }
@@ -358,7 +352,6 @@ class GameEngine {
                     if (prevOverlap.y > 0){
                         let direction = tileTransform.position.x > enemyTransform.previous_position.x? -1: 1;
                         enemyTransform.position.x += direction * overlap.x
-
                     }
 
                     else if (prevOverlap.x > 0){
@@ -367,7 +360,6 @@ class GameEngine {
                         enemyTransform.velocity.y = 0.0;
                     }
                 }
-
             }
         }
 
@@ -387,7 +379,7 @@ class GameEngine {
                 
                 if (playerHealth.health === 0) {
                     this.player.destroy();
-                    console.log('player dead');
+                    //console.log('player dead');
                 }
             }
         }
@@ -455,7 +447,6 @@ class GameEngine {
     updatePlayerAnimation(){
         let state = this.player.getComponent("CState").state;
         let animation = this.player.getComponent("CAnimation");
-        //console.log('called player animation', state);
 
         switch (state) {
             case "grounded":
