@@ -309,12 +309,6 @@ class GameEngine {
             playerState.state = newState;
             this.updatePlayerAnimation();
         }
-
-        // bullet movement
-        for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
-            let bulletTransform = bullet.getComponent('CTransform');
-
-            }
     }
 
     sCollision(){
