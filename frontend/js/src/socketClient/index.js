@@ -6,6 +6,7 @@ import levelEditor from "../levelEditor"
 import app from '../app'
 import APP_WINDOW from '../../enums/app_windows'
 import gamePlay from '../gamePlay'
+import domService from "../services/dom"
 
 export const socket = io()
 
@@ -59,9 +60,11 @@ export const listen = () => {
     socket.on('saveLevelResponse', function(data){
         if(data.success){
             alert("Level saved successfully.")
+            domService.hideElement("saveLevelModal")
+            document.getElementById("saveLevelName").value = ""
         }
         else{
-            alert(data.errors[0])
+            alert(data.errors.reduce((string, error) => string + `\n${error}`, ""))
         }
     })
 

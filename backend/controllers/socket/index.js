@@ -31,25 +31,11 @@ const connectControllers = (socket) => {
     socket.on("newSessionID", data => inputController.onNewSession(socket, data))
     socket.on("removeSession", data => gameStateController.removeSession(socket, data))
     socket.on("requestGameStateUpdate", data => gameStateController.onRequestGameStateUpdate(socket, data))
+    socket.on("saveLevel", data => gameStateController.onSaveLevel(socket, data))
     socket.on("getAnimationsList", data => assetsController.onGetAnimationsList(socket, data))
 
 
     // ********************************** Level Editor Listeners *****************************************
-
-    // Save level listener.
-    socket.on('saveLevel', (data) =>{
-
-        db.levels.findOne({levelName: data.levelName}, function(err, res){
-            if(err || res != null){
-                socekt.emit('saveLevelResponse', {success: false, errors: [err]})
-            }
-            else{
-                new_level = models.level(data.levelName, data.entities)
-                db.levels.save(new_level)
-                socket.emit('saveLevelResponse', {success: true, errors:[]})
-            }
-        })
-    })
 
 
     // Load level listener.

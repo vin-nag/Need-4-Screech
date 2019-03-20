@@ -7,4 +7,13 @@
     left: 50%;
 }
 
-
+.centeredModal {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.7);
+    padding: 100px 50px;
+    border-radius: 5px;
+    z-index: 100;
+}
