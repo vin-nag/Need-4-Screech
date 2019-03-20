@@ -4,9 +4,12 @@ import assetManager from "../services/assetManager"
 const engine = (entities, canvasID) => {
     const canvas = document.getElementById(canvasID)
     const ctx = canvas.getContext("2d")
+    let img = assetManager.getAnimationImage("george_background")
     
-    canvasService.draw.rectangle(ctx, 0, 0, canvas.width, canvas.height, "#42adf4")
-    
+    //canvasService.draw.rectangle(ctx, 0, 0, canvas.width, canvas.height, "#42adf4")
+
+    ctx.drawImage(img,0,0)
+
     for(let entity of entities){ drawEntity(ctx, entity) }
 }
 
@@ -29,6 +32,8 @@ const drawEntity = (ctx, entity) => {
     else {
         ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
     }
+
+
 
     /*
     const bounding = entity.componentMap["CBoundingBox"]
