@@ -371,10 +371,18 @@ class GameEngine {
         for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
 
             let overlap = physics.getOverLap(enemy, this.player);
+            let playerHealth = this.player.getComponent('CHealth');
 
             if (overlap.x > 0 && overlap.y > 0){
-                this.player.getComponent('CHealth').health -= 20;
-                if (this.player.getComponent('CHealth').health === 0) {
+
+                if (!playerHealth.invincible) {
+                    playerHealth.health -= 20;
+                    playerHealth.invincible = true;
+                    // Invincibility frames
+                    setTimeout(() => playerHealth.invincible = false, 800)
+                }
+                
+                if (playerHealth.health === 0) {
                     this.player.destroy();
                     console.log('player dead');
                 }
