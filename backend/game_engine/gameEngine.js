@@ -30,7 +30,7 @@ class GameEngine {
         this.player.addComponent(components.CLifeSpan(config.player.lifeSpan));
         this.player.addComponent(components.CGravity(config.game_engine.gravity));
         this.player.addComponent(components.CHealth(config.player.health));
-        this.player.addComponent(components.CAnimation('stand64',1,0,0));
+        this.player.addComponent(components.CAnimation('skeet_idle',4,0,0.25));
 
         // CInput
         let up = false;
@@ -49,8 +49,8 @@ class GameEngine {
         console.log('player spawned. player object:', this.player);
 
         //CBoundingBox
-         let size = new Vector(64, 64);
-         let half_size = new Vector(32, 32);
+         let size = new Vector(48, 48);
+         let half_size = new Vector(24, 24);
          this.player.addComponent(components.CBoundingBox(size, half_size));
 
          //CState
@@ -450,22 +450,22 @@ class GameEngine {
 
         switch (state) {
             case "grounded":
-                animation.animName = 'stand64';
-                animation.numOfFrames = 1;
+                animation.animName = 'skeet_idle';
+                animation.numOfFrames = 4;
                 animation.currentFrame = 0;
-                animation.speed = 0;
+                animation.speed = 0.25;
                 break;
 
             case "jumping":
-                animation.animName = 'air64';
-                animation.numOfFrames = 1;
+                animation.animName = 'skeet_jump';
+                animation.numOfFrames = 2;
                 animation.currentFrame = 0;
-                animation.speed = 0;
+                animation.speed = 0.5;
                 break;
 
             case "running":
-                animation.animName = 'run64';
-                animation.numOfFrames = 3;
+                animation.animName = 'skeet_run';
+                animation.numOfFrames = 6;
                 animation.currentFrame = 0;
                 animation.speed = 0.5;
                 break;
