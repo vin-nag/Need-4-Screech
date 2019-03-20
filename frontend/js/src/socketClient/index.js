@@ -68,6 +68,18 @@ export const listen = () => {
         }
     })
 
+    // List Levels Listener
+    socket.on("listLevelsResponse", (data) => {
+        if(data.success){
+            const values = data.levels.map(level => level._id)
+            const labels = data.levels.map(level => level.levelName)
+            domService.fillSelect("loadLevelsList", values, labels)
+        }
+        else {
+            alert(data.errors.reduce((string, error) => string + `\n${error}`, ""))
+        }
+    })
+
 
     // Load level Listener
 

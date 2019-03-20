@@ -63,7 +63,7 @@ const onListLevels = (socket, data) => {
             socket.emit("listLevelsResponse", {success: false, errors: [error]})
         }
         else{
-            socket.emit("listLevelResponse", {
+            socket.emit("listLevelsResponse", {
                 success: true,
                 errors: [],
                 levels: res
