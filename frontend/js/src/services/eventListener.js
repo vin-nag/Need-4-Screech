@@ -5,6 +5,7 @@ import menuService from "./menu"
 import domService from "./dom"
 import levelEditor from "../levelEditor"
 import gamePlay from "../gamePlay";
+import socketClient from "../socketClient"
 
 export const listen = () => {
     document.getElementById("goToSignup").addEventListener("click", () => app.switchToWindow(APP_WINDOWS.REGISTER))
@@ -14,7 +15,10 @@ export const listen = () => {
     document.getElementById("onSignUp").addEventListener("click", () => services.onSignUp())
     document.getElementById("onLogin").addEventListener("click", () => services.onLogin())
 
-    document.getElementById("levelEditorLoadLevel").addEventListener("click", () => levelEditor.loadLevel())
+    document.getElementById("levelEditorLoadLevel").addEventListener("click", () => {
+        domService.showElement("loadLevelModal")
+        socketClient.emit("listLevels", {})
+    })
     document.getElementById("levelEditorSaveLevel").addEventListener("click", ()=> domService.showElement("saveLevelModal"))
     document.getElementById("levelEditorSetActive").addEventListener("click", () => levelEditor.setActive())
 

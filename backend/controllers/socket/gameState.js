@@ -56,8 +56,25 @@ const onSaveLevel = (socket, data ) => {
     })
 }
 
+const onListLevels = (socket, data) => {
+    db.levels.find({}, {levelName: 1}, {limit: 25}, (err, res) => {
+        if(err || !res) { 
+            const error = err ? JSON.stringify(err) : "Did not find any levels"
+            socket.emit("listLevelsResponse", {success: false, errors: [error]})
+        }
+        else{
+            socket.emit("listLevelResponse", {
+                success: true,
+                errors: [],
+                levels: res
+            })
+        }
+    })
+}
+
 module.exports = {
     onRequestGameStateUpdate,
     onRemoveSession,
-    onSaveLevel
+    onSaveLevel,
+    onListLevels
 }

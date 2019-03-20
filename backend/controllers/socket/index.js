@@ -32,6 +32,7 @@ const connectControllers = (socket) => {
     socket.on("removeSession", data => gameStateController.removeSession(socket, data))
     socket.on("requestGameStateUpdate", data => gameStateController.onRequestGameStateUpdate(socket, data))
     socket.on("saveLevel", data => gameStateController.onSaveLevel(socket, data))
+    socket.on("listLevels", data => gameStateController.onListLevels(socket, data))
     socket.on("getAnimationsList", data => assetsController.onGetAnimationsList(socket, data))
 
 
