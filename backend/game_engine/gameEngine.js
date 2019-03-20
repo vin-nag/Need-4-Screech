@@ -63,42 +63,18 @@ class GameEngine {
          */
         let bullet = this.entity_manager.addEntity("bullet")
         let playerTransform = this.player.getComponent('CTransform')
-        let velocity = new Vector(0, 0);
         let size = new Vector(24, 24);
         let half_size = new Vector(12, 12);
+        let velocity = new Vector(12, 0);
+        if (playerTransform.scale === -1) {
+            velocity = new Vector(-12, 0);
+        }
 
         bullet.addComponent(components.CTransform(playerTransform.position, playerTransform.previous_position, 1, velocity, 0));
         bullet.addComponent(components.CBoundingBox(size, half_size));
         bullet.addComponent(components.CAnimation('buster', 1, 0, 0));
         bullet.addComponent(components.CState('shooting'));
-        bullet.addComponent(components.CLifeSpan(1500))
-
-    }
-
-    spawnNPC() {
-        /*
-        This function spawns a NPC, adding all the necessary components
-         */
-        let npc = this.entity_manager.addEntity("npc");
-
-        // animation
-        npc.addComponent(components.CAnimation("goombawalk", 2, 0, 0.5))
-
-        // transform
-        let position = new Vector(800, 436);
-        let previous_position = new Vector(100, 700);
-        let velocity = new Vector(0, 0);
-        npc.addComponent(components.CTransform(position, previous_position,1, velocity,0));
-
-        //bounding box
-        let size = new Vector(64, 64);
-        let half_size = new Vector(32, 32);
-        npc.addComponent(components.CBoundingBox(size, half_size));
-
-        //AI
-        /*
-        Need to create AI Component, add logic for Patrol and Follow NPC types
-        */
+        bullet.addComponent(components.CLifeSpan(1000))
 
     }
 
@@ -123,8 +99,8 @@ class GameEngine {
         console.log('enemy spawned. enemy object:', enemy);
 
         //CBoundingBox
-        let size = new Vector(64, 64);
-        let half_size = new Vector(32, 32);
+        let size = new Vector(44, 44);
+        let half_size = new Vector(22, 22);
         enemy.addComponent(components.CBoundingBox(size, half_size));
 
         //CState
@@ -310,6 +286,10 @@ class GameEngine {
                 }
             }
 
+            if (entity.tag === 'bullet') {
+                eTransform.position.x += eTransform.velocity.x
+            }
+
             eTransform.previous_position = eTransform.position;
             eTransform.position = eTransform.position.add(eTransform.velocity);
         }
@@ -326,11 +306,6 @@ class GameEngine {
             this.updatePlayerAnimation();
         }
 
-        // bullet movement
-        for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
-            let bulletTransform = bullet.getComponent('CTransform');
-            
-        }
     }
 
     sCollision(){
@@ -394,6 +369,26 @@ class GameEngine {
             if (overlap.x > 0 && overlap.y > 0){
                 this.player.destroy();
                 console.log('player dead');
+            }
+        }
+
+        // bullet / enemy collision
+        for (let enemy of this.entity_manager.getEntitiesByTag("enemy")) {
+            for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) { 
+                let overlap = physics.getOverLap(enemy, bullet);
+                if (overlap.x > 0 && overlap.y > 0){
+                    enemy.destroy();
+                }
+            }
+        }
+
+        // bullet / tile collision
+        for (let tile of this.entity_manager.getEntitiesByTag("tile")) {
+            for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) { 
+                let overlap = physics.getOverLap(tile, bullet);
+                if (overlap.x > 0 && overlap.y > 0){
+                    bullet.destroy();
+                }
             }
         }
 
