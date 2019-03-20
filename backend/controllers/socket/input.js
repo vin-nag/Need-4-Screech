@@ -1,3 +1,5 @@
+import {socket} from "../../../frontend/js/src/socketClient";
+
 const gameSessionService = require("./../../services/GameSessionService");
 
 const onKeyDown = (socket, data) => {
@@ -20,8 +22,21 @@ const onNewSession = (socket, data) => {
     })
 };
 
+const onMouseDown = (socket, data)=>{
+    let session = gameSessionService.getSession(data.sessionID);
+    session.lastInput.event = 'onMouseDown';
+    session.lastInput[data.keyCode] = true;
+};
+
+const onScroll = (socket, data) => {
+    let session = gameSessionService.getSession(data.sessionID);
+    session.lastInput.event = 'onScroll';
+    session.lastInput[data.keyCode] = true;
+}
 module.exports = {
     onKeyDown,
-    onKeyUp, 
+    onKeyUp,
+    onMouseDown,
+    onScroll,
     onNewSession
 }
