@@ -89,7 +89,7 @@ class GameEngine {
         enemy.addComponent(components.CLifeSpan(config.player.lifeSpan));
         enemy.addComponent(components.CGravity(config.game_engine.gravity));
         enemy.addComponent(components.CHealth(config.player.health));
-        enemy.addComponent(components.CAnimation('snake_walk',7,0,0.5));
+        enemy.addComponent(components.CAnimation('snake_walk',7,0,0.25));
 
         // CTransform
         let position = new Vector(700, 415);
@@ -99,8 +99,8 @@ class GameEngine {
         console.log('enemy spawned. enemy object:', enemy);
 
         //CBoundingBox
-        let size = new Vector(44, 44);
-        let half_size = new Vector(22, 22);
+        let size = new Vector(64, 64);
+        let half_size = new Vector(32, 32);
         enemy.addComponent(components.CBoundingBox(size, half_size));
 
         //CState
@@ -162,6 +162,7 @@ class GameEngine {
         this.spawnEnemy();
         this.entity_manager.update();
         console.log('game started');
+        console.log(this.entity_manager.getEntitiesByTag("enemy"));
     }
 
     update(){
@@ -199,9 +200,6 @@ class GameEngine {
                 setTimeout(() => CInput.canShoot = true, 200)
             }
         }
-
-
-
     }
 
     sMovement(){
@@ -268,6 +266,7 @@ class GameEngine {
 
         // update all entities position based on velocity
         for (let entity of this.entity_manager.getEntities()){
+            //console.log(entity.tag);
             let eTransform = entity.getComponent('CTransform');
 
             // add gravity effects to every entity that has CGravity
@@ -418,15 +417,13 @@ class GameEngine {
     }
 
     sAnimation() {
-
-        for (let entity of this.entity_manager.getEntities()){
+        this.entity_manager.getEntities().forEach(entity => {
             if (entity.hasComponent('CAnimation')){
-
                 let animation = entity.getComponent('CAnimation');
                 if (animation.numOfFrames < 2) { return; }
                 animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames;
             }
-        }
+        })
     }
 
     sLifespan() {
@@ -437,13 +434,11 @@ class GameEngine {
     }
 
     updatePlayerAnimation(){
-
         let state = this.player.getComponent("CState").state;
         let animation = this.player.getComponent("CAnimation");
         //console.log('called player animation', state);
 
         switch (state) {
-
             case "grounded":
                 animation.animName = 'stand64';
                 animation.numOfFrames = 1;
@@ -465,7 +460,6 @@ class GameEngine {
                 animation.speed = 0.5;
                 break;
         }
-
     }
 
     returnGameState(){
