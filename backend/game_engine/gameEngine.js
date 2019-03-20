@@ -379,8 +379,8 @@ class GameEngine {
             if (overlap.x > 0 && overlap.y > 0){
 
                 if (!playerHealth.invincible) {
-                    playerHealth.health -= 20;
                     playerHealth.invincible = true;
+                    playerHealth.health -= 20;
                     // Invincibility frames
                     setTimeout(() => playerHealth.invincible = false, 800)
                 }
