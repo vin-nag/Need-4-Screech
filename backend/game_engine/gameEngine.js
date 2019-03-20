@@ -193,8 +193,15 @@ class GameEngine {
         CInput.shoot = this.lastInput[config.controls.shoot];
 
         if (CInput.shoot) {
-            this.spawnBullet();
+            if (CInput.canShoot) {
+                this.spawnBullet()
+                CInput.canShoot = false
+                setTimeout(() => CInput.canShoot = true, 200)
+            }
         }
+
+
+
     }
 
     sMovement(){
@@ -423,8 +430,6 @@ class GameEngine {
     }
 
     sLifespan() {
-        // Stub: add lifespan to entities that have lifespan component
-
         // bullet lifespan
         for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
             setTimeout(() => bullet.destroy(), bullet.getComponent('CLifeSpan').lifespan)
