@@ -79,7 +79,7 @@ const onLoadLevel = (socket, data) => {
     if(!data.levelId) { errors.push("Level id was not provided") }
 
     if(errors.length){
-        socket.emit("saveLevelResponse", {success: false, errors})
+        socket.emit("loadLevelResponse", {success: false, errors})
         return
     }
 
