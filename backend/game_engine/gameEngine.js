@@ -88,7 +88,7 @@ class GameEngine {
         console.log('spawning enemy now');
         enemy.addComponent(components.CLifeSpan(config.player.lifeSpan));
         enemy.addComponent(components.CGravity(config.game_engine.gravity));
-        enemy.addComponent(components.CHealth(config.player.health));
+        enemy.addComponent(components.CHealth(2));
         enemy.addComponent(components.CAnimation('snake_walk',7,0,0.25));
 
         // CTransform
@@ -378,8 +378,11 @@ class GameEngine {
             let overlap = physics.getOverLap(enemy, this.player);
 
             if (overlap.x > 0 && overlap.y > 0){
-                this.player.destroy();
-                console.log('player dead');
+                this.player.getComponent('CHealth').health -= 20;
+                if (this.player.getComponent('CHealth').health === 0) {
+                    this.player.destroy();
+                    console.log('player dead');
+                }
             }
         }
 
@@ -388,7 +391,12 @@ class GameEngine {
             for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
                 let overlap = physics.getOverLap(enemy, bullet);
                 if (overlap.x > 0 && overlap.y > 0){
-                    enemy.destroy();
+                    bullet.destroy();
+                    enemy.getComponent('CHealth').health--;
+                    if (enemy.getComponent('CHealth').health === 0) {
+                        enemy.destroy();
+                        bullet.destroy();
+                    }
                 }
             }
         }
