@@ -49,7 +49,7 @@ class LevelEditor {
         //save the level, and awaits confirmation
         socketClient.emit("saveLevel", {
             "name": levelName,
-            "entities": this.entities
+            "sessionId": this.sessionId
         })
     }
 
