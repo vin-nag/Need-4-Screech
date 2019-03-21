@@ -63,22 +63,32 @@ class GameEngine {
          this.player.addComponent(components.CState("grounded"));
     }
 
+    spawnTimer(time=config.time.limit){
+
+        let timer = this.entity_manager.addEntity("timer");
+        let timerPosition = new Vector(config.canvas.x, config.canvas.y);
+        timer.addComponent(components.CTransform(timerPosition, timerPosition, 1, new Vector(0, 0), 0))
+        timer.addComponent(components.CTimer(time))
+    }
+
     spawnBullet() {
         /*
         This function spawns a bullet, adding all the necessary components
          */
         let bullet = this.entity_manager.addEntity("bullet")
         let playerTransform = this.player.getComponent('CTransform')
-        let size = new Vector(24, 24);
-        let half_size = new Vector(12, 12);
+        let bulletPosition = new Vector(playerTransform.position.x, playerTransform.position.y + 15);
+        let bulletPrevious = new Vector(playerTransform.position.x, playerTransform.position.y);
+        let size = new Vector(48, 16);
+        let half_size = new Vector(24, 8);
         let velocity = new Vector(12, 0);
         if (playerTransform.scale === -1) {
             velocity = new Vector(-12, 0);
         }
 
-        bullet.addComponent(components.CTransform(playerTransform.position, playerTransform.previous_position, 1, velocity, 0));
+        bullet.addComponent(components.CTransform(bulletPosition, bulletPrevious, 1, velocity, 0));
         bullet.addComponent(components.CBoundingBox(size, half_size));
-        bullet.addComponent(components.CAnimation('buster', 1, 0, 0));
+        bullet.addComponent(components.CAnimation('screech', 1, 0, 0));
         bullet.addComponent(components.CState('shooting'));
         bullet.addComponent(components.CLifeSpan(1000))
 
@@ -166,6 +176,7 @@ class GameEngine {
         this.spawnPlayer();
         this.spawnTiles();
         this.spawnEnemy();
+        this.spawnTimer();
         this.entity_manager.update();
         console.log('game started');
     }
@@ -183,6 +194,8 @@ class GameEngine {
             this.sCollision();
             this.sAnimation();
             this.sLifespan();
+            let timer = this.entity_manager.getEntitiesByTag("timer")[0].getComponent("CTimer");
+            timer.time--;
             this.entity_manager.update();
         }
     }
