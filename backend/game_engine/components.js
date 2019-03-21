@@ -27,7 +27,7 @@ const CState = (state) => ({name: "CState", state});
 /* this method is for the health component
 @param {int} health health of the entity
 */
-const CHealth = (health, invincible=false) => ({name: "CHealth", health, invincible});
+const CHealth = (health, maxHealth, invincible=false) => ({name: "CHealth", health, maxHealth, invincible});
 
 /* this method is for the bounding box component
 @param {array} size size of the entity

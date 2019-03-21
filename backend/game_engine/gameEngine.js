@@ -35,7 +35,7 @@ class GameEngine {
         console.log('spawning player now');
         this.player.addComponent(components.CLifeSpan(config.player.lifeSpan));
         this.player.addComponent(components.CGravity(config.game_engine.gravity));
-        this.player.addComponent(components.CHealth(config.player.health));
+        this.player.addComponent(components.CHealth(config.player.health, config.player.health));
         this.player.addComponent(components.CAnimation('skeet_idle',4,0,0.25));
 
         // CInput
@@ -100,7 +100,7 @@ class GameEngine {
         pole1.addComponent(components.CAnimation("pole1", 1, 0, 0));
 
         const pole2 = this.entity_manager.addEntity("bg");
-        pole2.addComponent(components.CTransform(new Vector(550, 320), new Vector(0, 0), 1, new Vector(0, 0), 0));
+        pole2.addComponent(components.CTransform(new Vector(625, 320), new Vector(0, 0), 1, new Vector(0, 0), 0));
         pole2.addComponent(components.CAnimation("pole2", 1, 0, 0));
 
         const pole3 = this.entity_manager.addEntity("bg");
@@ -122,7 +122,7 @@ class GameEngine {
         console.log('spawning enemy now');
         enemy.addComponent(components.CLifeSpan(config.player.lifeSpan));
         enemy.addComponent(components.CGravity(config.game_engine.gravity));
-        enemy.addComponent(components.CHealth(2));
+        enemy.addComponent(components.CHealth(2, 2));
         enemy.addComponent(components.CAnimation('snake_walk',7,0,0.25));
 
         // CTransform
