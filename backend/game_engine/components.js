@@ -51,6 +51,8 @@ const CInput = (up, down, left, right, shoot, canShoot) => ({name: "CInput", up,
  * @param {float} currentFrame The current frame. Floor this variable to determine which portion of the animation to render.
  * @param {float} speed The number of frames per second to increment `currentFrame` by.
  */
-const CAnimation = (animName, numOfFrames, currentFrame, speed) => ({name: "CAnimation", animName, numOfFrames, currentFrame, speed})
+const CAnimation = (animName, numOfFrames, currentFrame, speed) => ({name: "CAnimation", animName, numOfFrames, currentFrame, speed});
 
-module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation};
+const CTimer = (time) => ({name: "CTimer", time});
+
+module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CTimer};

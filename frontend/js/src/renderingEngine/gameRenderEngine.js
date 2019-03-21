@@ -14,32 +14,37 @@ const engine = (entities, canvasID) => {
 }
 
 const drawEntity = (ctx, entity) => {
-    const animation = entity.componentMap["CAnimation"]
-    const transform = entity.componentMap["CTransform"]
-    const img = assetManager.getAnimationImage(animation.animName)
-    const currentFrame = Math.floor(animation.currentFrame);
-    const frameWidth = img.width / animation.numOfFrames;
-    const frameHeight = img.height;
 
-
-    // drawing reverse
-    if (transform.scale === -1){
-        ctx.save();
-        ctx.translate(transform.position.x, transform.position.y);  //location on the canvas to draw your sprite, this is important.
-        ctx.scale(-1, 1);  //This does your mirroring/flipping
-        ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, -frameWidth, 0, frameWidth, frameHeight);
-        ctx.restore();
+    if (entity.tag === "timer"){
+        const time = entity.componentMap["CTimer"];
+        const position = entity.componentMap["CTransform"].position;
+        canvasService.draw.text(ctx, "Time Left: " + time.time, position.x, position.y, "36px", "#fff", "Permanent Marker")
     }
+
     else {
-        ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
+        const animation = entity.componentMap["CAnimation"]
+        const transform = entity.componentMap["CTransform"]
+        const img = assetManager.getAnimationImage(animation.animName)
+        const currentFrame = Math.floor(animation.currentFrame);
+        const frameWidth = img.width / animation.numOfFrames;
+        const frameHeight = img.height;
+
+        const bounding = entity.componentMap["CBoundingBox"]
+        canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
+
+        // drawing reverse
+        if (transform.scale === -1){
+            ctx.save();
+            ctx.translate(transform.position.x, transform.position.y);  //location on the canvas to draw your sprite, this is important.
+            ctx.scale(-1, 1);  //This does your mirroring/flipping
+            ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, -frameWidth, 0, frameWidth, frameHeight);
+            ctx.restore();
+        }
+
+        else {
+            ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
+        }
     }
-
-    /*
-    const bounding = entity.componentMap["CBoundingBox"]
-    canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
-     */
-
-
 }
 
 export default engine
