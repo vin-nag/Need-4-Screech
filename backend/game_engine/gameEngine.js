@@ -88,6 +88,24 @@ class GameEngine {
 
     }
 
+    spawnBG(){
+        const pole1 = this.entity_manager.addEntity("bg");
+        pole1.addComponent(components.CTransform(new Vector(50, 325), new Vector(0, 0), 1, new Vector(0, 0), 0));
+        pole1.addComponent(components.CAnimation("pole1", 1, 0, 0));
+
+        const pole2 = this.entity_manager.addEntity("bg");
+        pole2.addComponent(components.CTransform(new Vector(550, 320), new Vector(0, 0), 1, new Vector(0, 0), 0));
+        pole2.addComponent(components.CAnimation("pole2", 1, 0, 0));
+
+        const pole3 = this.entity_manager.addEntity("bg");
+        pole3.addComponent(components.CTransform(new Vector(1050, 320), new Vector(0, 0), 1, new Vector(0, 0), 0));
+        pole3.addComponent(components.CAnimation("pole3", 1, 0, 0));
+
+        const lantern = this.entity_manager.addEntity("bg");
+        lantern.addComponent(components.CTransform(new Vector(800, 500), new Vector(0, 0), 1, new Vector(0, 0), 0));
+        lantern.addComponent(components.CAnimation("lantern", 4, 0, 0.25));
+    }
+
     spawnEnemy() {
         /*
         This function spawns a player, adding all the necessary components
@@ -126,8 +144,8 @@ class GameEngine {
             tile.addComponent(components.CAnimation('GreyTile',1,0,0))
 
             // transform
-            let position = new Vector(x, 500);
-            let previous_position = new Vector(x, 500);
+            let position = new Vector(x, 625);
+            let previous_position = new Vector(x, 625);
             let velocity = new Vector(0, 0);
             tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
 
@@ -139,8 +157,8 @@ class GameEngine {
 
         // extra tiles to jump to
         let x = 192;
-        let y = 436;
-        for (let i=0; i<5; i++){
+        let y = 561;
+        for (let i=0; i<2; i++){
 
             let tile = this.entity_manager.addEntity("tile");
 
@@ -168,6 +186,7 @@ class GameEngine {
 
         console.log('starting game');
         this.spawnPlayer();
+        this.spawnBG();
         this.spawnTiles();
         this.spawnEnemy();
         this.spawnTimer();

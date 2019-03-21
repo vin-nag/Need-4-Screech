@@ -8,7 +8,7 @@ const engine = (entities, canvasID) => {
 
     //canvasService.draw.rectangle(ctx, 0, 0, canvas.width, canvas.height, "#42adf4")
 
-    ctx.drawImage(img,0,0)
+    ctx.drawImage(img,0,0, img.width, img.height, 0, 0, canvas.width, canvas.height);
 
     for(let entity of entities){ drawEntity(ctx, entity) }
 }
@@ -29,8 +29,10 @@ const drawEntity = (ctx, entity) => {
         const frameWidth = img.width / animation.numOfFrames;
         const frameHeight = img.height;
 
+        /*
         const bounding = entity.componentMap["CBoundingBox"]
         canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
+        */
 
         // drawing reverse
         if (transform.scale === -1){
