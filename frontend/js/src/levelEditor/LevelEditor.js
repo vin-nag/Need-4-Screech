@@ -47,19 +47,20 @@ class LevelEditor {
     saveLevel(levelName){
         //Stub: Sends the entities array to the backend, in order to
         //save the level, and awaits confirmation
-        console.log("HIT")
         socketClient.emit("saveLevel", {
             "levelName": levelName,
             "sessionId": this.sessionId
         })
     }
 
-    loadLevel(levelName){
+    loadLevel(levelId){
         //Stub: Calls the backend to request the entities stored for
         //the given level. On success, updates the local gameState
         //accordingly. On failure, displays the corresponding error message
-        socketClient.emit('loadLevel', levelName)
-
+        socketClient.emit('loadLevel', {
+            levelId,
+            sessionId: this.sessionId
+        })
 
     }
 

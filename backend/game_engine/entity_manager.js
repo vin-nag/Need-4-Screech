@@ -2,6 +2,7 @@
  * Entity Manager class using standard ECS architecture.
  */
 const Entity = require("./entity");
+const Vector = require("./vector")
 
 class EntityManager {
     /*
@@ -43,6 +44,29 @@ class EntityManager {
     getEntities(){
         // standard getter function
         return this.entities;
+    }
+
+    loadSerializedEntities(entities){
+        const newEntities = []
+
+        const deserialize = (obj) => {
+            if(!(obj instanceof Object)){ return } //base case
+
+            for(let i in obj){
+                if(obj[i]._isVector === true){ obj[i] = new Vector(obj[i].x, obj[i].y) }
+                else { deserialize(obj[i]) }
+            }
+        }
+
+        for(let i = 0; i < entities.length; i++){
+            const entity = this.addEntity(entities[i].tag)
+            entity.componentMap = entities[i].componentMap
+            deserialize(entity.componentMap)
+            newEntities.push(entity)
+        }
+
+        this.entities = newEntities
+        this.entitiesToAdd = []
     }
 
     getEntitiesByTag(tag){
