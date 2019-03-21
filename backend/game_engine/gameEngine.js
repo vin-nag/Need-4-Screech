@@ -35,7 +35,7 @@ class GameEngine {
         console.log('spawning player now');
         this.player.addComponent(components.CLifeSpan(config.player.lifeSpan));
         this.player.addComponent(components.CGravity(config.game_engine.gravity));
-        this.player.addComponent(components.CHealth(config.player.health, config.player.health));
+        this.player.addComponent(components.CHealth(config.player.health, config.player.health, false, true));
         this.player.addComponent(components.CAnimation('skeet_idle',4,0,0.25));
 
         // CInput
@@ -122,7 +122,7 @@ class GameEngine {
         console.log('spawning enemy now');
         enemy.addComponent(components.CLifeSpan(config.player.lifeSpan));
         enemy.addComponent(components.CGravity(config.game_engine.gravity));
-        enemy.addComponent(components.CHealth(2, 2));
+        enemy.addComponent(components.CHealth(2, 2, false, false));
         enemy.addComponent(components.CAnimation('snake_walk',7,0,0.25));
 
         // CTransform
@@ -422,7 +422,11 @@ class GameEngine {
                 let overlap = physics.getOverLap(enemy, bullet);
                 if (overlap.x > 0 && overlap.y > 0){
                     bullet.destroy();
+                    enemy.getComponent('CHealth').show = true;
                     enemy.getComponent('CHealth').health--;
+
+                    setTimeout(() => { enemy.getComponent('CHealth').show = false; }, 2000);
+
                     if (enemy.getComponent('CHealth').health === 0) {
                         enemy.destroy();
                         bullet.destroy();

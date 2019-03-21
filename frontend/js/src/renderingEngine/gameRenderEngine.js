@@ -34,7 +34,7 @@ const drawEntity = (ctx, entity) => {
         canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
         */
 
-        if ("CHealth" in entity.componentMap){
+        if ("CHealth" in entity.componentMap && entity.componentMap["CHealth"].show === true){
             let currentHealthPercentage = entity.componentMap["CHealth"].health / entity.componentMap["CHealth"].maxHealth;
             canvasService.draw.rectangle(ctx, transform.position.x - 2, transform.position.y - 10, frameWidth + 4, 8, "#860b08");
             canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y - 8, currentHealthPercentage * frameWidth, 6, "#f43a26")
