@@ -1,5 +1,6 @@
 // imports
 const components = require("./components");
+const entity_models = require("./default_entity_models");
 const EntityManager = require("./entity_manager");
 const config = require("./../../config-template.json");
 const Vector = require("./vector");
@@ -28,76 +29,45 @@ class GameEngine {
         this.player = this.entity_manager.getEntitiesByTag("player")[0]
     }
 
-    spawnPlayer() {
-        /*
-        This function spawns a player, adding all the necessary components
-         */
-        console.log('spawning player now');
-        this.player.addComponent(components.CLifeSpan(config.player.lifeSpan));
-        this.player.addComponent(components.CGravity(config.game_engine.gravity));
-        this.player.addComponent(components.CHealth(config.player.health, config.player.health, false, true));
-        this.player.addComponent(components.CAnimation('skeet_idle',4,0,0.25));
 
-        // CInput
-        let up = false;
-        let down = false;
-        let left = false;
-        let right = false;
-        let shoot = false;
-        let canShoot = true;
-        this.player.addComponent(components.CInput(up, down, left, right, shoot, canShoot));
+    init(){
+        let entities = [];
+        entities.push(entity_models.player(100, 435));
+        entities.push(entity_models.enemy_snake(700, 415));
 
-        // CTransform
-        let position = new Vector(100, 435);
-        let previous_position = new Vector(100, 415);
-        let velocity = new Vector(0, 0);
-        this.player.addComponent(components.CTransform(position, previous_position,1, velocity,0));
-        console.log('player spawned. player object:', this.player);
+        entities.push(entity_models.decorator_lantern(800, 500));
+        entities.push(entity_models.decorator_pole_1(50, 325));
+        entities.push(entity_models.decorator_pole_2(625, 320));
+        entities.push(entity_models.decorator_pole_3(1050, 320));
 
-        //CBoundingBox
-        let size = new Vector(64, 64);
-        let half_size = new Vector(32, 32);
-        this.player.addComponent(components.CBoundingBox(size, half_size));
+        entities.push(entity_models.bar_timer());
+        entities.push(entity_models.bar_health());
+        entities.push(entity_models.bar_screech());
 
-        //CState
-        this.player.addComponent(components.CState("grounded"));
+        for (let x = 0; x < 5000; x+=64){
+            entities.push(entity_models.tile_brick(x, 625));
+        }
 
-        //CPowerup
-        this.player.addComponent(components.CPowerup(false, false, false, false))
+        this.entity_manager.setEntities(entities);
+        console.log(this.entity_manager.getEntities());
     }
 
-    spawnBars(){
-        // timer
-        let timer = this.entity_manager.addEntity("bar");
-        let timerPosition = new Vector(10, 10);
-        timer.addComponent(components.CTransform(timerPosition, timerPosition, 1, new Vector(0, 0), 0));
-        timer.addComponent(components.CBar(config.time.limit, config.time.limit, "#FFFF00"));
-        timer.addComponent(components.CAnimation("timer", 1, 0, 0));
-        timer.addComponent(components.CState("timer"));
+    startGame() {
+        // this function starts the game, spawning the player and other necessary things
 
-        // health bar
-        let health = this.entity_manager.addEntity("bar");
-        let healthPosition = new Vector(475, 10);
-        health.addComponent(components.CTransform(healthPosition, healthPosition, 1, new Vector(0, 0), 0));
-        health.addComponent(components.CBar(config.player.health, config.player.health, "#8B0000"));
-        health.addComponent(components.CAnimation("health", 1, 0, 0));
-        health.addComponent(components.CState("health"));
-
-        // drunk bar
-        let drunk = this.entity_manager.addEntity("bar");
-        let drunkPosition = new Vector(950, 10);
-        drunk.addComponent(components.CTransform(drunkPosition, drunkPosition, 1, new Vector(0, 0), 0));
-        drunk.addComponent(components.CBar(config.player.health, config.player.health, "#9D702E"));
-        drunk.addComponent(components.CAnimation("drunk", 1, 0, 0));
-        drunk.addComponent(components.CState("drunk"));
+        console.log('starting game');
+        this.init();
+        this.entity_manager.update();
+        console.log('game started');
     }
 
     spawnBullet() {
         /*
         This function spawns a bullet, adding all the necessary components
          */
-        let bullet = this.entity_manager.addEntity("bullet")
-        let playerTransform = this.player.getComponent('CTransform')
+        let bullet = this.entity_manager.addEntity("bullet");
+        let player = this.entity_manager.getEntitiesByTag("player")[0];
+        let playerTransform = player.getComponent('CTransform');
         let bulletPosition = new Vector(playerTransform.position.x, playerTransform.position.y + 15);
         let bulletPrevious = new Vector(playerTransform.position.x, playerTransform.position.y);
         let size = new Vector(48, 16);
@@ -112,135 +82,6 @@ class GameEngine {
         bullet.addComponent(components.CAnimation('screech', 1, 0, 0));
         bullet.addComponent(components.CState('shooting'));
         bullet.addComponent(components.CLifeSpan(1000))
-
-    }
-
-    spawnBG(){
-        const pole1 = this.entity_manager.addEntity("bg");
-        pole1.addComponent(components.CTransform(new Vector(50, 325), new Vector(0, 0), 1, new Vector(0, 0), 0));
-        pole1.addComponent(components.CAnimation("pole1", 1, 0, 0));
-
-        const pole2 = this.entity_manager.addEntity("bg");
-        pole2.addComponent(components.CTransform(new Vector(625, 320), new Vector(0, 0), 1, new Vector(0, 0), 0));
-        pole2.addComponent(components.CAnimation("pole2", 1, 0, 0));
-
-        const pole3 = this.entity_manager.addEntity("bg");
-        pole3.addComponent(components.CTransform(new Vector(1050, 320), new Vector(0, 0), 1, new Vector(0, 0), 0));
-        pole3.addComponent(components.CAnimation("pole3", 1, 0, 0));
-
-        const lantern = this.entity_manager.addEntity("bg");
-        lantern.addComponent(components.CTransform(new Vector(800, 500), new Vector(0, 0), 1, new Vector(0, 0), 0));
-        lantern.addComponent(components.CAnimation("lantern", 4, 0, 0.25));
-    }
-
-    spawnEnemy() {
-        /*
-        This function spawns a player, adding all the necessary components
-         */
-
-        let enemy = this.entity_manager.addEntity("enemy");
-
-        console.log('spawning enemy now');
-        enemy.addComponent(components.CLifeSpan(config.player.lifeSpan));
-        enemy.addComponent(components.CGravity(config.game_engine.gravity));
-        enemy.addComponent(components.CHealth(2, 2, false, false));
-        enemy.addComponent(components.CAnimation('snake_walk',7,0,0.25));
-
-        // CTransform
-        let position = new Vector(700, 415);
-        let previous_position = new Vector(700, 415);
-        let velocity = new Vector(0, 0);
-        enemy.addComponent(components.CTransform(position, previous_position,1, velocity,0));
-        console.log('enemy spawned. enemy object:', enemy);
-
-        //CBoundingBox
-        let size = new Vector(64, 64);
-        let half_size = new Vector(32, 32);
-        enemy.addComponent(components.CBoundingBox(size, half_size));
-
-        //CState
-        enemy.addComponent(components.CState("grounded"));
-    }
-
-    spawnTiles() {
-
-        for (let x = 0; x < 10000; x+=64){
-            let tile = this.entity_manager.addEntity("tile");
-
-            // animation
-            tile.addComponent(components.CAnimation('GreyTile',1,0,0))
-
-            // transform
-            let position = new Vector(x, 625);
-            let previous_position = new Vector(x, 625);
-            let velocity = new Vector(0, 0);
-            tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
-
-            //bounding box
-            let size = new Vector(64, 64);
-            let half_size = new Vector(32, 32);
-            tile.addComponent(components.CBoundingBox(size, half_size));
-        }
-
-        // extra tiles to jump to
-        let x = 192;
-        let y = 561;
-        for (let i=0; i<2; i++){
-
-            let tile = this.entity_manager.addEntity("tile");
-
-            // animation
-            tile.addComponent(components.CAnimation('GreyTile',1,0,0))
-
-            // transform
-            let position = new Vector(x, y);
-            let previous_position = new Vector(x, y);
-            let velocity = new Vector(0, 0);
-            tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
-
-            //bounding box
-            let size = new Vector(64, 64);
-            let half_size = new Vector(32, 32);
-            tile.addComponent(components.CBoundingBox(size, half_size));
-            x += 65;
-            y -= 65;
-        }
-
-    }
-
-    spawnPowerups() {
-        // spawn powerups
-        let superSpeed = this.entity_manager.addEntity("powerup")
-        let invincibility = this.entity_manager.addEntity("powerup")
-        let shield = this.entity_manager.addEntity("powerup")
-
-        superSpeed.addComponent(components.CTransform(new Vector(400, 590), new Vector(100, 400), 1, new Vector(0,0), 0));
-        invincibility.addComponent(components.CTransform(new Vector(600, 590), new Vector(100, 500), 1, new Vector(0,0), 0));
-        shield.addComponent(components.CTransform(new Vector(800, 590), new Vector(100, 600), 1, new Vector(0,0), 0));
-
-        superSpeed.addComponent(components.CAnimation('SuperSpeed',4,0,.25))
-        invincibility.addComponent(components.CAnimation('Invincibility',4,0,.25))
-        shield.addComponent(components.CAnimation('Shield',4,0,.25))
-
-        let size = new Vector(20, 10);
-        let half_size = new Vector(20, 10);
-        superSpeed.addComponent(components.CBoundingBox(size, half_size));
-        invincibility.addComponent(components.CBoundingBox(size, half_size));
-        shield.addComponent(components.CBoundingBox(size, half_size));
-    }
-
-    startGame() {
-        // this function starts the game, spawning the player and other necessary things
-
-        console.log('starting game');
-        this.spawnPlayer();
-        this.spawnBG();
-        this.spawnTiles();
-        this.spawnEnemy();
-        this.spawnBars();
-        this.spawnPowerups();
-        this.entity_manager.update();
-        console.log('game started');
     }
 
     update(){
@@ -257,13 +98,12 @@ class GameEngine {
             this.sAnimation();
             this.sLifespan();
             this.sBars();
-            //let timer = this.entity_manager.getEntitiesByTag("timer")[0].getComponent("CTimer");
-            //timer.time--;
             this.entity_manager.update();
         }
     }
 
     sBars(){
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
         for (let entity of this.entity_manager.getEntitiesByTag("bar")){
             let values = entity.getComponent("CBar");
             let state = entity.getComponent("CState").state;
@@ -274,11 +114,11 @@ class GameEngine {
                     break;
 
                 case "health":
-                    values.value = this.player.getComponent("CHealth").health;
+                    values.value = player.getComponent("CHealth").health;
                     break;
 
                 case "drunk":
-                    values.value = this.player.getComponent("CHealth").health;
+                    values.value = player.getComponent("CHealth").health;
                     break;
             }
         }
@@ -286,7 +126,8 @@ class GameEngine {
 
     sInput(){
         // Input system
-        let CInput = this.player.getComponent('CInput');
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+        let CInput = player.getComponent('CInput');
 
         CInput.up = this.lastInput[config.controls.up];
         CInput.down = this.lastInput[config.controls.down];
@@ -304,13 +145,14 @@ class GameEngine {
     }
 
     sMovement() {
-        // movement system
 
-        let playerInput = this.player.getComponent('CInput');
-        let playerTransform = this.player.getComponent('CTransform');
-        let playerState = this.player.getComponent('CState');
+        // movement system
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+        let playerInput = player.getComponent('CInput');
+        let playerTransform = player.getComponent('CTransform');
+        let playerState = player.getComponent('CState');
         let newState = playerState.state;
-        let playerPowerup = this.player.getComponent('CPowerup');
+        let playerPowerup = player.getComponent('CPowerup');
 
         if (playerInput.up) {
             if (playerState.state === "grounded" || playerState.state === "running") {
@@ -330,7 +172,7 @@ class GameEngine {
                 playerTransform.scale = -1;
                 newState = "running"
             }
-            
+
         }
 
         if (playerInput.right) {
@@ -344,7 +186,7 @@ class GameEngine {
                 playerTransform.scale = 1;
                 newState = "running"
             }
-            
+
         }
 
         if (playerInput.down) {
@@ -431,18 +273,19 @@ class GameEngine {
 
     sCollision(){
 
-        let playerTransform = this.player.getComponent('CTransform');
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+        let playerTransform = player.getComponent('CTransform');
 
         for (let tile of this.entity_manager.getEntitiesByTag("tile")){
 
             if (!tile.hasComponent("CBoundingBox")) {continue;}
 
             let tileTransform = tile.getComponent("CTransform");
-            let overlap = physics.getOverLap(this.player, tile);
+            let overlap = physics.getOverLap(player, tile);
 
             if (overlap.x > 0 && overlap.y > 0) {
 
-                let prevOverlap = physics.getPrevOverLap(this.player, tile);
+                let prevOverlap = physics.getPrevOverLap(player, tile);
 
                 if (prevOverlap.y > 0){
                     let direction = tileTransform.position.x > playerTransform.previous_position.x? -1: 1;
@@ -483,9 +326,9 @@ class GameEngine {
 
         for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
 
-            let overlap = physics.getOverLap(enemy, this.player);
-            let playerHealth = this.player.getComponent('CHealth');
-            let playerPowerup = this.player.getComponent('CPowerup');
+            let overlap = physics.getOverLap(enemy, player);
+            let playerHealth = player.getComponent('CHealth');
+            let playerPowerup = player.getComponent('CPowerup');
 
             if (overlap.x > 0 && overlap.y > 0){
                 if (playerPowerup.invincibility) {
@@ -505,7 +348,7 @@ class GameEngine {
                         setTimeout(() => playerHealth.invincible = false, 800)
                     }
                     if (playerHealth.health === 0) {
-                        this.player.destroy();
+                        player.destroy();
                         //console.log('player dead');
                     }
                 }
@@ -543,33 +386,33 @@ class GameEngine {
 
         // player / powerup collision
         for (let powerup of this.entity_manager.getEntitiesByTag("powerup")) {
-            let overlap = physics.getOverLap(this.player, powerup);
+            let overlap = physics.getOverLap(player, powerup);
             if (overlap.x > 0 && overlap.y > 0){
                 if (powerup.getComponent('CAnimation').animName === 'SuperSpeed') {
                     //speed
                     console.log("shield")
-                    this.player.getComponent('CPowerup').superSpeed = true;
+                    player.getComponent('CPowerup').superSpeed = true;
                     powerup.destroy();
-                    setTimeout(() => this.player.getComponent('CPowerup').superSpeed = false, 10000)
+                    setTimeout(() => player.getComponent('CPowerup').superSpeed = false, 10000)
                 }
                 if (powerup.getComponent('CAnimation').animName === 'Invincibility') {
                     // temporary invincibility
                     console.log("inv")
-                    this.player.getComponent('CPowerup').invincibility = true;
+                    player.getComponent('CPowerup').invincibility = true;
                     powerup.destroy();
-                    setTimeout(() => this.player.getComponent('CPowerup').invincibility = false, 10000)
+                    setTimeout(() => player.getComponent('CPowerup').invincibility = false, 10000)
                 }
                 if (powerup.getComponent('CAnimation').animName === 'Shield') {
                     // shield
                     console.log("shield")
-                    this.player.getComponent('CPowerup').shield = true;
+                    player.getComponent('CPowerup').shield = true;
                     powerup.destroy();
                 }
             }
         }
 
         //update CState
-        let state = this.player.getComponent("CState");
+        let state = player.getComponent("CState");
         let newState = state.state;
         if (playerTransform.position.y !== playerTransform.previous_position.y){
             newState = "jumping";
@@ -604,8 +447,9 @@ class GameEngine {
     }
 
     updatePlayerAnimation(){
-        let state = this.player.getComponent("CState").state;
-        let animation = this.player.getComponent("CAnimation");
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+        let state = player.getComponent("CState").state;
+        let animation = player.getComponent("CAnimation");
 
         switch (state) {
             case "grounded":
