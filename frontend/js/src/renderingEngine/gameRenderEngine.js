@@ -76,6 +76,10 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
                 const state = entity.componentMap["CState"];
                 let offsetX = 200;
                 let offsetY = 75;
+                let currentPercentage = values.value / values.maxValue;
+                canvasService.draw.rectangle(ctx, Math.max(transform.position.x + offsetX - 115, transform.position.x + offsetX - 115 - camX), transform.position.y + offsetY - 55, frameWidth - 110, 27, "#000000");
+                canvasService.draw.rectangle(ctx, Math.max(transform.position.x + offsetX - 115, transform.position.x + offsetX - 115 - camX), transform.position.y + offsetY - 54, currentPercentage * (frameWidth - 110), 25, values.color);
+
                 canvasService.draw.text(ctx, "Current " + state.state + ": " + values.value, Math.max(transform.position.x + offsetX, transform.position.x + offsetX - camX), transform.position.y + offsetY, "18px", "#fff", "Permanent Marker")
             }
 

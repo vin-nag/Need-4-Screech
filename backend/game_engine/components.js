@@ -54,6 +54,6 @@ const CInput = (up, down, left, right, shoot, canShoot) => ({name: "CInput", up,
 const CAnimation = (animName, numOfFrames, currentFrame, speed) => ({name: "CAnimation", animName, numOfFrames, currentFrame, speed});
 
 
-const CBar = (value, maxValue) => ({name: "CBar", value, maxValue});
+const CBar = (value, maxValue, color) => ({name: "CBar", value, maxValue, color});
 
 module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar};

@@ -68,7 +68,7 @@ class GameEngine {
         let timer = this.entity_manager.addEntity("bar");
         let timerPosition = new Vector(10, 10);
         timer.addComponent(components.CTransform(timerPosition, timerPosition, 1, new Vector(0, 0), 0));
-        timer.addComponent(components.CBar(config.time.limit, config.time.limit));
+        timer.addComponent(components.CBar(config.time.limit, config.time.limit, "#FFFF00"));
         timer.addComponent(components.CAnimation("timer", 1, 0, 0));
         timer.addComponent(components.CState("timer"));
 
@@ -76,7 +76,7 @@ class GameEngine {
         let health = this.entity_manager.addEntity("bar");
         let healthPosition = new Vector(475, 10);
         health.addComponent(components.CTransform(healthPosition, healthPosition, 1, new Vector(0, 0), 0));
-        health.addComponent(components.CBar(config.player.health, config.player.health));
+        health.addComponent(components.CBar(config.player.health, config.player.health, "#8B0000"));
         health.addComponent(components.CAnimation("health", 1, 0, 0));
         health.addComponent(components.CState("health"));
 
@@ -84,7 +84,7 @@ class GameEngine {
         let drunk = this.entity_manager.addEntity("bar");
         let drunkPosition = new Vector(950, 10);
         drunk.addComponent(components.CTransform(drunkPosition, drunkPosition, 1, new Vector(0, 0), 0));
-        drunk.addComponent(components.CBar(config.player.health, config.player.health));
+        drunk.addComponent(components.CBar(config.player.health, config.player.health, "#9D702E"));
         drunk.addComponent(components.CAnimation("drunk", 1, 0, 0));
         drunk.addComponent(components.CState("drunk"));
     }
