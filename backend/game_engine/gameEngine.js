@@ -74,7 +74,7 @@ class GameEngine {
 
         // health bar
         let health = this.entity_manager.addEntity("bar");
-        let healthPosition = new Vector(450, 10);
+        let healthPosition = new Vector(475, 10);
         health.addComponent(components.CTransform(healthPosition, healthPosition, 1, new Vector(0, 0), 0));
         health.addComponent(components.CBar(config.player.health, config.player.health));
         health.addComponent(components.CAnimation("health", 1, 0, 0));
@@ -82,7 +82,7 @@ class GameEngine {
 
         // drunk bar
         let drunk = this.entity_manager.addEntity("bar");
-        let drunkPosition = new Vector(900, 10);
+        let drunkPosition = new Vector(950, 10);
         drunk.addComponent(components.CTransform(drunkPosition, drunkPosition, 1, new Vector(0, 0), 0));
         drunk.addComponent(components.CBar(config.player.health, config.player.health));
         drunk.addComponent(components.CAnimation("drunk", 1, 0, 0));
