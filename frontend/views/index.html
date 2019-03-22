@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
+    <title>Need 4 Screech</title>
     <script type="text/javascript" src="dist/index.js"></script>
     <link rel="stylesheet" href="css/main.css"></link>
     <link rel="stylesheet" href="css/authentication.css"></link>
@@ -10,12 +10,26 @@
     <link href="https://unpkg.com/nes.css@2.1.0/css/nes.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
+
 <body>
-    <div class="title">
-        <h1>Need For Screech</h1>
+    <div class="fullscreen-bg">
+        <video loop muted autoplay class="fullscreen-bg__video">
+            <source src="assets/video/City.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="title" style="margin:0 auto;">
+        <img src="assets/images/Need-4-Screech.png">
+    </div>
+    <div class="crush">
+        <img src="assets/images/crush.png" height="250px" style="transform:rotate(340deg);">
+    </div>
+    <div class="screech">
+        <img src="assets/images/screech.png" height="250px" style="transform:rotate(20deg);">
+    </div>
+    <div class="fishnchips">
+        <img src="assets/images/fishnchips.png" height="200px">
     </div>
     <div class="authentication">
-        
         <div class="nes-container">
             <div id="login" style="display: block;">
 
@@ -25,7 +39,6 @@
 
                     <button id="onLogin" class="nes-btn is-primary">Login</button><br>
                 
-
                     <span>Don't have an account?</span>
                     <a href="#" id="goToSignup">Sign Up Now</a>
                 </div>
