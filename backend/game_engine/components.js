@@ -12,7 +12,7 @@ const CLifeSpan = (lifespan) => ({name: "CLifeSpan", lifespan});
 @param {array} velocity velocity of the entity
 @param {float} angle angle of the entity
 */
-const CTransform = (position, previous_position, scale, velocity, angle=null) => ({name: "CTransform", position, previous_position, scale, velocity, angle});
+const CTransform = (position, previous_position, scale, velocity, angle=null, bounding=false) => ({name: "CTransform", position, previous_position, scale, velocity, angle, bounding});
 
 /* this method is for the gravity component
 @param {float} gravity gravity of the entity
@@ -27,7 +27,7 @@ const CState = (state) => ({name: "CState", state});
 /* this method is for the health component
 @param {int} health health of the entity
 */
-const CHealth = (health, invincible=false) => ({name: "CHealth", health, invincible});
+const CHealth = (health, maxHealth, invincible=false, show=false) => ({name: "CHealth", health, maxHealth, invincible, show});
 
 /* this method is for the bounding box component
 @param {array} size size of the entity
@@ -51,6 +51,9 @@ const CInput = (up, down, left, right, shoot, canShoot) => ({name: "CInput", up,
  * @param {float} currentFrame The current frame. Floor this variable to determine which portion of the animation to render.
  * @param {float} speed The number of frames per second to increment `currentFrame` by.
  */
-const CAnimation = (animName, numOfFrames, currentFrame, speed) => ({name: "CAnimation", animName, numOfFrames, currentFrame, speed})
+const CAnimation = (animName, numOfFrames, currentFrame, speed) => ({name: "CAnimation", animName, numOfFrames, currentFrame, speed});
 
-module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation};
+
+const CBar = (value, maxValue, color) => ({name: "CBar", value, maxValue, color});
+
+module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar};

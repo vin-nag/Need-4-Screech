@@ -33,6 +33,15 @@
         "down": "83",
         "left": "65",
         "right": "68",
-        "shoot": "32"
-     }
+        "shoot": "32",
+        "bounding": "66",
+        "ray": "82"
+     },
+    "canvas": {
+        "x": 1125,
+        "y": 35
+    },
+    "time": {
+        "limit": 1500
+    }
 }

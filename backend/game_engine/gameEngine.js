@@ -35,8 +35,8 @@ class GameEngine {
         console.log('spawning player now');
         this.player.addComponent(components.CLifeSpan(config.player.lifeSpan));
         this.player.addComponent(components.CGravity(config.game_engine.gravity));
-        this.player.addComponent(components.CHealth(config.player.health));
-        this.player.addComponent(components.CAnimation('stand64',1,0,0));
+        this.player.addComponent(components.CHealth(config.player.health, config.player.health, false, true));
+        this.player.addComponent(components.CAnimation('skeet_idle',4,0,0.25));
 
         // CInput
         let up = false;
@@ -48,7 +48,7 @@ class GameEngine {
         this.player.addComponent(components.CInput(up, down, left, right, shoot, canShoot));
 
         // CTransform
-        let position = new Vector(100, 415);
+        let position = new Vector(100, 435);
         let previous_position = new Vector(100, 415);
         let velocity = new Vector(0, 0);
         this.player.addComponent(components.CTransform(position, previous_position,1, velocity,0));
@@ -63,25 +63,71 @@ class GameEngine {
          this.player.addComponent(components.CState("grounded"));
     }
 
+    spawnBars(){
+        // timer
+        let timer = this.entity_manager.addEntity("bar");
+        let timerPosition = new Vector(10, 10);
+        timer.addComponent(components.CTransform(timerPosition, timerPosition, 1, new Vector(0, 0), 0));
+        timer.addComponent(components.CBar(config.time.limit, config.time.limit, "#FFFF00"));
+        timer.addComponent(components.CAnimation("timer", 1, 0, 0));
+        timer.addComponent(components.CState("timer"));
+
+        // health bar
+        let health = this.entity_manager.addEntity("bar");
+        let healthPosition = new Vector(475, 10);
+        health.addComponent(components.CTransform(healthPosition, healthPosition, 1, new Vector(0, 0), 0));
+        health.addComponent(components.CBar(config.player.health, config.player.health, "#8B0000"));
+        health.addComponent(components.CAnimation("health", 1, 0, 0));
+        health.addComponent(components.CState("health"));
+
+        // drunk bar
+        let drunk = this.entity_manager.addEntity("bar");
+        let drunkPosition = new Vector(950, 10);
+        drunk.addComponent(components.CTransform(drunkPosition, drunkPosition, 1, new Vector(0, 0), 0));
+        drunk.addComponent(components.CBar(config.player.health, config.player.health, "#9D702E"));
+        drunk.addComponent(components.CAnimation("drunk", 1, 0, 0));
+        drunk.addComponent(components.CState("drunk"));
+    }
+
     spawnBullet() {
         /*
         This function spawns a bullet, adding all the necessary components
          */
         let bullet = this.entity_manager.addEntity("bullet")
         let playerTransform = this.player.getComponent('CTransform')
-        let size = new Vector(24, 24);
-        let half_size = new Vector(12, 12);
+        let bulletPosition = new Vector(playerTransform.position.x, playerTransform.position.y + 15);
+        let bulletPrevious = new Vector(playerTransform.position.x, playerTransform.position.y);
+        let size = new Vector(48, 16);
+        let half_size = new Vector(24, 8);
         let velocity = new Vector(12, 0);
         if (playerTransform.scale === -1) {
             velocity = new Vector(-12, 0);
         }
 
-        bullet.addComponent(components.CTransform(playerTransform.position, playerTransform.previous_position, 1, velocity, 0));
+        bullet.addComponent(components.CTransform(bulletPosition, bulletPrevious, 1, velocity, 0));
         bullet.addComponent(components.CBoundingBox(size, half_size));
-        bullet.addComponent(components.CAnimation('buster', 1, 0, 0));
+        bullet.addComponent(components.CAnimation('screech', 1, 0, 0));
         bullet.addComponent(components.CState('shooting'));
         bullet.addComponent(components.CLifeSpan(1000))
 
+    }
+
+    spawnBG(){
+        const pole1 = this.entity_manager.addEntity("bg");
+        pole1.addComponent(components.CTransform(new Vector(50, 325), new Vector(0, 0), 1, new Vector(0, 0), 0));
+        pole1.addComponent(components.CAnimation("pole1", 1, 0, 0));
+
+        const pole2 = this.entity_manager.addEntity("bg");
+        pole2.addComponent(components.CTransform(new Vector(625, 320), new Vector(0, 0), 1, new Vector(0, 0), 0));
+        pole2.addComponent(components.CAnimation("pole2", 1, 0, 0));
+
+        const pole3 = this.entity_manager.addEntity("bg");
+        pole3.addComponent(components.CTransform(new Vector(1050, 320), new Vector(0, 0), 1, new Vector(0, 0), 0));
+        pole3.addComponent(components.CAnimation("pole3", 1, 0, 0));
+
+        const lantern = this.entity_manager.addEntity("bg");
+        lantern.addComponent(components.CTransform(new Vector(800, 500), new Vector(0, 0), 1, new Vector(0, 0), 0));
+        lantern.addComponent(components.CAnimation("lantern", 4, 0, 0.25));
     }
 
     spawnEnemy() {
@@ -94,7 +140,7 @@ class GameEngine {
         console.log('spawning enemy now');
         enemy.addComponent(components.CLifeSpan(config.player.lifeSpan));
         enemy.addComponent(components.CGravity(config.game_engine.gravity));
-        enemy.addComponent(components.CHealth(2));
+        enemy.addComponent(components.CHealth(2, 2, false, false));
         enemy.addComponent(components.CAnimation('snake_walk',7,0,0.25));
 
         // CTransform
@@ -115,15 +161,15 @@ class GameEngine {
 
     spawnTiles() {
 
-        for (let x = 0; x < 1280; x+=64){
+        for (let x = 0; x < 10000; x+=64){
             let tile = this.entity_manager.addEntity("tile");
 
             // animation
             tile.addComponent(components.CAnimation('GreyTile',1,0,0))
 
             // transform
-            let position = new Vector(x, 500);
-            let previous_position = new Vector(x, 500);
+            let position = new Vector(x, 625);
+            let previous_position = new Vector(x, 625);
             let velocity = new Vector(0, 0);
             tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
 
@@ -135,8 +181,8 @@ class GameEngine {
 
         // extra tiles to jump to
         let x = 192;
-        let y = 436;
-        for (let i=0; i<5; i++){
+        let y = 561;
+        for (let i=0; i<2; i++){
 
             let tile = this.entity_manager.addEntity("tile");
 
@@ -164,8 +210,10 @@ class GameEngine {
 
         console.log('starting game');
         this.spawnPlayer();
+        this.spawnBG();
         this.spawnTiles();
         this.spawnEnemy();
+        this.spawnBars();
         this.entity_manager.update();
         console.log('game started');
     }
@@ -183,10 +231,33 @@ class GameEngine {
             this.sCollision();
             this.sAnimation();
             this.sLifespan();
+            this.sBars();
+            //let timer = this.entity_manager.getEntitiesByTag("timer")[0].getComponent("CTimer");
+            //timer.time--;
             this.entity_manager.update();
         }
     }
 
+    sBars(){
+        for (let entity of this.entity_manager.getEntitiesByTag("bar")){
+            let values = entity.getComponent("CBar");
+            let state = entity.getComponent("CState").state;
+
+            switch (state){
+                case "timer":
+                    values.value--;
+                    break;
+
+                case "health":
+                    values.value = this.player.getComponent("CHealth").health;
+                    break;
+
+                case "drunk":
+                    values.value = this.player.getComponent("CHealth").health;
+                    break;
+            }
+        }
+    }
 
     sInput(){
         // Input system
@@ -243,6 +314,11 @@ class GameEngine {
             playerTransform.velocity.x = 0;
             playerTransform.scale = -1;
             newState = "grounded";
+        }
+
+        // stop player from walking left off level
+        if (playerTransform.position.x < 0) {
+            playerTransform.position = playerTransform.previous_position;
         }
 
         // add inertia
@@ -309,12 +385,6 @@ class GameEngine {
             playerState.state = newState;
             this.updatePlayerAnimation();
         }
-
-        // bullet movement
-        for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
-            let bulletTransform = bullet.getComponent('CTransform');
-
-            }
     }
 
     sCollision(){
@@ -396,7 +466,11 @@ class GameEngine {
                 let overlap = physics.getOverLap(enemy, bullet);
                 if (overlap.x > 0 && overlap.y > 0){
                     bullet.destroy();
+                    enemy.getComponent('CHealth').show = true;
                     enemy.getComponent('CHealth').health--;
+
+                    setTimeout(() => { enemy.getComponent('CHealth').show = false; }, 2000);
+
                     if (enemy.getComponent('CHealth').health === 0) {
                         enemy.destroy();
                         bullet.destroy();
@@ -456,24 +530,24 @@ class GameEngine {
 
         switch (state) {
             case "grounded":
-                animation.animName = 'stand64';
-                animation.numOfFrames = 1;
+                animation.animName = 'skeet_idle';
+                animation.numOfFrames = 4;
                 animation.currentFrame = 0;
-                animation.speed = 0;
+                animation.speed = 0.25;
                 break;
 
             case "jumping":
-                animation.animName = 'air64';
-                animation.numOfFrames = 1;
+                animation.animName = 'skeet_jump';
+                animation.numOfFrames = 2;
                 animation.currentFrame = 0;
-                animation.speed = 0;
+                animation.speed = 0.5;
                 break;
 
             case "running":
-                animation.animName = 'run64';
-                animation.numOfFrames = 3;
+                animation.animName = 'skeet_run';
+                animation.numOfFrames = 6;
                 animation.currentFrame = 0;
-                animation.speed = 0.5;
+                animation.speed = 0.25;
                 break;
         }
     }
