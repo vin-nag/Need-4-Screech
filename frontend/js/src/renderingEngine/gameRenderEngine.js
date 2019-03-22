@@ -77,6 +77,15 @@ const drawEntity = (ctx, entity) => {
             ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
         }
     }
+
+
+
+    /*
+    const bounding = entity.componentMap["CBoundingBox"]
+    canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
+    */
+
+
 }
 
 

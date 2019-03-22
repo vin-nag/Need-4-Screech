@@ -1,5 +1,5 @@
 const gameSessionService = require("./../../services/GameSessionService");
-const { db } = require("../../services/db")
+const { db, mongoUid } = require("../../services/db")
 const models = require("../../models/models")
 
 const onRequestGameStateUpdate = (socket, data) => {
@@ -56,8 +56,51 @@ const onSaveLevel = (socket, data ) => {
     })
 }
 
+const onListLevels = (socket, data) => {
+    db.levels.find({}, {levelName: 1}, {limit: 25}, (err, res) => {
+        if(err || !res) { 
+            const error = err ? JSON.stringify(err) : "Did not find any levels"
+            socket.emit("listLevelsResponse", {success: false, errors: [error]})
+        }
+        else{
+            socket.emit("listLevelsResponse", {
+                success: true,
+                errors: [],
+                levels: res
+            })
+        }
+    })
+}
+
+const onLoadLevel = (socket, data) => {
+    const errors = []
+
+    if(!data.sessionId) { errors.push("Session id was not provided") }
+    if(!data.levelId) { errors.push("Level id was not provided") }
+
+    if(errors.length){
+        socket.emit("loadLevelResponse", {success: false, errors})
+        return
+    }
+
+    const gameEngine = gameSessionService.getSession(data.sessionId)
+
+    db.levels.findOne({_id: mongoUid(data.levelId)}, function(err, res){
+        if(err || res == null){
+            console.log(res)
+            socket.emit('loadLevelResponse', {success: false, errors: [err]})
+        }
+        else{
+            gameEngine.loadSerializedEntities(res.entities)
+            socket.emit('loadLevelResponse', {success: true, errors:[]})
+        }
+    })
+}
+
 module.exports = {
     onRequestGameStateUpdate,
     onRemoveSession,
-    onSaveLevel
+    onSaveLevel,
+    onListLevels,
+    onLoadLevel
 }

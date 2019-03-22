@@ -68,13 +68,25 @@ export const listen = () => {
         }
     })
 
+    // List Levels Listener
+    socket.on("listLevelsResponse", (data) => {
+        if(data.success){
+            const values = data.levels.map(level => level._id)
+            const labels = data.levels.map(level => level.levelName)
+            domService.fillSelect("loadLevelsList", values, labels)
+        }
+        else {
+            alert(data.errors.reduce((string, error) => string + `\n${error}`, ""))
+        }
+    })
+
 
     // Load level Listener
 
     socket.on('loadLevelResponse', function(data){
         if(data.success){
-            levelEditor.setEntities(data.res.entities)
             alert("Level Loaded Successfully.")
+            domService.hideElement("loadLevelModal")
         }
         else{
             alert(data.errors[0])
@@ -85,7 +97,6 @@ export const listen = () => {
     socket.on('updateGameState', (data) => {
         if(gamePlay.sessionID === data.sessionId) { gamePlay.setEntities(data.gameState) }
         else if(levelEditor.sessionId === data.sessionId) { levelEditor.setEntities(data.gameState) }
-        //console.log(data.gameState)
     })
 
     socket.on('newSessionID', (data) => {
