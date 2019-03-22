@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
 
+body {
+    background: #2e3131 !important;
+}
+
 .centeredCanvas {
     transform: translate(-50%, -50%);
     position: fixed;
