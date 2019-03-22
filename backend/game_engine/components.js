@@ -12,7 +12,7 @@ const CLifeSpan = (lifespan) => ({name: "CLifeSpan", lifespan});
 @param {array} velocity velocity of the entity
 @param {float} angle angle of the entity
 */
-const CTransform = (position, previous_position, scale, velocity, angle=null) => ({name: "CTransform", position, previous_position, scale, velocity, angle});
+const CTransform = (position, previous_position, scale, velocity, angle=null, bounding=false) => ({name: "CTransform", position, previous_position, scale, velocity, angle, bounding});
 
 /* this method is for the gravity component
 @param {float} gravity gravity of the entity
@@ -53,6 +53,7 @@ const CInput = (up, down, left, right, shoot, canShoot) => ({name: "CInput", up,
  */
 const CAnimation = (animName, numOfFrames, currentFrame, speed) => ({name: "CAnimation", animName, numOfFrames, currentFrame, speed});
 
-const CTimer = (time) => ({name: "CTimer", time});
 
-module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CTimer};
+const CBar = (value, maxValue) => ({name: "CBar", value, maxValue});
+
+module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar};

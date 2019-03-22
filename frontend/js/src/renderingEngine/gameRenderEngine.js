@@ -39,8 +39,50 @@ const engine = (entities, canvasID) => {
 
 const drawEntity = (ctx, entity) => {
 
-    if (entity.tag === "timer"){
-        const time = entity.componentMap["CTimer"];
+
+    const animation = entity.componentMap["CAnimation"]
+    const transform = entity.componentMap["CTransform"]
+    const img = assetManager.getAnimationImage(animation.animName)
+    const currentFrame = Math.floor(animation.currentFrame);
+    const frameWidth = img.width / animation.numOfFrames;
+    const frameHeight = img.height;
+
+    if (transform.bounding === true){
+    const bounding = entity.componentMap["CBoundingBox"]
+    canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
+    }
+
+    if ("CHealth" in entity.componentMap && entity.componentMap["CHealth"].show === true){
+        let currentHealthPercentage = entity.componentMap["CHealth"].health / entity.componentMap["CHealth"].maxHealth;
+        canvasService.draw.rectangle(ctx, transform.position.x - 2, transform.position.y - 10, frameWidth + 4, 8, "#860b08");
+        canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y - 8, currentHealthPercentage * frameWidth, 6, "#f43a26")
+    }
+
+    // drawing reverse
+    if (transform.scale === -1){
+        ctx.save();
+        ctx.translate(transform.position.x, transform.position.y);  //location on the canvas to draw your sprite, this is important.
+        ctx.scale(-1, 1);  //This does your mirroring/flipping
+        ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, -frameWidth, 0, frameWidth, frameHeight);
+        ctx.restore();
+    }
+
+    else {
+        ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
+    }
+
+    if ("CBar" in entity.componentMap){
+        const values = entity.componentMap["CBar"];
+        const state = entity.componentMap["CState"];
+        let offsetX = 200;
+        let offsetY = 75;
+        canvasService.draw.text(ctx, "Current " + state.state + ": " + values.value, transform.position.x + offsetX, transform.position.y + offsetY, "18px", "#fff", "Permanent Marker")
+    }
+
+
+    /*
+    if (entity.tag === "bar"){
+        const time = entity.componentMap["CBar"];
         const position = entity.componentMap["CTransform"].position;
         canvasService.draw.text(ctx, "Time Left: " + time.time, position.x, position.y, "36px", "#fff", "Permanent Marker")
     }
@@ -56,7 +98,7 @@ const drawEntity = (ctx, entity) => {
         /*
         const bounding = entity.componentMap["CBoundingBox"]
         canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
-        */
+
 
         if ("CHealth" in entity.componentMap && entity.componentMap["CHealth"].show === true){
             let currentHealthPercentage = entity.componentMap["CHealth"].health / entity.componentMap["CHealth"].maxHealth;
@@ -77,13 +119,14 @@ const drawEntity = (ctx, entity) => {
             ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
         }
     }
-
-
-
-    /*
-    const bounding = entity.componentMap["CBoundingBox"]
-    canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
     */
+
+
+
+/*
+const bounding = entity.componentMap["CBoundingBox"]
+canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
+*/
 
 
 }

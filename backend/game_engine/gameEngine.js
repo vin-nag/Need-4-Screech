@@ -63,12 +63,30 @@ class GameEngine {
          this.player.addComponent(components.CState("grounded"));
     }
 
-    spawnTimer(time=config.time.limit){
+    spawnBars(){
+        // timer
+        let timer = this.entity_manager.addEntity("bar");
+        let timerPosition = new Vector(10, 10);
+        timer.addComponent(components.CTransform(timerPosition, timerPosition, 1, new Vector(0, 0), 0));
+        timer.addComponent(components.CBar(config.time.limit, config.time.limit));
+        timer.addComponent(components.CAnimation("timer", 1, 0, 0));
+        timer.addComponent(components.CState("timer"));
 
-        let timer = this.entity_manager.addEntity("timer");
-        let timerPosition = new Vector(config.canvas.x, config.canvas.y);
-        timer.addComponent(components.CTransform(timerPosition, timerPosition, 1, new Vector(0, 0), 0))
-        timer.addComponent(components.CTimer(time))
+        // health bar
+        let health = this.entity_manager.addEntity("bar");
+        let healthPosition = new Vector(450, 10);
+        health.addComponent(components.CTransform(healthPosition, healthPosition, 1, new Vector(0, 0), 0));
+        health.addComponent(components.CBar(config.player.health, config.player.health));
+        health.addComponent(components.CAnimation("health", 1, 0, 0));
+        health.addComponent(components.CState("health"));
+
+        // drunk bar
+        let drunk = this.entity_manager.addEntity("bar");
+        let drunkPosition = new Vector(900, 10);
+        drunk.addComponent(components.CTransform(drunkPosition, drunkPosition, 1, new Vector(0, 0), 0));
+        drunk.addComponent(components.CBar(config.player.health, config.player.health));
+        drunk.addComponent(components.CAnimation("drunk", 1, 0, 0));
+        drunk.addComponent(components.CState("drunk"));
     }
 
     spawnBullet() {
@@ -195,7 +213,7 @@ class GameEngine {
         this.spawnBG();
         this.spawnTiles();
         this.spawnEnemy();
-        this.spawnTimer();
+        this.spawnBars();
         this.entity_manager.update();
         console.log('game started');
     }
@@ -213,12 +231,33 @@ class GameEngine {
             this.sCollision();
             this.sAnimation();
             this.sLifespan();
-            let timer = this.entity_manager.getEntitiesByTag("timer")[0].getComponent("CTimer");
-            timer.time--;
+            this.sBars();
+            //let timer = this.entity_manager.getEntitiesByTag("timer")[0].getComponent("CTimer");
+            //timer.time--;
             this.entity_manager.update();
         }
     }
 
+    sBars(){
+        for (let entity of this.entity_manager.getEntitiesByTag("bar")){
+            let values = entity.getComponent("CBar");
+            let state = entity.getComponent("CState").state;
+
+            switch (state){
+                case "timer":
+                    values.value--;
+                    break;
+
+                case "health":
+                    values.value = this.player.getComponent("CHealth").health;
+                    break;
+
+                case "drunk":
+                    values.value = this.player.getComponent("CHealth").health;
+                    break;
+            }
+        }
+    }
 
     sInput(){
         // Input system
