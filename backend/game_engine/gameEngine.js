@@ -11,7 +11,6 @@ class GameEngine {
     constructor(sessionId){
         this.sessionId = sessionId;
         this.entity_manager = new EntityManager();
-        this.player = this.entity_manager.addEntity("player");
         this.gameStarted = false;
 
         // last input
@@ -25,50 +24,41 @@ class GameEngine {
 
     loadSerializedEntities(entities){
         this.entity_manager = new EntityManager()
-        this.entity_manager.loadSerializedEntities(entities)
-        this.player = this.entity_manager.getEntitiesByTag("player")[0]
+        this.entity_manager.loadSerializedEntities(entities);
     }
 
 
     init(){
-        let entities = [];
-        entities.push(entity_models.player(100, 435));
-        entities.push(entity_models.enemy_snake(700, 415));
+        this.entity_manager.addModel.background_img_george();
+        this.entity_manager.addModel.player(100,435);
+        this.entity_manager.addModel.enemy_snake(700, 415);
 
-        entities.push(entity_models.decorator_lantern(800, 500));
-        entities.push(entity_models.decorator_pole_1(50, 325));
-        entities.push(entity_models.decorator_pole_2(625, 320));
-        entities.push(entity_models.decorator_pole_3(1050, 320));
+        this.entity_manager.addModel.decorator_lantern(800, 500);
+        this.entity_manager.addModel.decorator_pole_1(50, 325);
+        this.entity_manager.addModel.decorator_pole_2(625, 320);
+        this.entity_manager.addModel.decorator_pole_3(1050, 320);
 
-        entities.push(entity_models.bar_timer());
-        entities.push(entity_models.bar_health());
-        entities.push(entity_models.bar_screech());
+        this.entity_manager.addModel.bar_timer();
+        this.entity_manager.addModel.bar_health();
+        this.entity_manager.addModel.bar_screech();
 
-        entities.push(entity_models.tile_grey_left(0, 625));
+        this.entity_manager.addModel.tile_grey_left(0, 625);
         for (let x = 64; x < 2560; x+=64){
-            entities.push(entity_models.tile_grey_center(x, 625));
+            this.entity_manager.addModel.tile_grey_center(x, 625);
         }
-        entities.push(entity_models.tile_grey_right(2560, 625));
+        this.entity_manager.addModel.tile_grey_right(2560, 625);
+        this.entity_manager.addModel.tile_grey_left(192, 561);
+        this.entity_manager.addModel.tile_grey_right(256, 561);
+        this.entity_manager.addModel.tile_grey_left(320, 495);
+        this.entity_manager.addModel.tile_grey_right(384, 495);
 
-        entities.push(entity_models.tile_grey_left(192, 561));
-        entities.push(entity_models.tile_grey_right(256, 561));
-
-        entities.push(entity_models.tile_grey_left(320, 495));
-        entities.push(entity_models.tile_grey_right(384, 495));
-
-        entities.push(entity_models.background_img_george());
-
-        entities.push(entity_models.powerup_shield(400, 590));
-        entities.push(entity_models.powerup_invincible(600, 590));
-        entities.push(entity_models.powerup_shield(800, 590));
-
-        this.entity_manager.setEntities(entities);
-        console.log(this.entity_manager.getEntities());
+        this.entity_manager.addModel.powerup_shield(400,590);
+        this.entity_manager.addModel.powerup_invincible(600, 590);
+        this.entity_manager.addModel.powerup_speed(800, 590);
     }
 
     startGame() {
         // this function starts the game, spawning the player and other necessary things
-
         console.log('starting game');
         this.init();
         console.log('game started');
@@ -96,7 +86,6 @@ class GameEngine {
         bullet.addComponent(components.CState('shooting'));
         bullet.addComponent(components.CLifeSpan(1000))
     }
-
 
 
     update(){
@@ -202,7 +191,6 @@ class GameEngine {
                 playerTransform.scale = 1;
                 newState = "running"
             }
-
         }
 
         if (playerInput.down) {
@@ -324,9 +312,7 @@ class GameEngine {
                 let overlap = physics.getOverLap(enemy, tile);
 
                 if (overlap.x > 0 && overlap.y > 0) {
-
                     let prevOverlap = physics.getPrevOverLap(enemy, tile);
-
                     if (prevOverlap.y > 0){
                         let direction = tileTransform.position.x > enemyTransform.previous_position.x? -1: 1;
                         enemyTransform.position.x += direction * overlap.x

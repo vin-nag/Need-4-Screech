@@ -3,6 +3,7 @@
  */
 const Entity = require("./entity");
 const Vector = require("./vector");
+const EntityModel = require("./default_entity_models");
 
 class EntityManager {
     /*
@@ -13,6 +14,7 @@ class EntityManager {
         this.size = 0;
         this.entities = [];
         this.entitiesToAdd = [];
+        this.addModel = new EntityModel(this);
     }
 
     addEntity(tag=null){
@@ -101,20 +103,7 @@ class EntityManager {
         return this.size;
     }
 
-    setEntities(entities){
-
-        this.entitiesToAdd = [];
-        let id = 0;
-
-        for (let entity of entities){
-            entity.id = id;
-            this.entitiesToAdd.push(entity);
-            id++;
-        }
-        this.id = this.entitiesToAdd.size;
-    }
-
-
 }
+
 // export the entity manager
 module.exports = EntityManager;
