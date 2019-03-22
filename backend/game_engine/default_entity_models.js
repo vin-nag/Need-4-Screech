@@ -18,6 +18,7 @@ const player = (x=0, y=0) => {
     player_entity.addComponent(components.CTransform( new Vector(x, y),  new Vector(0, 0),1,  new Vector(0, 0),0));
     player_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
     player_entity.addComponent(components.CState("grounded"));
+    player_entity.addComponent(components.CPowerup(false, false, false, false))
 
     return player_entity
 };
@@ -153,5 +154,36 @@ const background_img_ice = () => {
     return img_entity
 };
 
+const powerup_speed = (x=0, y=0) => {
 
-module.exports = {player, bar_timer, bar_health, bar_screech, tile_brick, enemy_snake, decorator_lantern, decorator_pole_1, decorator_pole_2, decorator_pole_3, bullet_bottle, background_img_george, background_img_ice};
+    const powerup_entity = entity_manager.addEntity("powerup");
+    powerup_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+    powerup_entity.addComponent(components.CAnimation('SuperSpeed',4,0,.50));
+    powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 10), new Vector(10, 5)));
+    return powerup_entity
+};
+
+const powerup_invincible = (x=0, y=0) => {
+
+    const powerup_entity = entity_manager.addEntity("powerup");
+    powerup_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+    powerup_entity.addComponent(components.CAnimation('Invincibility',4,0,.50));
+    powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 10), new Vector(10, 5)));
+    return powerup_entity
+};
+
+const powerup_shield = (x=0, y=0) => {
+
+    const powerup_entity = entity_manager.addEntity("powerup");
+    powerup_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+    powerup_entity.addComponent(components.CAnimation('Shield',4,0,.50));
+    powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 10), new Vector(10, 5)));
+    return powerup_entity
+};
+
+module.exports = { player, bar_timer, bar_health, bar_screech,
+    tile_brick, enemy_snake, decorator_lantern, decorator_pole_1,
+    decorator_pole_2, decorator_pole_3, bullet_bottle,
+    background_img_george, background_img_ice,
+    powerup_invincible, powerup_speed, powerup_shield
+};

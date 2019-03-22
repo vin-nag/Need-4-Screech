@@ -52,6 +52,10 @@ class GameEngine {
 
         entities.push(entity_models.background_img_george());
 
+        entities.push(entity_models.powerup_shield(400, 590));
+        entities.push(entity_models.powerup_invincible(600, 590));
+        entities.push(entity_models.powerup_shield(800, 590));
+
         this.entity_manager.setEntities(entities);
         console.log(this.entity_manager.getEntities());
     }
@@ -61,7 +65,6 @@ class GameEngine {
 
         console.log('starting game');
         this.init();
-        this.entity_manager.update();
         console.log('game started');
     }
 
@@ -88,10 +91,13 @@ class GameEngine {
         bullet.addComponent(components.CLifeSpan(1000))
     }
 
+
+
     update(){
         // this function handles the update function, starting a game if it hasn't been already
         if (!this.gameStarted){
             this.startGame();
+            this.entity_manager.update();
             this.gameStarted = true;
         }
         else {
