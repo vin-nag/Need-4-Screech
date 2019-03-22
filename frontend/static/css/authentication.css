@@ -50,15 +50,26 @@ span {
     position: fixed;
     text-align: left;
     padding-left: 20px;
+    
 }
 
 .fishnchips {
-    text-align: right;
-    padding: 50px;
+    position: fixed;
+    left: 37%;
+    top: 65%;
+
 }
 
 .screech {
+    position: fixed;
     text-align: right;
+    left: 86%;
+    bottom: 39%;
+}
+
+.quick-nav {
+    position: fixed;
+    bottom: 10%
 }
 
 
