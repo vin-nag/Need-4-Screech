@@ -10,6 +10,7 @@ class Vector {
     constructor(x, y){
         this.x = x;
         this.y = y;
+        this._isVector=true //used for deserialization
     }
 
     add(vector){

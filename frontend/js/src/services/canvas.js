@@ -16,10 +16,18 @@ const button = (ctx, icon, x, y, width, height, iconSize=null, fill="rgba(0, 0, 
     text(ctx, icon, (2*x+width)/2, (2*y+height)/2 + 0.33*parseInt(iconSize), iconSize, color, "FontAwesome")
 }
 
+
+const clamp = (value, min, max) => {
+    if(value < min) return min;
+    else if(value > max) return max;
+    return value;
+}
+
 export default {
     draw: {
         rectangle,
         text,
         button
-    }
+    },
+    clamp
 }
