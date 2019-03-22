@@ -154,4 +154,4 @@ const background_img_ice = () => {
 };
 
 
-module.exports = {player, bar_timer, bar_health, bar_screech, tile_brick, enemy_snake, decorator_lantern, decorator_pole_1, decorator_pole_2, decorator_pole_3, bullet_bottle, background_img_george};
+module.exports = {player, bar_timer, bar_health, bar_screech, tile_brick, enemy_snake, decorator_lantern, decorator_pole_1, decorator_pole_2, decorator_pole_3, bullet_bottle, background_img_george, background_img_ice};
