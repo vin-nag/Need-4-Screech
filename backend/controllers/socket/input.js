@@ -1,4 +1,3 @@
-import {socket} from "../../../frontend/js/src/socketClient";
 
 const gameSessionService = require("./../../services/GameSessionService");
 

@@ -183,7 +183,6 @@ class GameEngine {
         }
     }
 
-
     sInput(){
         // Input system
         let CInput = this.player.getComponent('CInput');
@@ -205,13 +204,27 @@ class GameEngine {
         }
 
         //Level Editor Input
+        if (this.lastInput[config.controls.new] === true){
+            let tile = this.entity_manager.addEntity("tile");
 
+            // animation
+            tile.addComponent(components.CAnimation('GreyTile',1,0,0))
 
+            // transform
+            let position = new Vector(100, 100);
+            let previous_position = new Vector(x, y);
+            let velocity = new Vector(0, 0);
+            tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
 
-
-        if(this.lastInput === 'onScroll'){
+            //bounding box
+            let size = new Vector(64, 64);
+            let half_size = new Vector(32, 32);
+            tile.addComponent(components.CBoundingBox(size, half_size));
 
         }
+
+
+
     }
 
     sMovement() {
