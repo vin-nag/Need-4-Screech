@@ -55,12 +55,15 @@ class GameEngine {
         console.log('player spawned. player object:', this.player);
 
         //CBoundingBox
-         let size = new Vector(64, 64);
-         let half_size = new Vector(32, 32);
-         this.player.addComponent(components.CBoundingBox(size, half_size));
+        let size = new Vector(64, 64);
+        let half_size = new Vector(32, 32);
+        this.player.addComponent(components.CBoundingBox(size, half_size));
 
-         //CState
-         this.player.addComponent(components.CState("grounded"));
+        //CState
+        this.player.addComponent(components.CState("grounded"));
+
+        //CPowerup
+        this.player.addComponent(components.CPowerup(false, false, false, false))
     }
 
     spawnBars(){
@@ -205,6 +208,27 @@ class GameEngine {
 
     }
 
+    spawnPowerups() {
+        // spawn powerups
+        let superSpeed = this.entity_manager.addEntity("powerup")
+        let invincibility = this.entity_manager.addEntity("powerup")
+        let shield = this.entity_manager.addEntity("powerup")
+
+        superSpeed.addComponent(components.CTransform(new Vector(400, 590), new Vector(100, 400), 1, new Vector(0,0), 0));
+        invincibility.addComponent(components.CTransform(new Vector(600, 590), new Vector(100, 500), 1, new Vector(0,0), 0));
+        shield.addComponent(components.CTransform(new Vector(800, 590), new Vector(100, 600), 1, new Vector(0,0), 0));
+
+        superSpeed.addComponent(components.CAnimation('SuperSpeed',4,0,.25))
+        invincibility.addComponent(components.CAnimation('Invincibility',4,0,.25))
+        shield.addComponent(components.CAnimation('Shield',4,0,.25))
+
+        let size = new Vector(20, 10);
+        let half_size = new Vector(20, 10);
+        superSpeed.addComponent(components.CBoundingBox(size, half_size));
+        invincibility.addComponent(components.CBoundingBox(size, half_size));
+        shield.addComponent(components.CBoundingBox(size, half_size));
+    }
+
     startGame() {
         // this function starts the game, spawning the player and other necessary things
 
@@ -214,6 +238,7 @@ class GameEngine {
         this.spawnTiles();
         this.spawnEnemy();
         this.spawnBars();
+        this.spawnPowerups();
         this.entity_manager.update();
         console.log('game started');
     }
@@ -285,6 +310,7 @@ class GameEngine {
         let playerTransform = this.player.getComponent('CTransform');
         let playerState = this.player.getComponent('CState');
         let newState = playerState.state;
+        let playerPowerup = this.player.getComponent('CPowerup');
 
         if (playerInput.up) {
             if (playerState.state === "grounded" || playerState.state === "running") {
@@ -294,15 +320,31 @@ class GameEngine {
         }
 
         if (playerInput.left) {
-            playerTransform.velocity.x = -config.player.speed;
-            playerTransform.scale = -1;
-            newState = "running"
+            if (playerPowerup.superSpeed) {
+                playerTransform.velocity.x = -config.player.speed - 10;
+                playerTransform.scale = -1;
+                newState = "running"
+            }
+            else {
+                playerTransform.velocity.x = -config.player.speed;
+                playerTransform.scale = -1;
+                newState = "running"
+            }
+            
         }
 
         if (playerInput.right) {
-            playerTransform.velocity.x = config.player.speed;
-            playerTransform.scale = 1;
-            newState = "running"
+            if (playerPowerup.superSpeed) {
+                playerTransform.velocity.x = config.player.speed + 10;
+                playerTransform.scale = 1;
+                newState = "running"
+            }
+            else {
+                playerTransform.velocity.x = config.player.speed;
+                playerTransform.scale = 1;
+                newState = "running"
+            }
+            
         }
 
         if (playerInput.down) {
@@ -443,19 +485,29 @@ class GameEngine {
 
             let overlap = physics.getOverLap(enemy, this.player);
             let playerHealth = this.player.getComponent('CHealth');
+            let playerPowerup = this.player.getComponent('CPowerup');
 
             if (overlap.x > 0 && overlap.y > 0){
-
-                if (!playerHealth.invincible) {
-                    playerHealth.invincible = true;
-                    playerHealth.health -= 20;
-                    // Invincibility frames
-                    setTimeout(() => playerHealth.invincible = false, 800)
+                if (playerPowerup.invincibility) {
+                    return;
                 }
-                
-                if (playerHealth.health === 0) {
-                    this.player.destroy();
-                    //console.log('player dead');
+                else {
+                    if (playerPowerup.shield) {
+                        playerPowerup.shield = false;
+                        playerHealth.invincible = true;
+                        setTimeout(() => playerHealth.invincible = false, 800)
+                        return;
+                    }
+                    if (!playerHealth.invincible) {
+                        playerHealth.invincible = true;
+                        playerHealth.health -= 20;
+                        // Invincibility frames
+                        setTimeout(() => playerHealth.invincible = false, 800)
+                    }
+                    if (playerHealth.health === 0) {
+                        this.player.destroy();
+                        //console.log('player dead');
+                    }
                 }
             }
         }
@@ -485,6 +537,33 @@ class GameEngine {
                 let overlap = physics.getOverLap(tile, bullet);
                 if (overlap.x > 0 && overlap.y > 0){
                     bullet.destroy();
+                }
+            }
+        }
+
+        // player / powerup collision
+        for (let powerup of this.entity_manager.getEntitiesByTag("powerup")) {
+            let overlap = physics.getOverLap(this.player, powerup);
+            if (overlap.x > 0 && overlap.y > 0){
+                if (powerup.getComponent('CAnimation').animName === 'SuperSpeed') {
+                    //speed
+                    console.log("shield")
+                    this.player.getComponent('CPowerup').superSpeed = true;
+                    powerup.destroy();
+                    setTimeout(() => this.player.getComponent('CPowerup').superSpeed = false, 10000)
+                }
+                if (powerup.getComponent('CAnimation').animName === 'Invincibility') {
+                    // temporary invincibility
+                    console.log("inv")
+                    this.player.getComponent('CPowerup').invincibility = true;
+                    powerup.destroy();
+                    setTimeout(() => this.player.getComponent('CPowerup').invincibility = false, 10000)
+                }
+                if (powerup.getComponent('CAnimation').animName === 'Shield') {
+                    // shield
+                    console.log("shield")
+                    this.player.getComponent('CPowerup').shield = true;
+                    powerup.destroy();
                 }
             }
         }
