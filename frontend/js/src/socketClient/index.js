@@ -24,10 +24,7 @@ export const listen = () => {
 
     socket.on('signUpResponse', (data) => {
         if(data.success){
-            alert("Sign up successful.");
-            app.switchToWindow(APP_WINDOW.GAME_PLAY)
-            gamePlay.newSessionId();
-            gamePlay.run()
+            app.switchToWindow(APP_WINDOW.MENU)
         } 
         else{
             let errMsg = ""
@@ -42,9 +39,7 @@ export const listen = () => {
 
     socket.on('signInResponse', (data) => {
         if(data.success){
-            app.switchToWindow(APP_WINDOW.GAME_PLAY)
-            gamePlay.newSessionId();
-            gamePlay.run()
+            app.switchToWindow(APP_WINDOW.MENU)
         } 
         else{
             alert(data.errors[0]);
