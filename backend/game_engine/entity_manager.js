@@ -2,7 +2,7 @@
  * Entity Manager class using standard ECS architecture.
  */
 const Entity = require("./entity");
-const Vector = require("./vector")
+const Vector = require("./vector");
 
 class EntityManager {
     /*
@@ -99,6 +99,19 @@ class EntityManager {
     getSize(){
         // standard getter function
         return this.size;
+    }
+
+    setEntities(entities){
+
+        this.entitiesToAdd = [];
+        let id = 0;
+
+        for (let entity of entities){
+            entity.id = id;
+            this.entitiesToAdd.push(entity);
+            id++;
+        }
+        this.id = this.entitiesToAdd.size;
     }
 
 
