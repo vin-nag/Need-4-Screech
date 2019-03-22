@@ -53,7 +53,16 @@ const CInput = (up, down, left, right, shoot, canShoot) => ({name: "CInput", up,
  */
 const CAnimation = (animName, numOfFrames, currentFrame, speed) => ({name: "CAnimation", animName, numOfFrames, currentFrame, speed});
 
+/**
+ * @param {bool} superSpeed superSpeed powerup of entity
+ * @param {bool} invincibility invincibility powerup of entity
+ * @param {bool} shield shield powerup of entity
+ * @param {bool} drunk drunk powerup of entity
+ * 
+ */
+const CPowerup = (superSpeed, invincibility, shield, drunk) =>({name: "CPowerup", superSpeed, invincibility, shield, drunk});
+
 
 const CBar = (value, maxValue, color) => ({name: "CBar", value, maxValue, color});
 
-module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar};
+module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup};
