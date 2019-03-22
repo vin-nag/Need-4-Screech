@@ -277,6 +277,11 @@ class GameEngine {
             newState = "grounded";
         }
 
+        // stop player from walking left off level
+        if (playerTransform.position.x < 0) {
+            playerTransform.position = playerTransform.previous_position;
+        }
+
         // add inertia
         if (!playerInput.left && !playerTransform.right) {
 
