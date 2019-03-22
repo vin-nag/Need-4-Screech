@@ -310,6 +310,7 @@ class GameEngine {
         let playerTransform = this.player.getComponent('CTransform');
         let playerState = this.player.getComponent('CState');
         let newState = playerState.state;
+        let playerPowerup = this.player.getComponent('CPowerup');
 
         if (playerInput.up) {
             if (playerState.state === "grounded" || playerState.state === "running") {
@@ -319,15 +320,31 @@ class GameEngine {
         }
 
         if (playerInput.left) {
-            playerTransform.velocity.x = -config.player.speed;
-            playerTransform.scale = -1;
-            newState = "running"
+            if (playerPowerup.superSpeed) {
+                playerTransform.velocity.x = -config.player.speed - 10;
+                playerTransform.scale = -1;
+                newState = "running"
+            }
+            else {
+                playerTransform.velocity.x = -config.player.speed;
+                playerTransform.scale = -1;
+                newState = "running"
+            }
+            
         }
 
         if (playerInput.right) {
-            playerTransform.velocity.x = config.player.speed;
-            playerTransform.scale = 1;
-            newState = "running"
+            if (playerPowerup.superSpeed) {
+                playerTransform.velocity.x = config.player.speed + 10;
+                playerTransform.scale = 1;
+                newState = "running"
+            }
+            else {
+                playerTransform.velocity.x = config.player.speed;
+                playerTransform.scale = 1;
+                newState = "running"
+            }
+            
         }
 
         if (playerInput.down) {
@@ -468,19 +485,29 @@ class GameEngine {
 
             let overlap = physics.getOverLap(enemy, this.player);
             let playerHealth = this.player.getComponent('CHealth');
+            let playerPowerup = this.player.getComponent('CPowerup');
 
             if (overlap.x > 0 && overlap.y > 0){
-
-                if (!playerHealth.invincible) {
-                    playerHealth.invincible = true;
-                    playerHealth.health -= 20;
-                    // Invincibility frames
-                    setTimeout(() => playerHealth.invincible = false, 800)
+                if (playerPowerup.invincibility) {
+                    return;
                 }
-                
-                if (playerHealth.health === 0) {
-                    this.player.destroy();
-                    //console.log('player dead');
+                else {
+                    if (playerPowerup.shield) {
+                        playerPowerup.shield = false;
+                        playerHealth.invincible = true;
+                        setTimeout(() => playerHealth.invincible = false, 800)
+                        return;
+                    }
+                    if (!playerHealth.invincible) {
+                        playerHealth.invincible = true;
+                        playerHealth.health -= 20;
+                        // Invincibility frames
+                        setTimeout(() => playerHealth.invincible = false, 800)
+                    }
+                    if (playerHealth.health === 0) {
+                        this.player.destroy();
+                        //console.log('player dead');
+                    }
                 }
             }
         }
@@ -523,12 +550,14 @@ class GameEngine {
                     console.log("shield")
                     this.player.getComponent('CPowerup').superSpeed = true;
                     powerup.destroy();
+                    setTimeout(() => this.player.getComponent('CPowerup').superSpeed = false, 10000)
                 }
                 if (powerup.getComponent('CAnimation').animName === 'Invincibility') {
                     // temporary invincibility
                     console.log("inv")
                     this.player.getComponent('CPowerup').invincibility = true;
                     powerup.destroy();
+                    setTimeout(() => this.player.getComponent('CPowerup').invincibility = false, 10000)
                 }
                 if (powerup.getComponent('CAnimation').animName === 'Shield') {
                     // shield
