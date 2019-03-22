@@ -4,7 +4,14 @@ import assetManager from "../services/assetManager"
 const engine = (entities, canvasID) => {
     const canvas = document.getElementById(canvasID)
     const ctx = canvas.getContext("2d")
-    let img = assetManager.getAnimationImage("george_background") 
+
+    let bg_img = ""
+    for (let entity of entities){
+        if (entity.tag === "bg-img"){
+            bg_img = entity.componentMap["CAnimation"].animName;
+        }
+    }
+    let img = assetManager.getAnimationImage(bg_img);
     ctx.setTransform(1,0,0,1,0,0); //reset the transform matrix as it is cumulative
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img,0,0, img.width, img.height, 0, 0, canvas.width, canvas.height);
@@ -12,6 +19,7 @@ const engine = (entities, canvasID) => {
     let camY = 0
 
     for(let entity of entities) {
+        if (entity.tag === "bg-img"){continue}
         if (entity.tag === "player") {
 
             let playerPos = entity.componentMap['CTransform'].position;

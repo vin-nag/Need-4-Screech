@@ -47,6 +47,10 @@ class GameEngine {
         for (let x = 0; x < 5000; x+=64){
             entities.push(entity_models.tile_brick(x, 625));
         }
+        entities.push(entity_models.tile_brick(192, 561));
+        entities.push(entity_models.tile_brick(192+65, 561-65));
+
+        entities.push(entity_models.background_img_george());
 
         this.entity_manager.setEntities(entities);
         console.log(this.entity_manager.getEntities());
@@ -209,6 +213,7 @@ class GameEngine {
 
         // update all entities position based on velocity
         for (let entity of this.entity_manager.getEntities()){
+            if (entity.tag === "bg-img"){continue}
             let eTransform = entity.getComponent('CTransform');
 
                 // add gravity effects to every entity that has CGravity

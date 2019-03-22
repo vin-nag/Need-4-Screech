@@ -133,4 +133,25 @@ const tile_brick = (x=0, y=0) => {
     return tile_brick_entity
 };
 
-module.exports = {player, bar_timer, bar_health, bar_screech, tile_brick, enemy_snake, decorator_lantern, decorator_pole_1, decorator_pole_2, decorator_pole_3, bullet_bottle};
+const background_img_george = () => {
+
+    const img_entity = entity_manager.addEntity("bg-img");
+
+    img_entity.addComponent(components.CAnimation('george_background', 1, 0, 0));
+    img_entity.addComponent(components.CTransform(new Vector(0, 0), new Vector(0, 0), 1));
+
+    return img_entity
+};
+
+const background_img_ice = () => {
+
+    const img_entity = entity_manager.addEntity("bg-img");
+
+    img_entity.addComponent(components.CAnimation('ice_background', 1, 0, 0));
+    img_entity.addComponent(components.CTransform(new Vector(0, 0), new Vector(0, 0), 1));
+
+    return img_entity
+};
+
+
+module.exports = {player, bar_timer, bar_health, bar_screech, tile_brick, enemy_snake, decorator_lantern, decorator_pole_1, decorator_pole_2, decorator_pole_3, bullet_bottle, background_img_george};
