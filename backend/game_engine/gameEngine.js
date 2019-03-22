@@ -44,11 +44,17 @@ class GameEngine {
         entities.push(entity_models.bar_health());
         entities.push(entity_models.bar_screech());
 
-        for (let x = 0; x < 5000; x+=64){
-            entities.push(entity_models.tile_brick(x, 625));
+        entities.push(entity_models.tile_grey_left(0, 625));
+        for (let x = 64; x < 2560; x+=64){
+            entities.push(entity_models.tile_grey_center(x, 625));
         }
-        entities.push(entity_models.tile_brick(192, 561));
-        entities.push(entity_models.tile_brick(192+65, 561-65));
+        entities.push(entity_models.tile_grey_right(2560, 625));
+
+        entities.push(entity_models.tile_grey_left(192, 561));
+        entities.push(entity_models.tile_grey_right(256, 561));
+
+        entities.push(entity_models.tile_grey_left(320, 495));
+        entities.push(entity_models.tile_grey_right(384, 495));
 
         entities.push(entity_models.background_img_george());
 

@@ -134,6 +134,41 @@ const tile_brick = (x=0, y=0) => {
     return tile_brick_entity
 };
 
+const tile_grey_left = (x=0, y=0) => {
+
+    const tile_brick_entity = entity_manager.addEntity("tile");
+
+    tile_brick_entity.addComponent(components.CAnimation('grey_tile_left',1,0,0));
+    tile_brick_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y),1, new Vector(0, 0),0));
+    tile_brick_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+
+    return tile_brick_entity
+};
+
+const tile_grey_right = (x=0, y=0) => {
+
+    const tile_brick_entity = entity_manager.addEntity("tile");
+
+    tile_brick_entity.addComponent(components.CAnimation('grey_tile_right',1,0,0));
+    tile_brick_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y),1, new Vector(0, 0),0));
+    tile_brick_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+
+    return tile_brick_entity
+};
+
+const tile_grey_center = (x=0, y=0) => {
+
+    const tile_brick_entity = entity_manager.addEntity("tile");
+
+    tile_brick_entity.addComponent(components.CAnimation('grey_tile_center',1,0,0));
+    tile_brick_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y),1, new Vector(0, 0),0));
+    tile_brick_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+
+    return tile_brick_entity
+};
+
+
+
 const background_img_george = () => {
 
     const img_entity = entity_manager.addEntity("bg-img");
@@ -185,5 +220,6 @@ module.exports = { player, bar_timer, bar_health, bar_screech,
     tile_brick, enemy_snake, decorator_lantern, decorator_pole_1,
     decorator_pole_2, decorator_pole_3, bullet_bottle,
     background_img_george, background_img_ice,
-    powerup_invincible, powerup_speed, powerup_shield
+    powerup_invincible, powerup_speed, powerup_shield,
+    tile_grey_center, tile_grey_left, tile_grey_right
 };
