@@ -137,7 +137,7 @@ class GameEngine {
 
     spawnTiles() {
 
-        for (let x = 0; x < 1280; x+=64){
+        for (let x = 0; x < 10000; x+=64){
             let tile = this.entity_manager.addEntity("tile");
 
             // animation

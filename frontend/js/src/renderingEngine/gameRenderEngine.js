@@ -4,13 +4,37 @@ import assetManager from "../services/assetManager"
 const engine = (entities, canvasID) => {
     const canvas = document.getElementById(canvasID)
     const ctx = canvas.getContext("2d")
-    let img = assetManager.getAnimationImage("george_background")
-
-    //canvasService.draw.rectangle(ctx, 0, 0, canvas.width, canvas.height, "#42adf4")
-
+    let img = assetManager.getAnimationImage("george_background") 
+    ctx.setTransform(1,0,0,1,0,0); //reset the transform matrix as it is cumulative
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img,0,0, img.width, img.height, 0, 0, canvas.width, canvas.height);
 
-    for(let entity of entities){ drawEntity(ctx, entity) }
+
+    for(let entity of entities) {
+        if (entity.tag === "player") {
+
+            let playerPos = entity.componentMap['CTransform'].position;
+            //Clamp the camera position to the world bounds while centering the camera around the player
+            let camX = canvasService.clamp(-playerPos.x + canvas.width/2, -5000, 5000 - canvas.width);
+            let camY = canvasService.clamp(-playerPos.y + canvas.height/2, 0, 720 - canvas.height);
+
+            // set boundary for camera movement (need to add level end boundary also)
+            // -637 is around the midpoint of screen, need this so canvas only starts translating at this point
+            // instead of at (0,0)
+            if (-playerPos.x < -637) {
+                ctx.translate( camX, camY ); 
+            }
+
+            /*
+            * Notes: some objects e.g. timer move off screen as they are in
+            * fixed position, need to move these with viewport later
+            */
+            
+        }
+        
+        drawEntity(ctx, entity)
+    }  
+                                         
 }
 
 const drawEntity = (ctx, entity) => {
@@ -54,5 +78,6 @@ const drawEntity = (ctx, entity) => {
         }
     }
 }
+
 
 export default engine
