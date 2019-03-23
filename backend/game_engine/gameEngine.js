@@ -20,6 +20,8 @@ class GameEngine {
         this.lastInput[config.controls.left] = false;
         this.lastInput[config.controls.right] = false;
         this.lastInput[config.controls.shoot] = false;
+        this.lastInput[config.controls.bounding] = false;
+        this.lastInput[config.controls.ray] = false;
     }
 
     loadSerializedEntities(entities){
@@ -139,12 +141,22 @@ class GameEngine {
         CInput.left = this.lastInput[config.controls.left];
         CInput.right = this.lastInput[config.controls.right];
         CInput.shoot = this.lastInput[config.controls.shoot];
+        CInput.bounding = this.lastInput[config.controls.bounding];
+        CInput.ray = this.lastInput[config.controls.ray];
 
         if (CInput.shoot) {
             if (CInput.canShoot) {
-                this.spawnBullet()
+                this.spawnBullet();
                 CInput.canShoot = false
                 setTimeout(() => CInput.canShoot = true, 200)
+            }
+        }
+
+        if (CInput.bounding){
+            for (let entity of this.entity_manager.getEntities()){
+                if (entity.hasComponent('CBoundingBox')){
+                    entity.getComponent('CBoundingBox').show = !entity.getComponent('CBoundingBox').show;
+                }
             }
         }
     }

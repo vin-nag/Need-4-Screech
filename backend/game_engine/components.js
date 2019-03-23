@@ -12,7 +12,7 @@ const CLifeSpan = (lifespan) => ({name: "CLifeSpan", lifespan});
 @param {array} velocity velocity of the entity
 @param {float} angle angle of the entity
 */
-const CTransform = (position, previous_position, scale, velocity, angle=null, bounding=false) => ({name: "CTransform", position, previous_position, scale, velocity, angle, bounding});
+const CTransform = (position, previous_position, scale, velocity, angle=null) => ({name: "CTransform", position, previous_position, scale, velocity, angle});
 
 /* this method is for the gravity component
 @param {float} gravity gravity of the entity
@@ -33,7 +33,7 @@ const CHealth = (health, maxHealth, invincible=false, show=false) => ({name: "CH
 @param {array} size size of the entity
 @param {array} halfSize half size of the entity
 */
-const CBoundingBox = (size, halfSize) => ({name: "CBoundingBox", size, halfSize});
+const CBoundingBox = (size, halfSize, show=false) => ({name: "CBoundingBox", size, halfSize, show});
 
 /* this method is for the input component
 @param {bool} up up of the entity
@@ -62,7 +62,8 @@ const CAnimation = (animName, numOfFrames, currentFrame, speed) => ({name: "CAni
  */
 const CPowerup = (superSpeed, invincibility, shield, drunk) =>({name: "CPowerup", superSpeed, invincibility, shield, drunk});
 
-
 const CBar = (value, maxValue, color) => ({name: "CBar", value, maxValue, color});
+
+const CEnemyAI = (enemy_type, aggro_time=5000, player_detected=false, showRay=false) => ({name: "CEnemyAI", enemy_type, aggro_time, player_detected, showRay})
 
 module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup};
