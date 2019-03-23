@@ -86,9 +86,34 @@ class GameEngine {
 
         bullet.addComponent(components.CTransform(bulletPosition, bulletPrevious, 1, velocity, 0));
         bullet.addComponent(components.CBoundingBox(size, half_size));
-        bullet.addComponent(components.CAnimation('screech', 1, 0, 0));
+        bullet.addComponent(components.CAnimation('buster', 1, 0, 0));
         bullet.addComponent(components.CState('shooting'));
         bullet.addComponent(components.CLifeSpan(1000))
+    }
+
+    spawnScreech() {
+        /*
+        This function spawns a screech bottle, which if collide with checkpoint
+        * screech delivered += 1, else it will smash on ground and catch on fire
+         */
+        let screech = this.entity_manager.addEntity("screech");
+        let player = this.entity_manager.getEntitiesByTag("player")[0];
+        let playerTransform = player.getComponent('CTransform');
+        let bulletPosition = new Vector(playerTransform.position.x, playerTransform.position.y + 15);
+        let bulletPrevious = new Vector(playerTransform.position.x, playerTransform.position.y);
+        let size = new Vector(48, 16);
+        let half_size = new Vector(24, 8);
+        let velocity = new Vector(12, 0);
+        if (playerTransform.scale === -1) {
+            velocity = new Vector(-12, 0);
+        }
+
+        screech.addComponent(components.CTransform(bulletPosition, bulletPrevious, 1, velocity, 0));
+        screech.addComponent(components.CBoundingBox(size, half_size));
+        screech.addComponent(components.CAnimation('screech', 1, 0, 0));
+        screech.addComponent(components.CState('shooting'));
+        // has no CLifespan component, as the bottle will has an arc when thrown and
+        // either collide with checkpoint or hit ground
     }
 
 
@@ -146,6 +171,9 @@ class GameEngine {
         CInput.shoot = this.lastInput[config.controls.shoot];
         CInput.bounding = this.lastInput[config.controls.bounding];
         CInput.ray = this.lastInput[config.controls.ray];
+        CInput.interact = this.lastInput[config.controls.interact];
+        CInput.screech = this.lastInput[config.controls.screech];
+        CInput.drink = this.lastInput[config.controls.drink];
 
 
 
@@ -153,7 +181,7 @@ class GameEngine {
             if (CInput.canShoot) {
                 this.spawnBullet();
                 CInput.canShoot = false
-                setTimeout(() => CInput.canShoot = true, 200)
+                setTimeout(() => CInput.canShoot = true, 400)
             }
         }
 
@@ -202,6 +230,33 @@ class GameEngine {
 
         }
 
+        if (CInput.interact){
+            // stub: open door logic
+            console.log("R pressed")
+        }
+
+        if (CInput.screech){
+            // stub: throw screech
+            console.log("E pressed")
+            if (CInput.canScreech) {
+                this.spawnScreech();
+                CInput.canScreech = false
+                setTimeout(() => CInput.canScreech = true, 400)
+            }
+        }
+
+        if (CInput.drink){
+            // stub: drink screech
+            console.log("F pressed")
+            if (CInput.canDrink) {
+                // drink screech
+                CInput.canDrink = false
+                setTimeout(() => CInput.canScreech = true, 15000)
+            }
+        }
+
+    
+        
     }
 
     sMovement() {
