@@ -35,7 +35,10 @@
         "right": "68",
         "shoot": "32",
         "bounding": "66",
-        "ray": "86"
+        "ray": "86",
+        "interact": "82",
+        "screech": "69",
+        "drink": "70"
      },
     "canvas": {
         "x": 1125,

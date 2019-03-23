@@ -15,11 +15,12 @@ class EntityModels {
         player_entity.addComponent(components.CGravity(config.game_engine.gravity));
         player_entity.addComponent(components.CHealth(config.player.health, config.player.health, false, false));
         player_entity.addComponent(components.CAnimation('skeet_idle', 4, 0, 0.25));
-        player_entity.addComponent(components.CInput(false, false, false, false, false, true));
+        player_entity.addComponent(components.CInput(false, false, false, false, false, true, true, true));
         player_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(0, 0), 1, new Vector(0, 0), 0));
         player_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
         player_entity.addComponent(components.CState("grounded"));
         player_entity.addComponent(components.CPowerup(false, false, false, false))
+        player_entity.addComponent(components.CScreech(25))
     };
 
     bar_timer(x=10, y=10) {
