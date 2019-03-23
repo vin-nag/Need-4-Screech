@@ -464,23 +464,50 @@ class GameEngine {
     sEnemyRayCasting(){
         const player = this.entity_manager.getEntitiesByTag("player")[0];
         const playerTransform = player.getComponent("CTransform");
-        const playerHalfSize = player.getComponent('CBoundingBox').halfSize;
-        const playerOffSet = playerTransform.position.add(playerHalfSize);
+        const playerBounding = player.getComponent('CBoundingBox');
+        const playerOffSet = playerTransform.position.add(playerBounding.halfSize);
 
         for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
+            let playerDetected = false;
             let enemyTransform = enemy.getComponent('CTransform');
-            let enemyHalfSize = enemy.getComponent('CBoundingBox').halfSize;
-            let enemyOffSet = enemyTransform.position.add(enemyHalfSize);
+            let enemyBounding = enemy.getComponent('CBoundingBox');
+            let enemyOffSet = enemyTransform.position.add(enemyBounding.halfSize);
             let enemyAI = enemy.getComponent('CEnemyAI');
-            let line = (playerOffSet.subtract(enemyOffSet)).abs();
+            let distance_to_player = (playerOffSet.subtract(enemyOffSet)).abs();
 
             // ignore if player is farther than range of enemy
-            if (line.length() > enemyAI.detection_distance){continue}
+            if (distance_to_player.length() > enemyAI.detection_distance){continue}
 
-            //console.log('player within range of enemy');
+            for (let tile of this.entity_manager.getEntitiesByTag("tile")){
+                let tileTransform = tile.getComponent("CTransform");
+                let tileBounding = tile.getComponent("CBoundingBox");
+                let tileOffSet = tileTransform.position.add(tileBounding.halfSize);
+                let distance_to_tile = (tileOffSet.subtract(enemyOffSet)).abs();
 
-            //console.log(line);
+                // ignore if tile is farther than range of enemy
+                if (distance_to_tile.length() > enemyAI.detection_distance){continue}
 
+                let points = physics.getPointsBetweenVectors(enemyOffSet, tileOffSet);
+
+                for (let point of points){
+                    if (physics.pointIntersectingPolygon(point, tileTransform.position, tileBounding.size)){
+                        break;
+                    }
+                    if (physics.pointIntersectingPolygon(point, playerTransform.position, playerBounding.size)){
+                        playerDetected = true;
+                        break;
+                    }
+                }
+
+                if (playerDetected){
+                    console.log('player detected');
+                    break;
+                }
+            }
+
+            enemyAI.playerPosition = playerOffSet;
+            enemyAI.player_detected = playerDetected;
+            enemyAI.show = playerDetected;
         }
     }
 

@@ -96,8 +96,11 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
     if ("CEnemyAI" in entity.componentMap && entity.componentMap["CEnemyAI"].show === true){
         let enemyAI = entity.componentMap["CEnemyAI"];
         let enemyBounding = entity.componentMap["CBoundingBox"];
+        let enemyOffset = {x: transform.position.x + enemyBounding.halfSize.x, y: transform.position.y + enemyBounding.halfSize.y};
         let path = new Path2D();
-        path.arc(transform.position.x, transform.position.y, enemyAI.detection_distance,transform.scale * Math.PI * 0.5,transform.scale * Math.PI * 1.5, false);
+        //path.arc(transform.position.x, transform.position.y, enemyAI.detection_distance,transform.scale * Math.PI * 0.5,transform.scale * Math.PI * 1.5, false);
+        path.moveTo(enemyOffset.x, enemyOffset.y);
+        path.lineTo(enemyAI.playerPosition.x, enemyAI.playerPosition.y)
         ctx.lineWidth = 5;
         ctx.strokeStyle = 'yellow';
         ctx.stroke(path);
