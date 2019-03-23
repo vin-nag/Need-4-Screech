@@ -16,20 +16,20 @@
         "updateRate": 30
     },
     "player": {
-        "jump": -75,
+        "jump": -250,
         "speed": 10,
         "angle": 0,
         "lifeSpan": 10,
         "health": 100,
-        "maxspeed": 15,
+        "maxspeed": 20,
         "inertia": 0.9,
         "minSpeed": 2.75,
         "drunk": 100,
         "drunk_jump": -150
     },
     "game_engine": {
-        "gravity": 3,
-        "drunk_gravity": 1
+        "drunk_gravity": 1,
+        "gravity": 2
     },
     "controls": {
         "up": "87",
@@ -51,5 +51,26 @@
     "time": {
         "limit": 3500,
         "drunk_duration": 1000
+        "limit": 1500
+    },
+    "enemy": {
+        "melee": {
+            "speed": 2,
+            "sight": 700,
+            "maxSpeed": 4,
+            "roamDistance": 150
+        },
+        "ranged": {
+            "speed": 4,
+            "sight": 800,
+            "maxSpeed": 8,
+            "roamDistance": 200
+        },
+        "flying": {
+            "speed": 2,
+            "sight": 1000,
+            "maxSpeed": 5,
+            "roamDistance": 1000
+        }
     }
 }

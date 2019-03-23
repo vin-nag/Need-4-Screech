@@ -67,11 +67,11 @@ class GameEngine {
         for (let x = 1000; x < 2500; x+=300){
             this.entity_manager.addModel.checkpoints(x, 475);
         }
-        
+
         this.entity_manager.addModel.score();
         this.entity_manager.addModel.screech_remaining(15);
         this.entity_manager.addModel.deliveries_left(5);
-        
+
     }
 
     startGame() {
@@ -185,6 +185,7 @@ class GameEngine {
             this.sLifespan();
             this.sBars();
             this.sEnemyRayCasting();
+            this.sEnemyAI();
             this.sGameState();
             this.entity_manager.update();
         }
@@ -346,7 +347,7 @@ class GameEngine {
                 }
                 setTimeout(() => CInput.canDrink = true, config.time.drunk_duration)
             }
-        } 
+        }
     }
 
     sMovement() {
@@ -375,7 +376,7 @@ class GameEngine {
                         playerTransform.velocity.y = config.player.jump;
                     }
                 }
-                
+
             }
 
             if (playerInput.left) {
@@ -439,60 +440,34 @@ class GameEngine {
                 }
             }
 
-            // update all entities position based on velocity
-            for (let entity of this.entity_manager.getEntities()) {
-                if (entity.tag === "bg-img"){continue}
-                let eTransform = entity.getComponent('CTransform');
+        let playerGravity = player.getComponent("CGravity");
+        playerTransform.velocity.y += playerGravity.gravity;
+        playerTransform.position.x += playerTransform.velocity.x;
 
-                    // add gravity effects to every entity that has CGravity
-                    if (entity.hasComponent('CGravity')) {
-                        if (player.getComponent('CPowerup').drunk) {
-                            //let eGravity = entity.getComponent('CGravity');
-                            eTransform.velocity.y += config.game_engine.drunk_gravity;
-                        }
-                        else {
-                            let eGravity = entity.getComponent('CGravity');
-                            eTransform.velocity.y += eGravity.gravity;
-                        }
-
-                    }
-
-                if (entity.tag === 'enemy'){
-                    let direction = playerTransform.position.subtract(eTransform.position);
-
-                    direction.normalize();
-                    direction = direction.multiply(config.player.maxspeed * 0.1);
-                    direction.y = eTransform.velocity.y;
-                    direction.x += eTransform.velocity.x / 2;
-                    eTransform.velocity = direction;
-
-                        if (eTransform.velocity.x < 0) {
-                            eTransform.scale = 1;
-                        }
-                        if (eTransform.velocity.x > 0) {
-                            eTransform.scale = -1;
-                        }
-                    }
-
-                if (entity.tag === 'bullet') {
-                    eTransform.position.x += eTransform.velocity.x
-                }
-
-                eTransform.previous_position = eTransform.position;
-                eTransform.position = eTransform.position.add(eTransform.velocity);
-            }
-
-            // truncate player speed if above max
-            if (playerTransform.velocity.length() > config.player.maxspeed) {
-                playerTransform.velocity.normalize();
-                playerTransform.velocity = playerTransform.velocity.multiply(config.player.maxspeed);
-            }
+        // truncate player speed if above max
+        if (playerTransform.velocity.length() > config.player.maxspeed) {
+            playerTransform.velocity.normalize();
+            playerTransform.velocity = playerTransform.velocity.multiply(config.player.maxspeed);
+        }
 
             if (playerState.state !== newState){
                 playerState.state = newState;
                 this.updatePlayerAnimation();
             }
         }
+
+        playerTransform.previous_position = playerTransform.position;
+        playerTransform.position = playerTransform.position.add(playerTransform.velocity);
+
+        // update all bullets position based on velocity
+        for (let entity of this.entity_manager.getEntitiesByTag("bullet")){
+
+            let eTransform = entity.getComponent('CTransform');
+            eTransform.position.x += eTransform.velocity.x;
+            eTransform.previous_position = eTransform.position;
+            eTransform.position = eTransform.position.add(eTransform.velocity);
+        }
+
     }
 
     sCollision(){
@@ -561,7 +536,7 @@ class GameEngine {
                     if (playerPowerup.shield) {
                         playerPowerup.shield = false;
                         playerHealth.invincible = true;
-                        setTimeout(() => playerHealth.invincible = false, 800)
+                        setTimeout(() => playerHealth.invincible = false, 800);
                         return;
                     }
                     if (!playerHealth.invincible) {
@@ -572,7 +547,7 @@ class GameEngine {
                     }
                     if (playerHealth.health === 0) {
                         console.log('player dead');
-                        
+
                     }
                 }
             }
@@ -645,7 +620,7 @@ class GameEngine {
             }
         }
 
-        // screech / checkpoint collision 
+        // screech / checkpoint collision
         for (let bottle of this.entity_manager.getEntitiesByTag("screech")) {
             for (let checkpoint of this.entity_manager.getEntitiesByTag("checkpoint")) {
                 const score = this.entity_manager.getEntitiesByTag("score")[0];
@@ -687,14 +662,14 @@ class GameEngine {
             }
         }
 
-        // player / taxi collision 
+        // player / taxi collision
         for (let taxi of this.entity_manager.getEntitiesByTag("taxi")) {
             let overlap = physics.getOverLap(player, taxi);
             if (overlap.x > 0 && overlap.y > 0) {
                 // level end, check if player delivered all screech
                 // if so, go to next level, if not, show level failed screen.
                 this.sLevelEnd();
-                
+
             }
         }
 
@@ -771,7 +746,7 @@ class GameEngine {
                 }
 
                 if (playerDetected){
-                    //console.log('player detected');
+                    setTimeout(() => enemyAI.player_detected = false, enemyAI.aggro_time);
                     break;
                 }
             }
@@ -780,6 +755,62 @@ class GameEngine {
             enemyAI.show = playerDetected;
         }
     }
+
+    sEnemyAI(){
+
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+
+        for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
+            const enemyTransform = enemy.getComponent('CTransform');
+            const enemyAI = enemy.getComponent("CEnemyAI");
+
+            // if aggro mode
+            if (enemyAI.player_detected === false){
+                let direction = enemyAI.currentRoam < 0 && enemyAI.currentRoam > -1* enemyAI.roamDistance? -1: 1;
+                enemyAI.currentRoam -= config.enemy.melee.speed;
+                // reset roam
+                if (enemyAI.currentRoam < -1*enemyAI.roamDistance){
+                    enemyAI.currentRoam = enemyAI.roamDistance;
+                }
+                enemyTransform.velocity.x += direction * config.enemy.melee.speed * 0.5;
+            }
+            // if detected player
+            else {
+                const playerTransform = player.getComponent('CTransform');
+                let direction = playerTransform.position.subtract(enemyTransform.position);
+                direction.normalize();
+                direction = direction.multiply(config.enemy.melee.maxSpeed * 0.75);
+                direction.y = enemyTransform.velocity.y;
+                direction.x += enemyTransform.velocity.x / 2;
+                enemyTransform.velocity = direction;
+            }
+
+            if (enemy.hasComponent('CGravity')) {
+                let enemyGravity = enemy.getComponent('CGravity');
+                enemyTransform.velocity.y += enemyGravity.gravity;
+            }
+
+            // truncate speed if above max
+            if (enemyTransform.velocity.length() > config.enemy.melee.maxSpeed) {
+                enemyTransform.velocity.normalize();
+                enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.melee.maxSpeed);
+            }
+
+            enemyTransform.position.x += enemyTransform.velocity.x;
+            enemyTransform.previous_position = enemyTransform.position;
+            enemyTransform.position = enemyTransform.position.add(enemyTransform.velocity);
+
+
+            if (enemyTransform.velocity.x < 0) {
+                enemyTransform.scale = 1;
+            }
+
+            if (enemyTransform.velocity.x > 0) {
+                enemyTransform.scale = -1;
+            }
+        }
+    }
+
 
     sLifespan() {
         // bullet lifespan
