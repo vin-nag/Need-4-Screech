@@ -49,11 +49,6 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
     const frameWidth = img.width / animation.numOfFrames;
     const frameHeight = img.height;
 
-    if (transform.bounding === true){
-    const bounding = entity.componentMap["CBoundingBox"]
-    canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
-    }
-
     if ("CHealth" in entity.componentMap && entity.componentMap["CHealth"].show === true){
         let currentHealthPercentage = entity.componentMap["CHealth"].health / entity.componentMap["CHealth"].maxHealth;
         canvasService.draw.rectangle(ctx, transform.position.x - 2, transform.position.y - 10, frameWidth + 4, 8, "#860b08");
@@ -93,6 +88,23 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
 
     }
 
+    if ("CBoundingBox" in entity.componentMap && entity.componentMap["CBoundingBox"].show === true){
+        const bounding = entity.componentMap["CBoundingBox"];
+        canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
+    }
+
+    if ("CEnemyAI" in entity.componentMap && entity.componentMap["CEnemyAI"].show === true){
+        let enemyAI = entity.componentMap["CEnemyAI"];
+        let enemyBounding = entity.componentMap["CBoundingBox"];
+        let enemyOffset = {x: transform.position.x + enemyBounding.halfSize.x, y: transform.position.y + enemyBounding.halfSize.y};
+        let path = new Path2D();
+        //path.arc(transform.position.x, transform.position.y, enemyAI.detection_distance,transform.scale * Math.PI * 0.5,transform.scale * Math.PI * 1.5, false);
+        path.moveTo(enemyOffset.x, enemyOffset.y);
+        path.lineTo(enemyAI.playerPosition.x, enemyAI.playerPosition.y)
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = 'yellow';
+        ctx.stroke(path);
+    }
 }
 
 

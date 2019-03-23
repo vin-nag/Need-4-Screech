@@ -20,6 +20,8 @@ class GameEngine {
         this.lastInput[config.controls.left] = false;
         this.lastInput[config.controls.right] = false;
         this.lastInput[config.controls.shoot] = false;
+        this.lastInput[config.controls.bounding] = false;
+        this.lastInput[config.controls.ray] = false;
     }
 
     loadSerializedEntities(entities){
@@ -103,6 +105,7 @@ class GameEngine {
             this.sAnimation();
             this.sLifespan();
             this.sBars();
+            this.sEnemyRayCasting();
             this.entity_manager.update();
         }
     }
@@ -139,12 +142,28 @@ class GameEngine {
         CInput.left = this.lastInput[config.controls.left];
         CInput.right = this.lastInput[config.controls.right];
         CInput.shoot = this.lastInput[config.controls.shoot];
+        CInput.bounding = this.lastInput[config.controls.bounding];
+        CInput.ray = this.lastInput[config.controls.ray];
 
         if (CInput.shoot) {
             if (CInput.canShoot) {
-                this.spawnBullet()
+                this.spawnBullet();
                 CInput.canShoot = false
                 setTimeout(() => CInput.canShoot = true, 200)
+            }
+        }
+
+        if (CInput.bounding){
+            for (let entity of this.entity_manager.getEntities()){
+                if (entity.hasComponent('CBoundingBox')){
+                    entity.getComponent('CBoundingBox').show = !entity.getComponent('CBoundingBox').show;
+                }
+            }
+        }
+
+        if (CInput.ray){
+            for (let entity of this.entity_manager.getEntitiesByTag("enemy")){
+                entity.getComponent("CEnemyAI").show = !entity.getComponent("CEnemyAI").show;
             }
         }
     }
@@ -440,6 +459,55 @@ class GameEngine {
                 animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames;
             }
         })
+    }
+
+    sEnemyRayCasting(){
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+        const playerTransform = player.getComponent("CTransform");
+        const playerBounding = player.getComponent('CBoundingBox');
+        const playerOffSet = playerTransform.position.add(playerBounding.halfSize);
+
+        for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
+            let playerDetected = false;
+            let enemyTransform = enemy.getComponent('CTransform');
+            let enemyBounding = enemy.getComponent('CBoundingBox');
+            let enemyOffSet = enemyTransform.position.add(enemyBounding.halfSize);
+            let enemyAI = enemy.getComponent('CEnemyAI');
+            let distance_to_player = (playerOffSet.subtract(enemyOffSet)).abs();
+
+            // ignore if player is farther than range of enemy
+            if (distance_to_player.length() > enemyAI.detection_distance){continue}
+
+            for (let tile of this.entity_manager.getEntitiesByTag("tile")){
+                let tileTransform = tile.getComponent("CTransform");
+                let tileBounding = tile.getComponent("CBoundingBox");
+                let tileOffSet = tileTransform.position.add(tileBounding.halfSize);
+                let distance_to_tile = (tileOffSet.subtract(enemyOffSet)).abs();
+
+                // ignore if tile is farther than range of enemy
+                if (distance_to_tile.length() > enemyAI.detection_distance){continue}
+
+                let points = physics.getPointsBetweenVectors(enemyOffSet, tileOffSet);
+
+                for (let point of points){
+                    if (physics.pointIntersectingPolygon(point, tileTransform.position, tileBounding.size)){
+                        break;
+                    }
+                    if (physics.pointIntersectingPolygon(point, playerTransform.position, playerBounding.size)){
+                        playerDetected = true;
+                        break;
+                    }
+                }
+
+                if (playerDetected){
+                    //console.log('player detected');
+                    break;
+                }
+            }
+            enemyAI.playerPosition = playerOffSet;
+            enemyAI.player_detected = playerDetected;
+            enemyAI.show = playerDetected;
+        }
     }
 
     sLifespan() {

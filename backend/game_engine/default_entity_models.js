@@ -87,6 +87,7 @@ class EntityModels {
         enemy_entity.addComponent(components.CAnimation('snake_walk', 7, 0, 0.25));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         enemy_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+        enemy_entity.addComponent(components.CEnemyAI("melee", 5000, 500, false, false, new Vector(0, 0)));
         enemy_entity.addComponent(components.CState("grounded"));
     };
 
@@ -153,4 +154,5 @@ class EntityModels {
     };
 
 }
+
 module.exports = EntityModels;
