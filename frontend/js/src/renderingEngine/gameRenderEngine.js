@@ -88,6 +88,10 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
 
     }
 
+    if (entity.tag == "player") {
+        
+    }
+
     if ("CBoundingBox" in entity.componentMap && entity.componentMap["CBoundingBox"].show === true){
         const bounding = entity.componentMap["CBoundingBox"];
         canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
