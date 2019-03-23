@@ -57,6 +57,7 @@ class GameEngine {
         this.entity_manager.addModel.powerup_shield(400,590);
         this.entity_manager.addModel.powerup_invincible(600, 590);
         this.entity_manager.addModel.powerup_speed(800, 590);
+        this.entity_manager.addModel.checkpoints(1000, 520);
     }
 
     startGame() {
@@ -196,15 +197,16 @@ class GameEngine {
         }
 
         if (CInput.interact){
-            // stub: open door logic
+            // open door logic
             console.log("R pressed")
         }
 
         if (CInput.screech){
-            // stub: throw screech
+            // throw screech
             console.log("E pressed")
             if (CInput.canScreech) {
                 this.spawnScreech();
+                this.player.getComponent('CScreech').screechCount -= 1;
                 CInput.canScreech = false
                 setTimeout(() => CInput.canScreech = true, 400)
             }
@@ -218,10 +220,7 @@ class GameEngine {
                 CInput.canDrink = false
                 setTimeout(() => CInput.canScreech = true, 15000)
             }
-        }
-
-    
-        
+        } 
     }
 
     sMovement() {

@@ -21,6 +21,7 @@ class EntityModels {
         player_entity.addComponent(components.CState("grounded"));
         player_entity.addComponent(components.CPowerup(false, false, false, false))
         player_entity.addComponent(components.CScreech(25))
+        player_entity.addComponent(components.CScore(0));
     };
 
     bar_timer(x=10, y=10) {
@@ -153,6 +154,13 @@ class EntityModels {
         powerup_entity.addComponent(components.CAnimation('Shield', 4, 0, .50));
         powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 10), new Vector(10, 5)));
     };
+
+    checkpoints(x=0, y=0) {
+        const checkpoint = this.entity_manager.addEntity("checkpoint");
+        checkpoint.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        checkpoint.addComponent(components.CAnimation('checkpoint_small', 1, 0, 0));
+        checkpoint.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+    }
 
 }
 

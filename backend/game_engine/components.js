@@ -68,4 +68,6 @@ const CEnemyAI = (enemy_type, aggro_time=5000, detection_distance=1000, player_d
 
 const CScreech = (screechCount) => ({name: "CScreech", screechCount});
 
-module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup, CEnemyAI, CScreech};
+const CScore = (score) => ({name: "CScore", score});
+
+module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup, CEnemyAI, CScreech, CScore};
