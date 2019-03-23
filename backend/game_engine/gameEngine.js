@@ -105,6 +105,7 @@ class GameEngine {
             this.sAnimation();
             this.sLifespan();
             this.sBars();
+            this.sEnemyRayCasting();
             this.entity_manager.update();
         }
     }
@@ -157,6 +158,12 @@ class GameEngine {
                 if (entity.hasComponent('CBoundingBox')){
                     entity.getComponent('CBoundingBox').show = !entity.getComponent('CBoundingBox').show;
                 }
+            }
+        }
+
+        if (CInput.ray){
+            for (let entity of this.entity_manager.getEntitiesByTag("enemy")){
+                entity.getComponent("CEnemyAI").show = !entity.getComponent("CEnemyAI").show;
             }
         }
     }
@@ -452,6 +459,29 @@ class GameEngine {
                 animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames;
             }
         })
+    }
+
+    sEnemyRayCasting(){
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+        const playerTransform = player.getComponent("CTransform");
+        const playerHalfSize = player.getComponent('CBoundingBox').halfSize;
+        const playerOffSet = playerTransform.position.add(playerHalfSize);
+
+        for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
+            let enemyTransform = enemy.getComponent('CTransform');
+            let enemyHalfSize = enemy.getComponent('CBoundingBox').halfSize;
+            let enemyOffSet = enemyTransform.position.add(enemyHalfSize);
+            let enemyAI = enemy.getComponent('CEnemyAI');
+            let line = (playerOffSet.subtract(enemyOffSet)).abs();
+
+            // ignore if player is farther than range of enemy
+            if (line.length() > enemyAI.detection_distance){continue}
+
+            //console.log('player within range of enemy');
+
+            //console.log(line);
+
+        }
     }
 
     sLifespan() {

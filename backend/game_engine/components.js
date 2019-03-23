@@ -64,6 +64,6 @@ const CPowerup = (superSpeed, invincibility, shield, drunk) =>({name: "CPowerup"
 
 const CBar = (value, maxValue, color) => ({name: "CBar", value, maxValue, color});
 
-const CEnemyAI = (enemy_type, aggro_time=5000, player_detected=false, showRay=false) => ({name: "CEnemyAI", enemy_type, aggro_time, player_detected, showRay})
+const CEnemyAI = (enemy_type, aggro_time=5000, detection_distance=1000, player_detected=false, show=false) => ({name: "CEnemyAI", enemy_type, aggro_time, detection_distance, player_detected, show});
 
-module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup};
+module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup, CEnemyAI};

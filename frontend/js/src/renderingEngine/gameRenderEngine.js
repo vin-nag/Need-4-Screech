@@ -93,6 +93,15 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
         canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
     }
 
+    if ("CEnemyAI" in entity.componentMap && entity.componentMap["CEnemyAI"].show === true){
+        let enemyAI = entity.componentMap["CEnemyAI"];
+        let enemyBounding = entity.componentMap["CBoundingBox"];
+        let path = new Path2D();
+        path.arc(transform.position.x, transform.position.y, enemyAI.detection_distance,transform.scale * Math.PI * 0.5,transform.scale * Math.PI * 1.5, false);
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = 'yellow';
+        ctx.stroke(path);
+    }
 }
 
 
