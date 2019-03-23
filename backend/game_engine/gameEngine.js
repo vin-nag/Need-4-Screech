@@ -500,11 +500,10 @@ class GameEngine {
                 }
 
                 if (playerDetected){
-                    console.log('player detected');
+                    //console.log('player detected');
                     break;
                 }
             }
-
             enemyAI.playerPosition = playerOffSet;
             enemyAI.player_detected = playerDetected;
             enemyAI.show = playerDetected;

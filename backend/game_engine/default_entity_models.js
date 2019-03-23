@@ -154,4 +154,5 @@ class EntityModels {
     };
 
 }
+
 module.exports = EntityModels;
