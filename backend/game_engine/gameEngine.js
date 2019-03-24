@@ -35,9 +35,10 @@ class GameEngine {
     init(){
         this.entity_manager.addModel.background_img_george();
         this.entity_manager.addModel.player(100,435);
+        //this.entity_manager.addModel.enemy_melee_moose(800, 450);
         //this.entity_manager.addModel.enemy_melee_snake(700, 550);
-        this.entity_manager.addModel.enemy_ranged_chef(1500, 450);
-        //this.entity_manager.addModel.enemy_flying_blackbird(700, 50);
+        this.entity_manager.addModel.enemy_ranged_chef(1000, 450);
+        this.entity_manager.addModel.enemy_flying_blackbird(700, 100);
 
         this.entity_manager.addModel.decorator_lantern(800, 500);
         this.entity_manager.addModel.decorator_pole_1(50, 325);
@@ -182,12 +183,12 @@ class GameEngine {
             // console.log('game continuing', this.entity_manager.getEntities());
             this.sInput();
             this.sMovement();
-            this.sCollision();
             this.sAnimation();
             this.sLifespan();
             this.sBars();
             this.sEnemyRayCasting();
             this.sEnemyAI();
+            this.sCollision();
             this.sGameState();
             this.entity_manager.update();
         }
@@ -508,10 +509,10 @@ class GameEngine {
             for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
 
                 let enemyTransform = enemy.getComponent("CTransform");
-                let overlap = physics.getOverLap(enemy, tile);
+                let overlap = physics.getOverLap(tile, enemy);
 
                 if (overlap.x > 0 && overlap.y > 0) {
-                    let prevOverlap = physics.getPrevOverLap(enemy, tile);
+                    let prevOverlap = physics.getPrevOverLap(tile, enemy);
                     if (prevOverlap.y > 0){
                         let direction = tileTransform.position.x > enemyTransform.previous_position.x? -1: 1;
                         enemyTransform.position.x += direction * overlap.x
@@ -717,6 +718,7 @@ class GameEngine {
             if (entity.hasComponent('CAnimation')){
                 let animation = entity.getComponent('CAnimation');
                 if (animation.numOfFrames < 2) { return; }
+                console.log(entity.tag);
                 animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames;
 
                 if (entity.tag === "boom") {

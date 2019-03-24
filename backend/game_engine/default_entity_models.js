@@ -144,10 +144,10 @@ class EntityModels {
         enemy_entity.addComponent(components.CLifeSpan(config.enemy.melee.lifeSpan));
         enemy_entity.addComponent(components.CGravity(config.game_engine.gravity));
         enemy_entity.addComponent(components.CHealth(2, 2, false, false));
-        enemy_entity.addComponent(components.CAnimation('moose_run', 15, 0, 0.5));
+        enemy_entity.addComponent(components.CAnimation('moose_run', 15, 0, 0.25));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y-10), 1, new Vector(0, 0), 0));
-        enemy_entity.addComponent(components.CBoundingBox(new Vector(137, 130), new Vector(69, 65)));
-        enemy_entity.addComponent(components.CEnemyAI("melee",  5, config.enemy.melee.roamDistance, 5000, config.enemy.melee.sight, false, false, new Vector(0, 0), true, "moose_run", 15, "moose_charge", 15));
+        enemy_entity.addComponent(components.CBoundingBox(new Vector(60, 60), new Vector(30, 30)));
+        enemy_entity.addComponent(components.CEnemyAI("melee",  5, config.enemy.melee.roamDistance, 5000, config.enemy.melee.sight, false, false, new Vector(0, 0), true, "moose_charge", 15, "moose_run", 15));
         enemy_entity.addComponent(components.CState("grounded"));
     };
 
