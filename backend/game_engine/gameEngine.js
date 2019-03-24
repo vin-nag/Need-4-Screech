@@ -117,6 +117,19 @@ class GameEngine {
         // either collide with checkpoint or hit ground
     }
 
+    spawnFire(e) {
+        let fire = this.entity_manager.addEntity("fire");
+        let size = new Vector(50, 50);
+        let half_size = new Vector(25, 25);
+        let position = e.getComponent('CTransform').position;
+        let previous_position = e.getComponent('CTransform').previous_position;
+        let velocity = new Vector(0,0)
+        fire.addComponent(components.CTransform(position, previous_position, 1, velocity, 0));
+        fire.addComponent(components.CBoundingBox(size, half_size));
+        fire.addComponent(components.CAnimation('fire_small', 24, 0, .7));
+        fire.addComponent(components.CLifeSpan(2000))
+    }
+
 
     update(){
         // this function handles the update function, starting a game if it hasn't been already
@@ -147,6 +160,9 @@ class GameEngine {
             switch (state){
                 case "timer":
                     values.value--;
+                    if (values.value === 0) {
+
+                    }
                     break;
 
                 case "health":
@@ -200,12 +216,12 @@ class GameEngine {
 
         if (CInput.interact){
             // open door logic
-            console.log("R pressed")
+            console.log("E pressed")
         }
 
         if (CInput.screech){
             // throw screech
-            console.log("E pressed")
+            console.log("O pressed")
             if (CInput.canScreech) {
                 this.spawnScreech();
                 player.getComponent('CScreech').screechCount -= 1;
@@ -502,6 +518,30 @@ class GameEngine {
                 }
             }
         }
+
+        // screech / enemy collision
+        for (let bottle of this.entity_manager.getEntitiesByTag("screech")) {
+            for (let enemy of this.entity_manager.getEntitiesByTag("enemy")) {
+                let overlap = physics.getOverLap(bottle, enemy);
+                if (overlap.x > 0 && overlap.y > 0) {
+                    bottle.destroy();
+                    enemy.destroy();
+                }
+            }
+        }
+
+        // screech / tile collision
+        for (let bottle of this.entity_manager.getEntitiesByTag("screech")) {
+            for (let tile of this.entity_manager.getEntitiesByTag("tile")) {
+                let overlap = physics.getOverLap(bottle, tile);
+                if (overlap.x > 0 && overlap.y > 0) {
+                    this.spawnFire(bottle)
+                    bottle.destroy();
+                }
+            }
+        }
+
+
 
         //update CState
         let state = player.getComponent("CState");
