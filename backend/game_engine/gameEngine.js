@@ -34,8 +34,10 @@ class GameEngine {
 
     init(){
         this.entity_manager.addModel.background_img_george();
-        this.entity_manager.addModel.player(390,435);
-        this.entity_manager.addModel.enemy_snake(700, 415);
+        this.entity_manager.addModel.player(100,435);
+        this.entity_manager.addModel.enemy_melee_snake(700, 550);
+        this.entity_manager.addModel.enemy_ranged_chef(1500, 450);
+        this.entity_manager.addModel.enemy_flying_blackbird(700, 50);
 
         this.entity_manager.addModel.decorator_lantern(800, 500);
         this.entity_manager.addModel.decorator_pole_1(50, 325);
@@ -236,6 +238,7 @@ class GameEngine {
         // Input system
         const player = this.entity_manager.getEntitiesByTag("player")[0];
         let CInput = player.getComponent('CInput');
+        let playerTransform = player.getComponent('CTransform');
 
         CInput.up = this.lastInput[config.controls.up];
         CInput.down = this.lastInput[config.controls.down];
@@ -252,8 +255,8 @@ class GameEngine {
 
         if (CInput.shoot) {
             if (CInput.canShoot) {
-                this.spawnBullet();
-                CInput.canShoot = false
+                this.entity_manager.addModel.bullet_bottle(playerTransform.position.x + (playerTransform.scale * 100), playerTransform.position.y + 15, playerTransform.scale);
+                CInput.canShoot = false;
                 setTimeout(() => CInput.canShoot = true, 400)
             }
         }
@@ -464,6 +467,11 @@ class GameEngine {
 
             let eTransform = entity.getComponent('CTransform');
             eTransform.position.x += eTransform.velocity.x;
+
+            if (entity.hasComponent('CGravity')){
+                let eGravity = entity.getComponent('CGravity');
+                eTransform.velocity.y += eGravity.gravity;
+            }
             eTransform.previous_position = eTransform.position;
             eTransform.position = eTransform.position.add(eTransform.velocity);
         }
@@ -476,22 +484,17 @@ class GameEngine {
         let playerTransform = player.getComponent('CTransform');
 
         for (let tile of this.entity_manager.getEntitiesByTag("tile")){
-
             if (!tile.hasComponent("CBoundingBox")) {continue;}
-
             let tileTransform = tile.getComponent("CTransform");
+
+            // tile-player collision
             let overlap = physics.getOverLap(player, tile);
-
             if (overlap.x > 0 && overlap.y > 0) {
-
                 let prevOverlap = physics.getPrevOverLap(player, tile);
-
                 if (prevOverlap.y > 0){
                     let direction = tileTransform.position.x > playerTransform.previous_position.x? -1: 1;
                     playerTransform.position.x += direction * overlap.x
-
                 }
-
                 else if (prevOverlap.x > 0){
                     let direction = tileTransform.position.y > playerTransform.previous_position.y? -1: 1;
                     playerTransform.position.y += direction * overlap.y;
@@ -499,7 +502,7 @@ class GameEngine {
                 }
             }
 
-            // enemy collision
+            // tile-enemy collision
             for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
 
                 let enemyTransform = enemy.getComponent("CTransform");
@@ -519,8 +522,17 @@ class GameEngine {
                     }
                 }
             }
+
+            // tile-bullet collision
+           for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
+                let overlap = physics.getOverLap(tile, bullet);
+                if (overlap.x > 0 && overlap.y > 0){
+                    bullet.destroy();
+                }
+            }
         }
 
+        // enemy - player collision
         for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
 
             let overlap = physics.getOverLap(enemy, player);
@@ -551,10 +563,7 @@ class GameEngine {
                     }
                 }
             }
-        }
 
-        // bullet / enemy collision
-        for (let enemy of this.entity_manager.getEntitiesByTag("enemy")) {
             for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
                 const score = this.entity_manager.getEntitiesByTag("score")[0];
                 let overlap = physics.getOverLap(enemy, bullet);
@@ -570,16 +579,6 @@ class GameEngine {
                         enemy.destroy();
                         bullet.destroy();
                     }
-                }
-            }
-        }
-
-        // bullet / tile collision
-        for (let tile of this.entity_manager.getEntitiesByTag("tile")) {
-            for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
-                let overlap = physics.getOverLap(tile, bullet);
-                if (overlap.x > 0 && overlap.y > 0){
-                    bullet.destroy();
                 }
             }
         }
@@ -670,6 +669,26 @@ class GameEngine {
                 // if so, go to next level, if not, show level failed screen.
                 this.sLevelEnd();
 
+            }
+        }
+
+        // bullet-player collision
+        for (let bullet of this.entity_manager.getEntitiesByTag("bullet")){
+            let overlap = physics.getOverLap(player, bullet);
+            let playerHealth = player.getComponent('CHealth');
+            if (overlap.x > 0 && overlap.y > 0){
+                bullet.destroy();
+                if (!playerHealth.invincible) {
+                    playerHealth.invincible = true;
+                    playerHealth.health -= 20;
+                    // Invincibility frames
+                    setTimeout(() => playerHealth.invincible = false, 800)
+                }
+
+                if (playerHealth.health === 0) {
+                    player.destroy();
+                    bullet.destroy();
+                }
             }
         }
 
@@ -778,11 +797,62 @@ class GameEngine {
             else {
                 const playerTransform = player.getComponent('CTransform');
                 let direction = playerTransform.position.subtract(enemyTransform.position);
-                direction.normalize();
-                direction = direction.multiply(config.enemy.melee.maxSpeed * 0.75);
-                direction.y = enemyTransform.velocity.y;
-                direction.x += enemyTransform.velocity.x / 2;
-                enemyTransform.velocity = direction;
+
+                switch (enemyAI.enemy_type) {
+
+                    case "melee":
+                        direction.normalize();
+                        direction = direction.multiply(config.enemy.melee.maxSpeed * 0.75);
+                        direction.y = enemyTransform.velocity.y;
+                        direction.x += enemyTransform.velocity.x / 2;
+                        enemyTransform.velocity = direction;
+
+                        // truncate speed if above max
+                        if (enemyTransform.velocity.length() > config.enemy.melee.maxSpeed) {
+                            enemyTransform.velocity.normalize();
+                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.melee.maxSpeed);
+                        }
+                        break;
+
+                    case "ranged":
+                        direction.normalize();
+                        direction = direction.multiply(config.enemy.melee.maxSpeed);
+                        direction.y = enemyTransform.velocity.y;
+                        direction.x += enemyTransform.velocity.x / 2;
+                        enemyTransform.velocity = direction;
+
+                        if (enemyAI.canAttack){
+                            this.entity_manager.addModel.bullet_knife(enemyTransform.position.x + (enemyTransform.scale * 125), enemyTransform.position.y + 15, enemyTransform.scale);
+                            enemyAI.canAttack = false;
+                            setTimeout( () => {enemyAI.canAttack = true}, 1000)
+                        }
+                        // truncate speed if above max
+                        if (enemyTransform.velocity.length() > config.enemy.ranged.maxSpeed) {
+                            enemyTransform.velocity.normalize();
+                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.ranged.maxSpeed * 0.2);
+                        }
+                        break;
+
+                    case "flying":
+                        direction.normalize();
+                        direction = direction.multiply(config.enemy.flying.maxSpeed * 0.75);
+                        direction.y = enemyTransform.velocity.y;
+                        direction.x += enemyTransform.velocity.x / 2;
+                        enemyTransform.velocity = direction;
+
+                        if (enemyAI.canAttack){
+                            this.entity_manager.addModel.bullet_dropping(enemyTransform.position.x + (enemyTransform.scale * 15), enemyTransform.position.y + 110, enemyTransform.scale);
+                            enemyAI.canAttack = false;
+                            setTimeout( () => {enemyAI.canAttack = true}, 1000)
+                        }
+
+                        // truncate speed if above max
+                        if (enemyTransform.velocity.length() > config.enemy.flying.maxSpeed) {
+                            enemyTransform.velocity.normalize();
+                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.flying.maxSpeed * 0.2);
+                        }
+                        break;
+                }
             }
 
             if (enemy.hasComponent('CGravity')) {
@@ -790,23 +860,16 @@ class GameEngine {
                 enemyTransform.velocity.y += enemyGravity.gravity;
             }
 
-            // truncate speed if above max
-            if (enemyTransform.velocity.length() > config.enemy.melee.maxSpeed) {
-                enemyTransform.velocity.normalize();
-                enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.melee.maxSpeed);
-            }
-
             enemyTransform.position.x += enemyTransform.velocity.x;
             enemyTransform.previous_position = enemyTransform.position;
             enemyTransform.position = enemyTransform.position.add(enemyTransform.velocity);
 
-
             if (enemyTransform.velocity.x < 0) {
-                enemyTransform.scale = 1;
+                enemyTransform.scale = -1;
             }
 
             if (enemyTransform.velocity.x > 0) {
-                enemyTransform.scale = -1;
+                enemyTransform.scale = 1;
             }
         }
     }
