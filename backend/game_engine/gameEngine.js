@@ -35,7 +35,7 @@ class GameEngine {
     init(){
         this.entity_manager.addModel.background_img_george();
         this.entity_manager.addModel.player(100,435);
-        //this.entity_manager.addModel.enemy_melee_moose(800, 450);
+        this.entity_manager.addModel.enemy_melee_moose(800, 450);
         //this.entity_manager.addModel.enemy_melee_snake(700, 550);
         this.entity_manager.addModel.enemy_ranged_chef(1000, 450);
         this.entity_manager.addModel.enemy_flying_blackbird(700, 100);
@@ -718,7 +718,6 @@ class GameEngine {
             if (entity.hasComponent('CAnimation')){
                 let animation = entity.getComponent('CAnimation');
                 if (animation.numOfFrames < 2) { return; }
-                console.log(entity.tag);
                 animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames;
 
                 if (entity.tag === "boom") {

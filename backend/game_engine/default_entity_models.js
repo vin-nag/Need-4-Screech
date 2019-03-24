@@ -170,7 +170,7 @@ class EntityModels {
         enemy_entity.addComponent(components.CHealth(2, 2, false, false));
         enemy_entity.addComponent(components.CAnimation('chef_walk', 16, 0, 0.75));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        enemy_entity.addComponent(components.CBoundingBox(new Vector(100, 131), new Vector(50, 65)));
+        enemy_entity.addComponent(components.CBoundingBox(new Vector(131, 100), new Vector(66, 50)));
         enemy_entity.addComponent(components.CEnemyAI("ranged",  10, config.enemy.ranged.roamDistance, 5000, config.enemy.ranged.sight, false, false, new Vector(0, 0), true, "chef_walk", 16, "chef_attack", 12));
         enemy_entity.addComponent(components.CState("grounded"));
     };
