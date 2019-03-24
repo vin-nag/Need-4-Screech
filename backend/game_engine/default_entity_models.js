@@ -146,7 +146,7 @@ class EntityModels {
         enemy_entity.addComponent(components.CHealth(2, 2, false, false));
         enemy_entity.addComponent(components.CAnimation('moose_run', 15, 0, 0.5));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y-10), 1, new Vector(0, 0), 0));
-        enemy_entity.addComponent(components.CBoundingBox(new Vector(124, 120), new Vector(62, 60)));
+        enemy_entity.addComponent(components.CBoundingBox(new Vector(137, 130), new Vector(69, 65)));
         enemy_entity.addComponent(components.CEnemyAI("melee",  5, config.enemy.melee.roamDistance, 5000, config.enemy.melee.sight, false, false, new Vector(0, 0), true, "moose_run", 15, "moose_charge", 15));
         enemy_entity.addComponent(components.CState("grounded"));
     };
@@ -198,21 +198,21 @@ class EntityModels {
         const tile_brick_entity = this.entity_manager.addEntity("tile");
         tile_brick_entity.addComponent(components.CAnimation('grey_tile_left', 1, 0, 0));
         tile_brick_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        tile_brick_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+        tile_brick_entity.addComponent(components.CBoundingBox(new Vector(66, 66), new Vector(33, 33)));
     };
 
     tile_grey_right(x=0, y=0) {
         const tile_brick_entity = this.entity_manager.addEntity("tile");
         tile_brick_entity.addComponent(components.CAnimation('grey_tile_right', 1, 0, 0));
         tile_brick_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        tile_brick_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+        tile_brick_entity.addComponent(components.CBoundingBox(new Vector(66, 66), new Vector(33, 33)));
     };
 
     tile_grey_center(x=0, y=0) {
         const tile_brick_entity = this.entity_manager.addEntity("tile");
         tile_brick_entity.addComponent(components.CAnimation('grey_tile_center', 1, 0, 0));
         tile_brick_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        tile_brick_entity.addComponent(components.CBoundingBox(new Vector(60, 60), new Vector(30, 30)));
+        tile_brick_entity.addComponent(components.CBoundingBox(new Vector(66, 66), new Vector(33, 33)));
     };
 
     background_img_george() {
