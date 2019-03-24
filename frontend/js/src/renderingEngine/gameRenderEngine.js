@@ -65,6 +65,16 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
     }
 
     else {
+        
+        if (entity.tag === "score") {
+            if ("CScore" in entity.componentMap) {
+                let score = entity.componentMap["CScore"];
+                let offsetX = 200;
+                let offsetY = 75;
+                canvasService.draw.text(ctx, "Score: " + score.score, Math.max(transform.position.x + offsetX, transform.position.x + offsetX - camX), transform.position.y + offsetY, "30px", "#fff", "Permanent Marker")
+            }
+        }
+
         if (entity.tag === "bar"){
 
             ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, Math.max(transform.position.x, transform.position.x-camX), transform.position.y, frameWidth, frameHeight);
@@ -82,14 +92,11 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
             }
 
         }
+
         else {
         ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
         }
 
-    }
-
-    if (entity.tag == "player") {
-        
     }
 
     if ("CBoundingBox" in entity.componentMap && entity.componentMap["CBoundingBox"].show === true){
