@@ -59,6 +59,7 @@ class GameEngine {
         this.entity_manager.addModel.powerup_speed(800, 590);
         this.entity_manager.addModel.checkpoints(1000, 520);
         this.entity_manager.addModel.score();
+        this.entity_manager.addModel.screech_remaining(15);
         
     }
 
@@ -238,6 +239,8 @@ class GameEngine {
             // throw screech
             console.log("O pressed")
             if (CInput.canScreech) {
+                const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
+                screech_remaining.getComponent('CScreech').screechCount -= 1;
                 this.spawnScreech();
                 player.getComponent('CScreech').screechCount -= 1;
                 CInput.canScreech = false
@@ -468,8 +471,10 @@ class GameEngine {
         // bullet / enemy collision
         for (let enemy of this.entity_manager.getEntitiesByTag("enemy")) {
             for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
+                const score = this.entity_manager.getEntitiesByTag("score")[0];
                 let overlap = physics.getOverLap(enemy, bullet);
                 if (overlap.x > 0 && overlap.y > 0){
+                    score.getComponent('CScore').score += 10;
                     bullet.destroy();
                     enemy.getComponent('CHealth').show = true;
                     enemy.getComponent('CHealth').health--;
@@ -528,7 +533,7 @@ class GameEngine {
                 let overlap = physics.getOverLap(bottle, checkpoint);
                 if (overlap.x > 0 && overlap.y > 0) {
                     bottle.destroy();
-                    score.getComponent('CScore').score += 1;
+                    score.getComponent('CScore').score += 100;
                     console.log("screech delivered");
                 }
             }
@@ -537,8 +542,10 @@ class GameEngine {
         // screech / enemy collision
         for (let bottle of this.entity_manager.getEntitiesByTag("screech")) {
             for (let enemy of this.entity_manager.getEntitiesByTag("enemy")) {
+                const score = this.entity_manager.getEntitiesByTag("score")[0];
                 let overlap = physics.getOverLap(bottle, enemy);
                 if (overlap.x > 0 && overlap.y > 0) {
+                    score.getComponent('CScore').score += 35;
                     this.spawnBoom(bottle);
                     bottle.destroy();
                     enemy.destroy();

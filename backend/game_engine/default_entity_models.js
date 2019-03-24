@@ -169,6 +169,14 @@ class EntityModels {
         score.addComponent(components.CScore(0));
     }
 
+    screech_remaining(screech, x=675, y=155) {
+        const screech_remaining = this.entity_manager.addEntity("screech_remaining");
+        screech_remaining.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        screech_remaining.addComponent(components.CAnimation('transparent', 1, 0, 0));
+        screech_remaining.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+        screech_remaining.addComponent(components.CScreech(screech));
+    }
+
 }
 
 module.exports = EntityModels;

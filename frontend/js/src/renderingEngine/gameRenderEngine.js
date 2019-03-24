@@ -72,6 +72,13 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
             }
         }
 
+        if (entity.tag === "screech_remaining") {
+            if ("CScreech" in entity.componentMap) {
+                let screech = entity.componentMap["CScreech"];
+                canvasService.draw.text(ctx, "Screech Remaining: " + screech.screechCount, Math.max(transform.position.x, transform.position.x - camX), transform.position.y, "30px", "#fff", "Permanent Marker")
+            }
+        }
+
         if (entity.tag === "bar"){
 
             ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, Math.max(transform.position.x, transform.position.x-camX), transform.position.y, frameWidth, frameHeight);
