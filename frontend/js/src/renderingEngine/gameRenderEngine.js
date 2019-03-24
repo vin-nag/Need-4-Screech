@@ -18,7 +18,6 @@ const engine = (entities, canvasID) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(bg_img, 0, 0, bg_img.width, bg_img.height, 0, 0, canvas.width, canvas.height);
 
-
     let camX = 0;
     let camY = 0;
     for (let entity of entities) {
@@ -65,13 +64,11 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
     }
 
     else {
-        
+
         if (entity.tag === "score") {
             if ("CScore" in entity.componentMap) {
                 let score = entity.componentMap["CScore"];
-                let offsetX = 200;
-                let offsetY = 75;
-                canvasService.draw.text(ctx, "Score: " + score.score, Math.max(transform.position.x + offsetX, transform.position.x + offsetX - camX), transform.position.y + offsetY, "30px", "#fff", "Permanent Marker")
+                canvasService.draw.text(ctx, "Score: " + score.score, Math.max(transform.position.x, transform.position.x - camX), transform.position.y, "30px", "#fff", "Permanent Marker")
             }
         }
 

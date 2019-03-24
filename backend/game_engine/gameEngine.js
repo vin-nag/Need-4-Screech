@@ -132,6 +132,21 @@ class GameEngine {
         fire.addComponent(components.CLifeSpan(2000))
     }
 
+    spawnBoom(e) {
+        let boom = this.entity_manager.addEntity("boom");
+        let size = new Vector(50, 50);
+        let half_size = new Vector(25, 25);
+        let position = e.getComponent('CTransform').position;
+        let boomPos = new Vector(position.x, position.y - 50)
+        let previous_position = e.getComponent('CTransform').previous_position;
+        let velocity = new Vector(0,0)
+        boom.addComponent(components.CTransform(boomPos, previous_position, 1, velocity, 0));
+        boom.addComponent(components.CBoundingBox(size, half_size));
+        boom.addComponent(components.CAnimation('boom', 13, 0, .8));
+        boom.addComponent(components.CLifeSpan(2000))
+
+    }
+
 
     update(){
         // this function handles the update function, starting a game if it hasn't been already
@@ -559,6 +574,7 @@ class GameEngine {
             for (let enemy of this.entity_manager.getEntitiesByTag("enemy")) {
                 let overlap = physics.getOverLap(bottle, enemy);
                 if (overlap.x > 0 && overlap.y > 0) {
+                    this.spawnBoom(bottle);
                     bottle.destroy();
                     enemy.destroy();
                 }
@@ -602,6 +618,12 @@ class GameEngine {
                 let animation = entity.getComponent('CAnimation');
                 if (animation.numOfFrames < 2) { return; }
                 animation.currentFrame = (animation.currentFrame + animation.speed) % animation.numOfFrames;
+
+                if (entity.tag === "boom") {
+                    if (animation.currentFrame >= 12) {
+                        entity.destroy();
+                    }
+                }
             }
         })
     }
@@ -659,6 +681,11 @@ class GameEngine {
         // bullet lifespan
         for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
             setTimeout(() => bullet.destroy(), bullet.getComponent('CLifeSpan').lifespan)
+        }
+
+        // fire lifespan
+        for (let fire of this.entity_manager.getEntitiesByTag("fire")) {
+            setTimeout(() => fire.destroy(), fire.getComponent('CLifeSpan').lifespan)
         }
     }
 

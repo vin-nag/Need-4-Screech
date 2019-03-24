@@ -21,7 +21,6 @@ class EntityModels {
         player_entity.addComponent(components.CState("grounded"));
         player_entity.addComponent(components.CPowerup(false, false, false, false))
         player_entity.addComponent(components.CScreech(25))
-        player_entity.addComponent(components.CScore(0));
     };
 
     bar_timer(x=10, y=10) {
@@ -162,7 +161,7 @@ class EntityModels {
         checkpoint.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
     }
 
-    score(x=10, y=80) {
+    score(x=210, y=155) {
         const score = this.entity_manager.addEntity("score");
         score.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         score.addComponent(components.CAnimation('transparent', 1, 0, 0));
