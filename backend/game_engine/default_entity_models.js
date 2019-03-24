@@ -162,6 +162,14 @@ class EntityModels {
         checkpoint.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
     }
 
+    score(x=10, y=80) {
+        const score = this.entity_manager.addEntity("score");
+        score.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        score.addComponent(components.CAnimation('transparent', 1, 0, 0));
+        score.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+        score.addComponent(components.CScore(0));
+    }
+
 }
 
 module.exports = EntityModels;

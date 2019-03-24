@@ -60,6 +60,8 @@ class GameEngine {
         this.entity_manager.addModel.powerup_invincible(600, 590);
         this.entity_manager.addModel.powerup_speed(800, 590);
         this.entity_manager.addModel.checkpoints(1000, 520);
+        this.entity_manager.addModel.score();
+        
     }
 
     startGame() {
@@ -241,7 +243,7 @@ class GameEngine {
             console.log("E pressed")
             if (CInput.canScreech) {
                 this.spawnScreech();
-                this.player.getComponent('CScreech').screechCount -= 1;
+                player.getComponent('CScreech').screechCount -= 1;
                 CInput.canScreech = false
                 setTimeout(() => CInput.canScreech = true, 400)
             }
@@ -502,7 +504,7 @@ class GameEngine {
             if (overlap.x > 0 && overlap.y > 0){
                 if (powerup.getComponent('CAnimation').animName === 'SuperSpeed') {
                     //speed
-                    console.log("shield")
+                    console.log("speed")
                     player.getComponent('CPowerup').superSpeed = true;
                     powerup.destroy();
                     setTimeout(() => player.getComponent('CPowerup').superSpeed = false, 10000)
@@ -519,6 +521,19 @@ class GameEngine {
                     console.log("shield")
                     player.getComponent('CPowerup').shield = true;
                     powerup.destroy();
+                }
+            }
+        }
+
+        // screech / checkpoint collision 
+        for (let bottle of this.entity_manager.getEntitiesByTag("screech")) {
+            for (let checkpoint of this.entity_manager.getEntitiesByTag("checkpoint")) {
+                const score = this.entity_manager.getEntitiesByTag("score")[0];
+                let overlap = physics.getOverLap(bottle, checkpoint);
+                if (overlap.x > 0 && overlap.y > 0) {
+                    bottle.destroy();
+                    score.getComponent('CScore').score += 1;
+                    console.log("screech delivered");
                 }
             }
         }
