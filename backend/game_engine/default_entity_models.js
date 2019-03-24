@@ -60,9 +60,9 @@ class EntityModels {
 
     bullet_knife(x=0, y=0, scale) {
         const bullet_entity = this.entity_manager.addEntity("bullet");
-        let offsetX = scale === -1? x-102: x;
-        bullet_entity.addComponent(components.CTransform(new Vector(offsetX, y), new Vector(offsetX, y), scale, new Vector(scale*20, 0), 0));
-        bullet_entity.addComponent(components.CBoundingBox(new Vector(102, 22), new Vector(51, 11)));
+        let offsetX = scale === -1? x - 51: x;
+        bullet_entity.addComponent(components.CTransform(new Vector(offsetX, y), new Vector(offsetX, y), scale, new Vector(scale*15, 0), 0));
+        bullet_entity.addComponent(components.CBoundingBox(new Vector(51, 11), new Vector(25, 5)));
         bullet_entity.addComponent(components.CAnimation('knife', 1, 0, 0));
         bullet_entity.addComponent(components.CState('shooting'));
         bullet_entity.addComponent(components.CLifeSpan(1000));
@@ -70,30 +70,10 @@ class EntityModels {
 
     bullet_dropping(x=0, y=0, scale) {
         const bullet_entity = this.entity_manager.addEntity("bullet");
-        bullet_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), scale, new Vector(scale*1, 10), 0));
-        bullet_entity.addComponent(components.CGravity(config.enemy.flying.gravity));
-        bullet_entity.addComponent(components.CBoundingBox(new Vector(32, 67), new Vector(32, 67)));
+        bullet_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), scale, new Vector(scale*2.5, 15), 0));
+        bullet_entity.addComponent(components.CGravity(config.game_engine.gravity));
+        bullet_entity.addComponent(components.CBoundingBox(new Vector(32, 67), new Vector(16, 34)));
         bullet_entity.addComponent(components.CAnimation('bullet_dropping', 1, 0, 0));
-        bullet_entity.addComponent(components.CState('shooting'));
-        bullet_entity.addComponent(components.CLifeSpan(1000));
-    };
-
-    bullet_bottle(x=0, y=0, scale) {
-        const bullet_entity = this.entity_manager.addEntity("bullet");
-        let offsetX = scale === -1? x-48: x;
-        bullet_entity.addComponent(components.CTransform(new Vector(offsetX, y), new Vector(offsetX, y), scale, new Vector(scale*15, 0), 0));
-        bullet_entity.addComponent(components.CBoundingBox(new Vector(48, 16), new Vector(24, 8)));
-        bullet_entity.addComponent(components.CAnimation('screech', 1, 0, 0));
-        bullet_entity.addComponent(components.CState('shooting'));
-        bullet_entity.addComponent(components.CLifeSpan(1000));
-    };
-
-    bullet_knife(x=0, y=0, scale) {
-        const bullet_entity = this.entity_manager.addEntity("bullet");
-        let offsetX = scale === -1? x-51: x;
-        bullet_entity.addComponent(components.CTransform(new Vector(offsetX, y), new Vector(offsetX, y), scale, new Vector(scale*15, 0), 0));
-        bullet_entity.addComponent(components.CBoundingBox(new Vector(51, 11), new Vector(25, 5)));
-        bullet_entity.addComponent(components.CAnimation('knife', 1, 0, 0));
         bullet_entity.addComponent(components.CState('shooting'));
         bullet_entity.addComponent(components.CLifeSpan(1000));
     };
@@ -148,13 +128,26 @@ class EntityModels {
 
     enemy_melee_snake(x=0, y=0) {
         const enemy_entity = this.entity_manager.addEntity("enemy");
-        enemy_entity.addComponent(components.CLifeSpan(config.player.lifeSpan));
+        enemy_entity.addComponent(components.CLifeSpan(config.enemy.melee.lifeSpan));
         enemy_entity.addComponent(components.CGravity(config.game_engine.gravity));
         enemy_entity.addComponent(components.CHealth(2, 2, false, false));
         enemy_entity.addComponent(components.CAnimation('snake_walk', 7, 0, 0.75));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         enemy_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
-        enemy_entity.addComponent(components.CEnemyAI("melee",  5, config.enemy.melee.roamDistance, 5000, config.enemy.melee.sight, false, false, new Vector(0, 0)));
+        enemy_entity.addComponent(components.CEnemyAI("melee",  5, config.enemy.melee.roamDistance, 5000, config.enemy.melee.sight, false, false, new Vector(0, 0), true, "snake_walk", 7, "snake_walk", 7));
+        enemy_entity.addComponent(components.CState("grounded"));
+    };
+
+
+    enemy_melee_moose(x=0, y=0) {
+        const enemy_entity = this.entity_manager.addEntity("enemy");
+        enemy_entity.addComponent(components.CLifeSpan(config.enemy.melee.lifeSpan));
+        enemy_entity.addComponent(components.CGravity(config.game_engine.gravity));
+        enemy_entity.addComponent(components.CHealth(2, 2, false, false));
+        enemy_entity.addComponent(components.CAnimation('moose_run', 15, 0, 0.5));
+        enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y-10), 1, new Vector(0, 0), 0));
+        enemy_entity.addComponent(components.CBoundingBox(new Vector(124, 120), new Vector(62, 60)));
+        enemy_entity.addComponent(components.CEnemyAI("melee",  5, config.enemy.melee.roamDistance, 5000, config.enemy.melee.sight, false, false, new Vector(0, 0), true, "moose_run", 15, "moose_charge", 15));
         enemy_entity.addComponent(components.CState("grounded"));
     };
 
@@ -172,12 +165,12 @@ class EntityModels {
 
     enemy_ranged_chef(x=0, y=0) {
         const enemy_entity = this.entity_manager.addEntity("enemy");
-        enemy_entity.addComponent(components.CLifeSpan(config.enemy.ranged.lifeSpan));
+        enemy_entity.addComponent(components.CLifeSpan(config.player.lifeSpan));
         enemy_entity.addComponent(components.CGravity(config.game_engine.gravity));
         enemy_entity.addComponent(components.CHealth(2, 2, false, false));
         enemy_entity.addComponent(components.CAnimation('chef_walk', 16, 0, 0.75));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-            enemy_entity.addComponent(components.CBoundingBox(new Vector(100, 131), new Vector(50, 65.5)));
+        enemy_entity.addComponent(components.CBoundingBox(new Vector(100, 131), new Vector(50, 65)));
         enemy_entity.addComponent(components.CEnemyAI("ranged",  10, config.enemy.ranged.roamDistance, 5000, config.enemy.ranged.sight, false, false, new Vector(0, 0), true, "chef_walk", 16, "chef_attack", 12));
         enemy_entity.addComponent(components.CState("grounded"));
     };
@@ -219,7 +212,7 @@ class EntityModels {
         const tile_brick_entity = this.entity_manager.addEntity("tile");
         tile_brick_entity.addComponent(components.CAnimation('grey_tile_center', 1, 0, 0));
         tile_brick_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        tile_brick_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+        tile_brick_entity.addComponent(components.CBoundingBox(new Vector(60, 60), new Vector(30, 30)));
     };
 
     background_img_george() {

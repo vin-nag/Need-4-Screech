@@ -740,6 +740,7 @@ class GameEngine {
             let enemyBounding = enemy.getComponent('CBoundingBox');
             let enemyOffSet = enemyTransform.position.add(enemyBounding.halfSize);
             let enemyAI = enemy.getComponent('CEnemyAI');
+            let oldState = enemyAI.state;
             let distance_to_player = (playerOffSet.subtract(enemyOffSet)).abs();
 
             // ignore if player is farther than range of enemy
@@ -774,6 +775,9 @@ class GameEngine {
             enemyAI.playerPosition = playerOffSet;
             enemyAI.player_detected = playerDetected;
             enemyAI.show = playerDetected;
+            if (playerDetected !== oldState){
+                this.updateEnemyAnimation(enemy);
+            }//
         }
     }
 
@@ -784,27 +788,38 @@ class GameEngine {
         for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
             const enemyTransform = enemy.getComponent('CTransform');
             const enemyAI = enemy.getComponent("CEnemyAI");
+            let state = enemyAI.player_detected;
 
-            // if aggro mode
+            // if not aggro mode
             if (enemyAI.player_detected === false){
                 let direction = enemyAI.currentRoam < 0 && enemyAI.currentRoam > -1* enemyAI.roamDistance? -1: 1;
-                enemyAI.currentRoam -= config.enemy.melee.speed;
+                enemyAI.currentRoam--;
                 // reset roam
                 if (enemyAI.currentRoam < -1*enemyAI.roamDistance){
                     enemyAI.currentRoam = enemyAI.roamDistance;
+                    enemyTransform.velocity.x = 0;
                 }
-                enemyTransform.velocity.x += direction * config.enemy.melee.speed * 0.5;
+                enemyTransform.velocity.x += direction * config.enemy.melee.speed;
+
+                // truncate speed if above max
+                if (enemyTransform.velocity.length() > config.enemy.melee.maxSpeed) {
+                    enemyTransform.velocity.normalize();
+                    enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.melee.maxSpeed * 0.25 );
+                }
             }
             // if detected player
             else {
                 const playerTransform = player.getComponent('CTransform');
                 let direction = playerTransform.position.subtract(enemyTransform.position);
+                let bounds = enemy.getComponent("CBoundingBox");
+                let offsetX = enemyTransform.scale === 1? bounds.size.x + enemyTransform.position.x + 5: enemyTransform.position.x - 5;
+                let offsetY = enemyTransform.position.y + bounds.halfSize.y;
 
                 switch (enemyAI.enemy_type) {
 
                     case "melee":
                         direction.normalize();
-                        direction = direction.multiply(config.enemy.melee.maxSpeed * 0.75);
+                        direction = direction.multiply(config.enemy.melee.maxSpeed * 0.25);
                         direction.y = enemyTransform.velocity.y;
                         direction.x += enemyTransform.velocity.x / 2;
                         enemyTransform.velocity = direction;
@@ -812,26 +827,26 @@ class GameEngine {
                         // truncate speed if above max
                         if (enemyTransform.velocity.length() > config.enemy.melee.maxSpeed) {
                             enemyTransform.velocity.normalize();
-                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.melee.maxSpeed);
+                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.melee.maxSpeed * 0.25);
                         }
                         break;
 
                     case "ranged":
                         direction.normalize();
-                        direction = direction.multiply(config.enemy.melee.maxSpeed);
+                        direction = direction.multiply(config.enemy.ranged.maxSpeed * 0.25);
                         direction.y = enemyTransform.velocity.y;
-                        direction.x += enemyTransform.velocity.x / 2;
+                        direction.x += enemyTransform.velocity.x;
                         enemyTransform.velocity = direction;
 
                         if (enemyAI.canAttack){
-                            this.entity_manager.addModel.bullet_knife(enemyTransform.position.x + (enemyTransform.scale * 125), enemyTransform.position.y + 15, enemyTransform.scale);
+                            this.entity_manager.addModel.bullet_knife(offsetX, offsetY, enemyTransform.scale);
                             enemyAI.canAttack = false;
                             setTimeout( () => {enemyAI.canAttack = true}, 1000)
                         }
                         // truncate speed if above max
                         if (enemyTransform.velocity.length() > config.enemy.ranged.maxSpeed) {
                             enemyTransform.velocity.normalize();
-                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.ranged.maxSpeed * 0.2);
+                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.ranged.maxSpeed * 0.25);
                         }
                         break;
 
@@ -841,9 +856,10 @@ class GameEngine {
                         direction.y = enemyTransform.velocity.y;
                         direction.x += enemyTransform.velocity.x / 2;
                         enemyTransform.velocity = direction;
+                        offsetY = enemyTransform.position.y + bounds.size.y + 5;
 
                         if (enemyAI.canAttack){
-                            this.entity_manager.addModel.bullet_dropping(enemyTransform.position.x + (enemyTransform.scale * 15), enemyTransform.position.y + 110, enemyTransform.scale);
+                            this.entity_manager.addModel.bullet_dropping(offsetX, offsetY, enemyTransform.scale);
                             enemyAI.canAttack = false;
                             setTimeout( () => {enemyAI.canAttack = true}, 1000)
                         }
@@ -851,7 +867,7 @@ class GameEngine {
                         // truncate speed if above max
                         if (enemyTransform.velocity.length() > config.enemy.flying.maxSpeed) {
                             enemyTransform.velocity.normalize();
-                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.flying.maxSpeed * 0.2);
+                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.flying.maxSpeed * 0.25);
                         }
                         break;
                 }
@@ -875,7 +891,6 @@ class GameEngine {
             }
         }
     }
-
 
     sLifespan() {
         // bullet lifespan
@@ -916,6 +931,26 @@ class GameEngine {
                 animation.speed = 0.25;
                 break;
         }
+    }
+
+    updateEnemyAnimation(enemy){
+        //console.log('updated enemy animation');
+
+        let animation = enemy.getComponent("CAnimation");
+        let state = enemy.getComponent("CEnemyAI");
+
+        if (state.player_detected === true){
+            animation.animName = state.attackAnim;
+            animation.numOfFrames = state.attackAnimFrames;
+        }
+        else {
+            animation.animName = state.idleAnim;
+            animation.numOfFrames = state.idleAnimFrames;
+
+        }
+        animation.currentFrame = 0;
+        animation.speed = 0.25;
+
     }
 
     // check if player completed level successfully
