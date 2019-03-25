@@ -32,13 +32,15 @@ class GameEngine {
 
     init(){
         this.entity_manager.addModel.background_img_george();
-        this.entity_manager.addModel.player(100,435);
+        this.entity_manager.addModel.player(390,435);
         this.entity_manager.addModel.enemy_snake(700, 415);
 
         this.entity_manager.addModel.decorator_lantern(800, 500);
         this.entity_manager.addModel.decorator_pole_1(50, 325);
         this.entity_manager.addModel.decorator_pole_2(625, 320);
         this.entity_manager.addModel.decorator_pole_3(1050, 320);
+        this.entity_manager.addModel.decorator_van(-60, 320);
+        this.entity_manager.addModel.level_end_taxi(2270, 500);
 
         this.entity_manager.addModel.bar_timer();
         this.entity_manager.addModel.bar_health();
@@ -48,11 +50,11 @@ class GameEngine {
         for (let x = 64; x < 2560; x+=64){
             this.entity_manager.addModel.tile_grey_center(x, 625);
         }
-        this.entity_manager.addModel.tile_grey_right(2560, 625);
-        this.entity_manager.addModel.tile_grey_left(192, 561);
-        this.entity_manager.addModel.tile_grey_right(256, 561);
-        this.entity_manager.addModel.tile_grey_left(320, 495);
-        this.entity_manager.addModel.tile_grey_right(384, 495);
+        // this.entity_manager.addModel.tile_grey_right(2560, 625);
+        // this.entity_manager.addModel.tile_grey_left(192, 561);
+        // this.entity_manager.addModel.tile_grey_right(256, 561);
+        // this.entity_manager.addModel.tile_grey_left(320, 495);
+        // this.entity_manager.addModel.tile_grey_right(384, 495);
 
         this.entity_manager.addModel.powerup_shield(400,590);
         this.entity_manager.addModel.powerup_invincible(600, 590);
@@ -533,6 +535,7 @@ class GameEngine {
                 let overlap = physics.getOverLap(bottle, checkpoint);
                 if (overlap.x > 0 && overlap.y > 0) {
                     bottle.destroy();
+                    checkpoint.destroy();
                     score.getComponent('CScore').score += 100;
                     console.log("screech delivered");
                 }
@@ -564,7 +567,15 @@ class GameEngine {
             }
         }
 
-
+        // player / taxi collision 
+        for (let taxi of this.entity_manager.getEntitiesByTag("taxi")) {
+            let overlap = physics.getOverLap(player, taxi);
+            if (overlap.x > 0 && overlap.y > 0) {
+                // level end, check if player delivered all screech
+                // if so, go to next level, if not, show level failed screen.
+                console.log("taxi collision");
+            }
+        }
 
         //update CState
         let state = player.getComponent("CState");
@@ -660,6 +671,16 @@ class GameEngine {
             setTimeout(() => fire.destroy(), fire.getComponent('CLifeSpan').lifespan)
         }
     }
+
+    // checks for game over or level complete
+    // sGameState() {
+
+    //     for (let time of this.entity_manager.getEntitiesByTag("bar")) {
+    //         let values = entity.getComponent("CBar");
+    //         let state = entity.getComponent("CState").state;
+    //     }
+
+    // }
 
     updatePlayerAnimation(){
         const player = this.entity_manager.getEntitiesByTag("player")[0];
