@@ -71,8 +71,12 @@ class LevelEditor {
     }
 
     handleMouseMove(event){
-        //Stub: If there is an entity selected, updates its position to that of
-        //the cursor
+        if (this.selectedEntity != null){
+            socket.emit("updatePosition", {
+                "entity": this.selectedEntity,
+                "event": event
+            })
+        }
     }
 
     handleMouseWheel(event){
