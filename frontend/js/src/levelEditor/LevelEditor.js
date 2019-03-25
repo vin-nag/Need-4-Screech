@@ -85,7 +85,7 @@ class LevelEditor {
     handleMouseMove(event){
         if (this.selectedEntity != null){
             socket.emit("updateEntityPosition", {
-                "entity": this.selectedEntity,
+                "entityID": this.selectedEntity.getId(),
                 "event": event
             })
         }

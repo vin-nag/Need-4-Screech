@@ -100,9 +100,13 @@ const onLoadLevel = (socket, data) => {
 const updateEntityPosition = (socket, data) => {
     let newXpos = data.event.x
     let newYpos = data.event.y
-    let entity = data.entity
-    
-    // find the fucntion that takes in the new x and y coordinates for changing the position.
+    let entityID = data.entityID
+    let entities = gameEngine.entity_manager.getEntities()
+    for (let item of entities){
+        if(item.getId() == entityID){
+            // update entity position
+        }
+    }
 }
 
 module.exports = {
