@@ -80,6 +80,19 @@ class EntityModels {
         lantern_entity.addComponent(components.CAnimation("lantern", 4, 0, 0.25));
     };
 
+    decorator_van(x=0, y=0) {
+        const van_entity = this.entity_manager.addEntity("decorator");
+        van_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        van_entity.addComponent(components.CAnimation("van", 1, 0, 0));
+    }
+
+    level_end_taxi(x=0, y=0) {
+        const taxi_entity = this.entity_manager.addEntity("taxi");
+        taxi_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        taxi_entity.addComponent(components.CAnimation("jiffy", 1, 0, 0));
+        taxi_entity.addComponent(components.CBoundingBox(new Vector(200, 120), new Vector(100, 60)));
+    }
+
     enemy_snake(x=0, y=0) {
         const enemy_entity = this.entity_manager.addEntity("enemy");
         enemy_entity.addComponent(components.CLifeSpan(config.player.lifeSpan));
