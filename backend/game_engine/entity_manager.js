@@ -2,7 +2,8 @@
  * Entity Manager class using standard ECS architecture.
  */
 const Entity = require("./entity");
-const Vector = require("./vector")
+const Vector = require("./vector");
+const EntityModel = require("./default_entity_models");
 
 class EntityManager {
     /*
@@ -13,6 +14,7 @@ class EntityManager {
         this.size = 0;
         this.entities = [];
         this.entitiesToAdd = [];
+        this.addModel = new EntityModel(this);
     }
 
     addEntity(tag=null){
@@ -101,7 +103,7 @@ class EntityManager {
         return this.size;
     }
 
-
 }
+
 // export the entity manager
 module.exports = EntityManager;

@@ -4,33 +4,36 @@ import assetManager from "../services/assetManager"
 const engine = (entities, canvasID) => {
     const canvas = document.getElementById(canvasID)
     const ctx = canvas.getContext("2d")
-    let img = assetManager.getAnimationImage("george_background") 
+
+    let bg_name = ""
+    for (let entity of entities){
+        if (entity.tag === "bg-img"){
+            bg_name = entity.componentMap["CAnimation"].animName;
+        }
+    }
+
+    let bg_img = assetManager.getAnimationImage(bg_name);
+
     ctx.setTransform(1,0,0,1,0,0); //reset the transform matrix as it is cumulative
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img,0,0, img.width, img.height, 0, 0, canvas.width, canvas.height);
-    let camX = 0
-    let camY = 0
+    ctx.drawImage(bg_img, 0, 0, bg_img.width, bg_img.height, 0, 0, canvas.width, canvas.height);
 
-    for(let entity of entities) {
+
+    let camX = 0;
+    let camY = 0;
+    for (let entity of entities) {
+        if (entity.tag === "bg-img"){continue}
         if (entity.tag === "player") {
 
             let playerPos = entity.componentMap['CTransform'].position;
             //Clamp the camera position to the world bounds while centering the camera around the player
             camX = canvasService.clamp(-playerPos.x + canvas.width/2, -5000, 5000 - canvas.width);
             camY = canvasService.clamp(-playerPos.y + canvas.height/2, 0, 720 - canvas.height);
-            console.log(camX);
+
             // set boundary for camera movement (need to add level end boundary also)
-            // -637 is around the midpoint of screen, need this so canvas only starts translating at this point
-            // instead of at (0,0)
-            if (-playerPos.x < -637) {
+            if (-playerPos.x < -canvas.width/2) {
                 ctx.translate( camX, camY ); 
             }
-
-            /*
-            * Notes: some objects e.g. timer move off screen as they are in
-            * fixed position, need to move these with viewport later
-            */
-            
         }
         
         drawEntity(ctx, entity, camX, camY)
@@ -45,11 +48,6 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
     const currentFrame = Math.floor(animation.currentFrame);
     const frameWidth = img.width / animation.numOfFrames;
     const frameHeight = img.height;
-
-    if (transform.bounding === true){
-    const bounding = entity.componentMap["CBoundingBox"]
-    canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
-    }
 
     if ("CHealth" in entity.componentMap && entity.componentMap["CHealth"].show === true){
         let currentHealthPercentage = entity.componentMap["CHealth"].health / entity.componentMap["CHealth"].maxHealth;
@@ -90,6 +88,23 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
 
     }
 
+    if ("CBoundingBox" in entity.componentMap && entity.componentMap["CBoundingBox"].show === true){
+        const bounding = entity.componentMap["CBoundingBox"];
+        canvasService.draw.rectangle(ctx, transform.position.x, transform.position.y, bounding.size.x, bounding.size.y, "#ffffff")
+    }
+
+    if ("CEnemyAI" in entity.componentMap && entity.componentMap["CEnemyAI"].show === true){
+        let enemyAI = entity.componentMap["CEnemyAI"];
+        let enemyBounding = entity.componentMap["CBoundingBox"];
+        let enemyOffset = {x: transform.position.x + enemyBounding.halfSize.x, y: transform.position.y + enemyBounding.halfSize.y};
+        let path = new Path2D();
+        //path.arc(transform.position.x, transform.position.y, enemyAI.detection_distance,transform.scale * Math.PI * 0.5,transform.scale * Math.PI * 1.5, false);
+        path.moveTo(enemyOffset.x, enemyOffset.y);
+        path.lineTo(enemyAI.playerPosition.x, enemyAI.playerPosition.y)
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = 'yellow';
+        ctx.stroke(path);
+    }
 }
 
 

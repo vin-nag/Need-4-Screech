@@ -3,7 +3,7 @@ const APP_WINDOWS = {
     REGISTER: 2,
     LEVEL_EDITOR: 3,
     MENU: 4,
-    GAME_PLAY: 5
+    GAME_PLAY: 5,
 }
 
 export default APP_WINDOWS
