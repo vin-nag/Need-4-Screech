@@ -108,5 +108,6 @@ module.exports = {
     onRemoveSession,
     onSaveLevel,
     onListLevels,
-    onLoadLevel
+    onLoadLevel,
+    updateEntityPosition
 }
