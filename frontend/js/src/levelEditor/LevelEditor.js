@@ -93,6 +93,11 @@ class LevelEditor {
     handleMouseWheel(event){
         //Stub: Map scroll wheel movement to level editor functions (likely changing
         //the animation of the selected entity)
+        let threshold = 0.8
+        if (event.deltaY >= threshold){
+            // set new animation
+        }
+
     }
 
     handleKeyPress(event){
