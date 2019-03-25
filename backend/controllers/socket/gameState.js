@@ -97,6 +97,10 @@ const onLoadLevel = (socket, data) => {
     })
 }
 
+const updateEntityPosition = (socket, data) => {
+
+}
+
 module.exports = {
     onRequestGameStateUpdate,
     onRemoveSession,

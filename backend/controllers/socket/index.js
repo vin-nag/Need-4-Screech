@@ -35,6 +35,7 @@ const connectControllers = (socket) => {
     socket.on("listLevels", data => gameStateController.onListLevels(socket, data))
     socket.on('loadLevel', (data)=> gameStateController.onLoadLevel(socket, data))
     socket.on("getAnimationsList", data => assetsController.onGetAnimationsList(socket, data))
+    socket.on("updateEntityPosition", data => gameStateController.updateEntityPosition(socket, data))
 }
 
 module.exports = {
