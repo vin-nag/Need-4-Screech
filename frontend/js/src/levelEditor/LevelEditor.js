@@ -68,6 +68,22 @@ class LevelEditor {
         //Stub: Figures out whether an entity as already selected or not.
         //If yes, deselects the entity. If not, checks if an entity is located
         //at the click pos, and if so sets it as selected
+        if(this.selectedEntity != null){
+            this.selectedEntity = null
+        }
+        else{
+            let xClick = event.x
+            let yClick = event.y
+            for (let entity of this.entities){
+                let xRange = entity.componentMap.position.x // add image width
+                let yRange = entity.componentMap.position.y // add image height
+                let inXrange = xClick >= entity.componentMap.position.x && xClick <= xRange
+                let inYrange = yClick >= entity.componentMap.position.y && yClick <= yRange
+                if (inXrange && inYrange){
+                    this.selectedEntity = entity
+                }
+            }
+        }
     }
 
     handleMouseMove(event){
