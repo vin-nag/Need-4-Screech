@@ -104,7 +104,8 @@ const updateEntityPosition = (socket, data) => {
     let entities = gameEngine.entity_manager.getEntities()
     for (let item of entities){
         if(item.getId() == entityID){
-            // update entity position
+            item.componentMap["CTransform"].position.x = newXpos
+            item.componentMap["CTransform"].position.y = newYpos
         }
     }
 }
