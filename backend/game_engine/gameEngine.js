@@ -21,6 +21,7 @@ class GameEngine {
         this.lastInput[config.controls.right] = false;
         this.lastInput[config.controls.shoot] = false;
         this.lastInput[config.controls.new]= false;
+        this.lastInput[config.controls.mouseclick] = false;
 
     }
 
@@ -282,15 +283,18 @@ class GameEngine {
         }
 
         //Level Editor Input
+
         if (this.lastInput[config.controls.new] === true){
+            //console.log("Input N TILE IS SPAWNED!!!!!!");
+
             let tile = this.entity_manager.addEntity("tile");
 
             // animation
             tile.addComponent(components.CAnimation('GreyTile',1,0,0))
 
             // transform
-            let position = new Vector(100, 100);
-            let previous_position = new Vector(x, y);
+            let position = new Vector(250,125);
+            let previous_position = new Vector(250, 125);
             let velocity = new Vector(0, 0);
             tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
 
@@ -298,10 +302,16 @@ class GameEngine {
             let size = new Vector(64, 64);
             let half_size = new Vector(32, 32);
             tile.addComponent(components.CBoundingBox(size, half_size));
-
         }
 
 
+        //Not working currently
+        if (this.lastInput[config.controls.mouseclick] === true){
+            console.log("Mouse Clicked")
+
+
+
+        }
 
     }
 

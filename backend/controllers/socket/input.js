@@ -21,9 +21,9 @@ const onNewSession = (socket, data) => {
     })
 };
 
-const onMouseDown = (socket, data)=>{
+const onClick = (socket, data)=>{
     let session = gameSessionService.getSession(data.sessionID);
-    session.lastInput.event = 'onMouseDown';
+    session.lastInput.event = 'onClick';
     session.lastInput[data.keyCode] = true;
 };
 
@@ -35,7 +35,7 @@ const onScroll = (socket, data) => {
 module.exports = {
     onKeyDown,
     onKeyUp,
-    onMouseDown,
+    onClick,
     onScroll,
     onNewSession
 }
