@@ -60,9 +60,6 @@ class LevelEditor {
     }
 
     handleClick(event){
-        //Stub: Figures out whether an entity as already selected or not.
-        //If yes, deselects the entity. If not, checks if an entity is located
-        //at the click pos, and if so sets it as selected
         if(this.selectedEntity != null){
             this.selectedEntity = null
         }
@@ -71,8 +68,8 @@ class LevelEditor {
             let yClick = event.y
             for (let entity of this.entities){
                 let boundingBox = entity.componentMap["CBoundingBox"]
-                let xRange = entity.componentMap.size.position.x + boundingBox.size.x
-                let yRange = entity.componentMap.size.position.y + boundingBox.size.y
+                let xRange = entity.componentMap["CTransform"].position.x + boundingBox.size.x
+                let yRange = entity.componentMap["CTransform"].position.y + boundingBox.size.y
                 let inXrange = xClick >= entity.componentMap.size.position.x && xClick <= xRange
                 let inYrange = yClick >= entity.componentMap.size.position.y && yClick <= yRange
                 if (inXrange && inYrange){
@@ -94,10 +91,6 @@ class LevelEditor {
     handleMouseWheel(event){
         //Stub: Map scroll wheel movement to level editor functions (likely changing
         //the animation of the selected entity)
-        let threshold = 0.8
-        if (event.deltaY >= threshold){
-            // set new animation
-        }
     }
 
     handleKeyPress(event){
