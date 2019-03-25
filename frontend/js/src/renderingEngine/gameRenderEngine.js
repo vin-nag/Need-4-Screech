@@ -79,7 +79,22 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
             }
         }
 
-        if (entity.tag === "bar"){
+        if (entity.tag === "deliveries_left") {
+            if ("CScore" in entity.componentMap) {
+                let score = entity.componentMap["CScore"];
+                canvasService.draw.text(ctx, "Deliveries left: " + score.score, Math.max(transform.position.x, transform.position.x - camX), transform.position.y, "30px", "#fff", "Permanent Marker")
+            }
+        }
+
+        if (entity.tag === "game_bar") {
+
+            if ("CAnimation" in entity.componentMap) {
+                ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, Math.max(transform.position.x, transform.position.x-camX), transform.position.y, frameWidth, frameHeight);
+            }
+            
+        }
+
+        if (entity.tag === "bar") {
 
             ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, Math.max(transform.position.x, transform.position.x-camX), transform.position.y, frameWidth, frameHeight);
 

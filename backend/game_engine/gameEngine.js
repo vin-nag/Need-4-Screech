@@ -44,6 +44,7 @@ class GameEngine {
         this.entity_manager.addModel.decorator_van(-60, 320);
         this.entity_manager.addModel.level_end_taxi(2270, 500);
 
+        //this.entity_manager.addModel.game_bar();
         this.entity_manager.addModel.bar_timer();
         this.entity_manager.addModel.bar_health();
         this.entity_manager.addModel.bar_screech();
@@ -62,8 +63,11 @@ class GameEngine {
         this.entity_manager.addModel.powerup_invincible(600, 590);
         this.entity_manager.addModel.powerup_speed(800, 590);
         this.entity_manager.addModel.checkpoints(1000, 520);
+
         this.entity_manager.addModel.score();
         this.entity_manager.addModel.screech_remaining(15);
+        this.entity_manager.addModel.deliveries_left(5);
+
         
     }
 
@@ -567,11 +571,13 @@ class GameEngine {
         for (let bottle of this.entity_manager.getEntitiesByTag("screech")) {
             for (let checkpoint of this.entity_manager.getEntitiesByTag("checkpoint")) {
                 const score = this.entity_manager.getEntitiesByTag("score")[0];
+                const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
                 let overlap = physics.getOverLap(bottle, checkpoint);
                 if (overlap.x > 0 && overlap.y > 0) {
                     bottle.destroy();
                     checkpoint.destroy();
                     score.getComponent('CScore').score += 100;
+                    deliveries_left.getComponent('CScore').score -= 1;
                     console.log("screech delivered");
                 }
             }

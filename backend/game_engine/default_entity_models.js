@@ -174,7 +174,23 @@ class EntityModels {
         checkpoint.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
     }
 
-    score(x=210, y=155) {
+    deliveries_left(deliveries_left, x=210, y=140) {
+        const deliveries = this.entity_manager.addEntity("deliveries_left");
+        deliveries.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        deliveries.addComponent(components.CAnimation('transparent', 1, 0, 0));
+        deliveries.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+        deliveries.addComponent(components.CScore(deliveries_left));
+    }
+
+    screech_remaining(screech, x=675, y=140) {
+        const screech_remaining = this.entity_manager.addEntity("screech_remaining");
+        screech_remaining.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        screech_remaining.addComponent(components.CAnimation('transparent', 1, 0, 0));
+        screech_remaining.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+        screech_remaining.addComponent(components.CScreech(screech));
+    }
+
+    score(x=1150, y=140) {
         const score = this.entity_manager.addEntity("score");
         score.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         score.addComponent(components.CAnimation('transparent', 1, 0, 0));
@@ -182,13 +198,13 @@ class EntityModels {
         score.addComponent(components.CScore(0));
     }
 
-    screech_remaining(screech, x=675, y=155) {
-        const screech_remaining = this.entity_manager.addEntity("screech_remaining");
-        screech_remaining.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        screech_remaining.addComponent(components.CAnimation('transparent', 1, 0, 0));
-        screech_remaining.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
-        screech_remaining.addComponent(components.CScreech(screech));
+    game_bar(x=0, y=0) {
+        const game_bar = this.entity_manager.addEntity("game_bar");
+        game_bar.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        game_bar.addComponent(components.CAnimation('orange_bar', 1, 0, 0));
     }
+
+
 
 }
 
