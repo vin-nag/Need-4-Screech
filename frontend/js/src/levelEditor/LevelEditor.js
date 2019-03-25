@@ -70,10 +70,11 @@ class LevelEditor {
             let xClick = event.x
             let yClick = event.y
             for (let entity of this.entities){
-                let xRange = entity.componentMap.position.x // add image width
-                let yRange = entity.componentMap.position.y // add image height
-                let inXrange = xClick >= entity.componentMap.position.x && xClick <= xRange
-                let inYrange = yClick >= entity.componentMap.position.y && yClick <= yRange
+                let boundingBox = entity.componentMap["CBoundingBox"]
+                let xRange = entity.componentMap.size.position.x + boundingBox.size.x
+                let yRange = entity.componentMap.size.position.y + boundingBox.size.y
+                let inXrange = xClick >= entity.componentMap.size.position.x && xClick <= xRange
+                let inYrange = yClick >= entity.componentMap.size.position.y && yClick <= yRange
                 if (inXrange && inYrange){
                     this.selectedEntity = entity
                 }
@@ -97,7 +98,6 @@ class LevelEditor {
         if (event.deltaY >= threshold){
             // set new animation
         }
-
     }
 
     handleKeyPress(event){

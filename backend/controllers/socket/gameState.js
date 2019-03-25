@@ -100,6 +100,8 @@ const onLoadLevel = (socket, data) => {
 const updateEntityPosition = (socket, data) => {
     let newXpos = data.event.x
     let newYpos = data.event.y
+    let entity = data.entity
+    
     // find the fucntion that takes in the new x and y coordinates for changing the position.
 }
 
