@@ -64,7 +64,7 @@ const CPowerup = (superSpeed, invincibility, shield, drunk) =>({name: "CPowerup"
 
 const CBar = (value, maxValue, color) => ({name: "CBar", value, maxValue, color});
 
-const CEnemyAI = (enemy_type, currentRoam, roamDistance, aggro_time=5000, detection_distance=1000, player_detected=false, show=false, playerPosition, canAttack=true) => ({name: "CEnemyAI", enemy_type, currentRoam, roamDistance, aggro_time, detection_distance, player_detected, show, playerPosition, canAttack});
+const CEnemyAI = (enemy_type, currentRoam, roamDistance, aggro_time=5000, detection_distance=1000, player_detected=false, show=false, playerPosition, canAttack=true, idleAnim, idleAnimFrames, attackAnim, attackAnimFrames) => ({name: "CEnemyAI", enemy_type, currentRoam, roamDistance, aggro_time, detection_distance, player_detected, show, playerPosition, canAttack, idleAnim, idleAnimFrames, attackAnim, attackAnimFrames});
 
 const CScreech = (screechCount) => ({name: "CScreech", screechCount});
 
