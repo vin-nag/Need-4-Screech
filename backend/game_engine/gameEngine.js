@@ -35,6 +35,8 @@ class GameEngine {
     init(){
         this.entity_manager.addModel.background_img_george();
         this.entity_manager.addModel.player(100,435);
+        //this.entity_manager.addModel.enemy_melee_moose(800, 450);
+        //this.entity_manager.addModel.enemy_flying_blackbird(700, 300);
         this.entity_manager.addModel.enemy_melee_moose(800, 450);
         //this.entity_manager.addModel.enemy_melee_snake(700, 550);
         this.entity_manager.addModel.enemy_ranged_chef(1000, 450);
@@ -74,6 +76,8 @@ class GameEngine {
         this.entity_manager.addModel.score();
         this.entity_manager.addModel.screech_remaining(15);
         this.entity_manager.addModel.deliveries_left(5);
+
+        this.entity_manager.addModel.enemy_ranged_chef(1000, 450);
 
     }
 
@@ -258,14 +262,14 @@ class GameEngine {
         if (CInput.shoot) {
             if (CInput.canShoot) {
                 let offsetX = playerTransform.scale === -1? playerTransform.position.x - 5: playerTransform.position.x + playerBounding.size.x + 5;
-                this.entity_manager.addModel.bullet_bottle(offsetX, playerTransform.position.y + 15, playerTransform.scale);
+                this.entity_manager.addModel.bullet_knife(offsetX, playerTransform.position.y + 15, playerTransform.scale);
                 CInput.canShoot = false;
                 setTimeout(() => CInput.canShoot = true, 400)
             }
         }
 
         if (CInput.bounding){
-            for (let entity of this.entity_manager.getEntities()){
+            for (let entity of this.entity_manager.getEntitiesByTag("enemy")){
                 if (entity.hasComponent('CBoundingBox')){
                     entity.getComponent('CBoundingBox').show = !entity.getComponent('CBoundingBox').show;
                 }
@@ -446,8 +450,8 @@ class GameEngine {
                 }
             }
 
-        let playerGravity = player.getComponent("CGravity");
-        playerTransform.velocity.y += playerGravity.gravity;
+        let pGravity = player.getComponent('CGravity');
+        playerTransform.velocity.y += pGravity.gravity;
         playerTransform.position.x += playerTransform.velocity.x;
 
         // truncate player speed if above max
@@ -471,10 +475,6 @@ class GameEngine {
             let eTransform = entity.getComponent('CTransform');
             eTransform.position.x += eTransform.velocity.x;
 
-            if (entity.hasComponent('CGravity')){
-                let eGravity = entity.getComponent('CGravity');
-                eTransform.velocity.y += eGravity.gravity;
-            }
             eTransform.previous_position = eTransform.position;
             eTransform.position = eTransform.position.add(eTransform.velocity);
         }
@@ -487,7 +487,9 @@ class GameEngine {
         let playerTransform = player.getComponent('CTransform');
 
         for (let tile of this.entity_manager.getEntitiesByTag("tile")){
+
             if (!tile.hasComponent("CBoundingBox")) {continue;}
+
             let tileTransform = tile.getComponent("CTransform");
 
             // tile-player collision
@@ -527,7 +529,7 @@ class GameEngine {
             }
 
             // tile-bullet collision
-           for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
+            for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
                 let overlap = physics.getOverLap(tile, bullet);
                 if (overlap.x > 0 && overlap.y > 0){
                     bullet.destroy();
@@ -814,7 +816,7 @@ class GameEngine {
                 let direction = playerTransform.position.subtract(enemyTransform.position);
                 let bounds = enemy.getComponent("CBoundingBox");
                 let offsetX = enemyTransform.scale === 1? bounds.size.x + enemyTransform.position.x + 5: enemyTransform.position.x - 5;
-                let offsetY = enemyTransform.position.y + bounds.halfSize.y;
+                let offsetY = enemyTransform.position.y + 15;
 
                 switch (enemyAI.enemy_type) {
 
@@ -860,9 +862,9 @@ class GameEngine {
                         offsetY = enemyTransform.position.y + bounds.size.y + 5;
 
                         if (enemyAI.canAttack){
-                            this.entity_manager.addModel.bullet_dropping(offsetX, offsetY, enemyTransform.scale);
+                            this.entity_manager.addModel.bullet_dropping(offsetX, offsetY, enemyTransform.scale, enemyTransform.velocity);
                             enemyAI.canAttack = false;
-                            setTimeout( () => {enemyAI.canAttack = true}, 1000)
+                            setTimeout( () => {enemyAI.canAttack = true}, 2000)
                         }
 
                         // truncate speed if above max
@@ -874,9 +876,9 @@ class GameEngine {
                 }
             }
 
-            if (enemy.hasComponent('CGravity')) {
-                let enemyGravity = enemy.getComponent('CGravity');
-                enemyTransform.velocity.y += enemyGravity.gravity;
+            if (enemy.hasComponent('CGravity')){
+                let eGravity = enemy.getComponent('CGravity');
+                enemyTransform.velocity.y += eGravity.gravity;
             }
 
             enemyTransform.position.x += enemyTransform.velocity.x;
