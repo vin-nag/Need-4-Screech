@@ -98,6 +98,9 @@ const onLoadLevel = (socket, data) => {
 }
 
 const updateEntityPosition = (socket, data) => {
+    let newXpos = data.event.x
+    let newYpos = data.event.y
+    
 
 }
 
