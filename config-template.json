@@ -56,22 +56,24 @@
     "enemy": {
         "melee": {
             "speed": 2,
-            "sight": 200,
+            "sight": 750,
             "maxSpeed": 4,
-            "roamDistance": 75
+            "roamDistance": 75,
+            "lifeSpan": 4
         },
         "ranged": {
             "speed": 1,
-            "sight": 500,
+            "sight": 750,
             "maxSpeed": 3,
-            "roamDistance": 50
+            "roamDistance": 75,
+            "lifeSpan": 2
         },
         "flying": {
-            "speed": 1,
-            "sight": 500,
-            "maxSpeed": 3,
+            "speed": 2.5,
+            "sight": 750,
+            "maxSpeed": 4,
             "roamDistance": 100,
-            "gravity": 3
+            "lifeSpan": 1
         }
     }
 }

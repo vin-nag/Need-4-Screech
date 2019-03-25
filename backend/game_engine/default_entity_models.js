@@ -50,7 +50,8 @@ class EntityModels {
 
     bullet_bottle(x=0, y=0, scale) {
         const bullet_entity = this.entity_manager.addEntity("bullet");
-        bullet_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), scale, new Vector(scale*20, 0), 0));
+        let offsetX = scale === -1? x-48: x;
+        bullet_entity.addComponent(components.CTransform(new Vector(offsetX, y), new Vector(offsetX, y), scale, new Vector(scale*20, 0), 0));
         bullet_entity.addComponent(components.CBoundingBox(new Vector(48, 16), new Vector(24, 8)));
         bullet_entity.addComponent(components.CAnimation('screech', 1, 0, 0));
         bullet_entity.addComponent(components.CState('shooting'));
@@ -59,7 +60,8 @@ class EntityModels {
 
     bullet_knife(x=0, y=0, scale) {
         const bullet_entity = this.entity_manager.addEntity("bullet");
-        bullet_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), scale, new Vector(scale*20, 0), 0));
+        let offsetX = scale === -1? x-102: x;
+        bullet_entity.addComponent(components.CTransform(new Vector(offsetX, y), new Vector(offsetX, y), scale, new Vector(scale*20, 0), 0));
         bullet_entity.addComponent(components.CBoundingBox(new Vector(102, 22), new Vector(51, 11)));
         bullet_entity.addComponent(components.CAnimation('knife', 1, 0, 0));
         bullet_entity.addComponent(components.CState('shooting'));

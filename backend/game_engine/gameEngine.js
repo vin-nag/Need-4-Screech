@@ -35,9 +35,9 @@ class GameEngine {
     init(){
         this.entity_manager.addModel.background_img_george();
         this.entity_manager.addModel.player(100,435);
-        this.entity_manager.addModel.enemy_melee_snake(700, 550);
+        //this.entity_manager.addModel.enemy_melee_snake(700, 550);
         this.entity_manager.addModel.enemy_ranged_chef(1500, 450);
-        this.entity_manager.addModel.enemy_flying_blackbird(700, 50);
+        //this.entity_manager.addModel.enemy_flying_blackbird(700, 50);
 
         this.entity_manager.addModel.decorator_lantern(800, 500);
         this.entity_manager.addModel.decorator_pole_1(50, 325);
@@ -239,6 +239,7 @@ class GameEngine {
         const player = this.entity_manager.getEntitiesByTag("player")[0];
         let CInput = player.getComponent('CInput');
         let playerTransform = player.getComponent('CTransform');
+        let playerBounding = player.getComponent("CBoundingBox");
 
         CInput.up = this.lastInput[config.controls.up];
         CInput.down = this.lastInput[config.controls.down];
@@ -255,7 +256,8 @@ class GameEngine {
 
         if (CInput.shoot) {
             if (CInput.canShoot) {
-                this.entity_manager.addModel.bullet_bottle(playerTransform.position.x + (playerTransform.scale * 100), playerTransform.position.y + 15, playerTransform.scale);
+                let offsetX = playerTransform.scale === -1? playerTransform.position.x - 5: playerTransform.position.x + playerBounding.size.x + 5;
+                this.entity_manager.addModel.bullet_bottle(offsetX, playerTransform.position.y + 15, playerTransform.scale);
                 CInput.canShoot = false;
                 setTimeout(() => CInput.canShoot = true, 400)
             }
