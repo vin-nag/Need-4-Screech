@@ -60,7 +60,7 @@ const CAnimation = (animName, numOfFrames, currentFrame, speed) => ({name: "CAni
  * @param {bool} drunk drunk powerup of entity
  * 
  */
-const CPowerup = (superSpeed, invincibility, shield, drunk) =>({name: "CPowerup", superSpeed, invincibility, shield, drunk});
+const CPowerup = (superSpeed, invincibility, shield, drunk, drunk_time) =>({name: "CPowerup", superSpeed, invincibility, shield, drunk, drunk_time});
 
 const CBar = (value, maxValue, color) => ({name: "CBar", value, maxValue, color});
 
@@ -70,4 +70,6 @@ const CScreech = (screechCount) => ({name: "CScreech", screechCount});
 
 const CScore = (score) => ({name: "CScore", score});
 
-module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup, CEnemyAI, CScreech, CScore};
+const CGameRunning = (running) => ({name: "CGameRunning", running})
+
+module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup, CEnemyAI, CScreech, CScore, CGameRunning};

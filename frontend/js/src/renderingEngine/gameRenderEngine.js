@@ -86,14 +86,6 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
             }
         }
 
-        if (entity.tag === "game_bar") {
-
-            if ("CAnimation" in entity.componentMap) {
-                ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, Math.max(transform.position.x, transform.position.x-camX), transform.position.y, frameWidth, frameHeight);
-            }
-            
-        }
-
         if (entity.tag === "bar") {
 
             ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, Math.max(transform.position.x, transform.position.x-camX), transform.position.y, frameWidth, frameHeight);
@@ -109,13 +101,11 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
 
                 canvasService.draw.text(ctx, "Current " + state.state + ": " + values.value, Math.max(transform.position.x + offsetX, transform.position.x + offsetX - camX), transform.position.y + offsetY, "18px", "#fff", "Permanent Marker")
             }
-
         }
 
         else {
         ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
         }
-
     }
 
     if ("CBoundingBox" in entity.componentMap && entity.componentMap["CBoundingBox"].show === true){

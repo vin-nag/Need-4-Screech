@@ -44,7 +44,7 @@ class GameEngine {
         this.entity_manager.addModel.decorator_van(-60, 320);
         this.entity_manager.addModel.level_end_taxi(2270, 500);
 
-        //this.entity_manager.addModel.game_bar();
+        //this.entity_manager.addModel.game_bar(0,0);
         this.entity_manager.addModel.bar_timer();
         this.entity_manager.addModel.bar_health();
         this.entity_manager.addModel.bar_screech();
@@ -67,7 +67,6 @@ class GameEngine {
         this.entity_manager.addModel.score();
         this.entity_manager.addModel.screech_remaining(15);
         this.entity_manager.addModel.deliveries_left(5);
-
         
     }
 
@@ -89,9 +88,9 @@ class GameEngine {
         let bulletPrevious = new Vector(playerTransform.position.x, playerTransform.position.y);
         let size = new Vector(48, 16);
         let half_size = new Vector(24, 8);
-        let velocity = new Vector(12, 0);
+        let velocity = new Vector(12 + playerTransform.velocity.x, 0);
         if (playerTransform.scale === -1) {
-            velocity = new Vector(-12, 0);
+            velocity = new Vector(-12 + playerTransform.velocity.x, 0);
         }
 
         bullet.addComponent(components.CTransform(bulletPosition, bulletPrevious, 1, velocity, 0));
@@ -113,9 +112,9 @@ class GameEngine {
         let bulletPrevious = new Vector(playerTransform.position.x, playerTransform.position.y);
         let size = new Vector(48, 16);
         let half_size = new Vector(24, 8);
-        let velocity = new Vector(12, 0);
+        let velocity = new Vector(12 + playerTransform.velocity.x, 0);
         if (playerTransform.scale === -1) {
-            velocity = new Vector(-12, 0);
+            velocity = new Vector(-12 + playerTransform.velocity.x, 0);
         }
 
         screech.addComponent(components.CTransform(bulletPosition, bulletPrevious, 1, velocity, 0));
@@ -180,12 +179,17 @@ class GameEngine {
         for (let entity of this.entity_manager.getEntitiesByTag("bar")){
             let values = entity.getComponent("CBar");
             let state = entity.getComponent("CState").state;
+            let player_powerup = player.getComponent("CPowerup");
+            let game_running = player.getComponent("CGameRunning");
 
             switch (state){
                 case "timer":
-                    values.value--;
+                    if (game_running.running) {
+                        values.value--;
+                    }
                     if (values.value === 0) {
-
+                        game_running.running = false;
+                        values.value = 0;
                     }
                     break;
 
@@ -194,7 +198,13 @@ class GameEngine {
                     break;
 
                 case "drunk":
-                    values.value = player.getComponent("CHealth").health;
+                    if (player_powerup.drunk) {
+                        values.value--;
+                    }
+                    if (values.value === 0) {
+                        player_powerup.drunk = false;
+                        values.value = 0
+                    }
                     break;
             }
         }
@@ -278,25 +288,42 @@ class GameEngine {
 
         if (CInput.screech){
             // throw screech
+            let game_running = player.getComponent("CGameRunning");
             console.log("O pressed")
-            if (CInput.canScreech) {
-                const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
-                screech_remaining.getComponent('CScreech').screechCount -= 1;
-                this.spawnScreech();
-                player.getComponent('CScreech').screechCount -= 1;
-                CInput.canScreech = false
-                setTimeout(() => CInput.canScreech = true, 400)
+            if (game_running.running) {
+                if (CInput.canScreech) {
+                    const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
+                    this.spawnScreech();
+                    screech_remaining.getComponent('CScreech').screechCount -= 1;
+                    CInput.canScreech = false
+                    if (screech_remaining.getComponent('CScreech').screechCount === 0) {
+                        game_running.running = false;
+                        screech_remaining.getComponent('CScreech').screechCount = 0;
+                    }
+                    setTimeout(() => CInput.canScreech = true, 400)
+                }
             }
+
         }
 
         if (CInput.drink){
-            // stub: drink screech
+            // drink screech
+            const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
             console.log("F pressed")
             if (CInput.canDrink) {
-                // drink screech
-                CInput.canDrink = false
-                setTimeout(() => CInput.canScreech = true, 15000)
+                let player_powerup = player.getComponent('CPowerup');
+                player_powerup.drunk = true
+                screech_remaining.getComponent('CScreech').screechCount -= 1;
+                CInput.canDrink = false;
+                for (let entity of this.entity_manager.getEntitiesByTag("bar")) {
+                    if (entity.getComponent('CState').state === "drunk") {
+                        entity.getComponent('CBar').value = entity.getComponent('CBar').maxValue;
+                    }
+                }
+                setTimeout(() => CInput.canDrink = true, 400)
             }
+
+
         } 
     }
 
@@ -311,10 +338,19 @@ class GameEngine {
         let playerPowerup = player.getComponent('CPowerup');
 
         if (playerInput.up) {
-            if (playerState.state === "grounded" || playerState.state === "running") {
-                newState = "jumping";
-                playerTransform.velocity.y = config.player.jump;
+            if (playerPowerup.drunk) {
+                if (playerState.state === "grounded" || playerState.state === "running") {
+                    newState = "jumping";
+                    playerTransform.velocity.y = config.player.drunk_jump;
+                }
             }
+            else {
+                if (playerState.state === "grounded" || playerState.state === "running") {
+                    newState = "jumping";
+                    playerTransform.velocity.y = config.player.jump;
+                }
+            }
+            
         }
 
         if (playerInput.left) {
@@ -328,7 +364,6 @@ class GameEngine {
                 playerTransform.scale = -1;
                 newState = "running"
             }
-
         }
 
         if (playerInput.right) {
@@ -386,8 +421,15 @@ class GameEngine {
 
                 // add gravity effects to every entity that has CGravity
                 if (entity.hasComponent('CGravity')) {
-                    let eGravity = entity.getComponent('CGravity');
-                    eTransform.velocity.y += eGravity.gravity;
+                    if (player.getComponent('CPowerup').drunk) {
+                        //let eGravity = entity.getComponent('CGravity');
+                        eTransform.velocity.y += config.game_engine.drunk_gravity;
+                    }
+                    else {
+                        let eGravity = entity.getComponent('CGravity');
+                        eTransform.velocity.y += eGravity.gravity;
+                    }
+
                 }
 
             if (entity.tag === 'enemy'){
@@ -575,7 +617,7 @@ class GameEngine {
                 let overlap = physics.getOverLap(bottle, checkpoint);
                 if (overlap.x > 0 && overlap.y > 0) {
                     bottle.destroy();
-                    checkpoint.destroy();
+                    //checkpoint.destroy();
                     score.getComponent('CScore').score += 100;
                     deliveries_left.getComponent('CScore').score -= 1;
                     console.log("screech delivered");
@@ -610,11 +652,15 @@ class GameEngine {
 
         // player / taxi collision 
         for (let taxi of this.entity_manager.getEntitiesByTag("taxi")) {
+            let deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
             let overlap = physics.getOverLap(player, taxi);
             if (overlap.x > 0 && overlap.y > 0) {
                 // level end, check if player delivered all screech
                 // if so, go to next level, if not, show level failed screen.
-                console.log("taxi collision");
+                if (deliveries_left.getComponent('CScore').score === 0) {
+                    console.log("level complete");
+                }
+                
             }
         }
 
@@ -712,16 +758,6 @@ class GameEngine {
             setTimeout(() => fire.destroy(), fire.getComponent('CLifeSpan').lifespan)
         }
     }
-
-    // checks for game over or level complete
-    // sGameState() {
-
-    //     for (let time of this.entity_manager.getEntitiesByTag("bar")) {
-    //         let values = entity.getComponent("CBar");
-    //         let state = entity.getComponent("CState").state;
-    //     }
-
-    // }
 
     updatePlayerAnimation(){
         const player = this.entity_manager.getEntitiesByTag("player")[0];
