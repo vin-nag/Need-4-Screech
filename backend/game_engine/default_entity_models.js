@@ -78,7 +78,6 @@ class EntityModels {
         bullet_entity.addComponent(components.CLifeSpan(1000));
     };
 
-
     decorator_pole_1(x=0, y=0) {
         const pole_1_entity = this.entity_manager.addEntity("decorator");
         pole_1_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
@@ -148,7 +147,7 @@ class EntityModels {
         enemy_entity.addComponent(components.CLifeSpan(config.player.lifeSpan));
         enemy_entity.addComponent(components.CGravity(config.game_engine.gravity));
         enemy_entity.addComponent(components.CHealth(2, 2, false, false));
-        enemy_entity.addComponent(components.CAnimation('chef_walk', 16, 0, 0.75));
+        enemy_entity.addComponent(components.CAnimation('chef_walk', 16, 0, 0.5));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         enemy_entity.addComponent(components.CBoundingBox(new Vector(98.4, 75), new Vector(49.2, 37.5)));
         enemy_entity.addComponent(components.CEnemyAI("ranged",  10, config.enemy.ranged.roamDistance, 5000, config.enemy.ranged.sight, false, false, new Vector(0, 0), true, "chef_walk", 16, "chef_attack", 12));
@@ -165,7 +164,6 @@ class EntityModels {
         enemy_entity.addComponent(components.CEnemyAI("flying",  0, config.enemy.flying.roamDistance, 5000, config.enemy.flying.sight, false, false, new Vector(0, 0), true, "black_bird_fly", 8, "black_bird_fly", 8));
         enemy_entity.addComponent(components.CState("grounded"));
     };
-
 
     tile_brick(x=0, y=0) {
         const tile_brick_entity = this.entity_manager.addEntity("tile");

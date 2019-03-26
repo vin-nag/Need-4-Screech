@@ -743,7 +743,7 @@ class GameEngine {
             let enemyBounding = enemy.getComponent('CBoundingBox');
             let enemyOffSet = enemyTransform.position.add(enemyBounding.halfSize);
             let enemyAI = enemy.getComponent('CEnemyAI');
-            let oldState = enemyAI.state;
+            let oldState = enemyAI.player_detected;
             let distance_to_player = (playerOffSet.subtract(enemyOffSet)).abs();
 
             // ignore if player is farther than range of enemy
@@ -770,14 +770,11 @@ class GameEngine {
                     }
                 }
 
-                if (playerDetected){
-                    setTimeout(() => enemyAI.player_detected = false, enemyAI.aggro_time);
-                    break;
-                }
             }
             enemyAI.playerPosition = playerOffSet;
             enemyAI.player_detected = playerDetected;
             enemyAI.show = playerDetected;
+
             if (playerDetected !== oldState){
                 this.updateEnemyAnimation(enemy);
             }//
@@ -791,7 +788,6 @@ class GameEngine {
         for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
             const enemyTransform = enemy.getComponent('CTransform');
             const enemyAI = enemy.getComponent("CEnemyAI");
-            let state = enemyAI.player_detected;
 
             // if not aggro mode
             if (enemyAI.player_detected === false){
@@ -836,7 +832,7 @@ class GameEngine {
 
                     case "ranged":
                         direction.normalize();
-                        direction = direction.multiply(config.enemy.ranged.maxSpeed * 0.25);
+                        direction = direction.multiply(config.enemy.ranged.maxSpeed * 0.05);
                         direction.y = enemyTransform.velocity.y;
                         direction.x += enemyTransform.velocity.x;
                         enemyTransform.velocity = direction;
@@ -849,7 +845,7 @@ class GameEngine {
                         // truncate speed if above max
                         if (enemyTransform.velocity.length() > config.enemy.ranged.maxSpeed) {
                             enemyTransform.velocity.normalize();
-                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.ranged.maxSpeed * 0.25);
+                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.ranged.maxSpeed * 0.05);
                         }
                         break;
 
@@ -949,10 +945,8 @@ class GameEngine {
         else {
             animation.animName = state.idleAnim;
             animation.numOfFrames = state.idleAnimFrames;
-
         }
         animation.currentFrame = 0;
-        animation.speed = 0.25;
 
     }
 
