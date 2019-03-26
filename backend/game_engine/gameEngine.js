@@ -168,6 +168,7 @@ class GameEngine {
             this.sLifespan();
             this.sBars();
             this.sEnemyRayCasting();
+            this.sGameState();
             this.entity_manager.update();
         }
     }
@@ -192,7 +193,9 @@ class GameEngine {
                     break;
 
                 case "health":
-                    values.value = player.getComponent("CHealth").health;
+                    if (game_running.running) {
+                        values.value = player.getComponent("CHealth").health;
+                    }
                     break;
 
                 case "drunk":
@@ -287,8 +290,6 @@ class GameEngine {
                 }
                 setTimeout(() => CInput.canDrink = true, 500)
             }
-
-
         } 
     }
 
@@ -301,126 +302,129 @@ class GameEngine {
         let playerState = player.getComponent('CState');
         let newState = playerState.state;
         let playerPowerup = player.getComponent('CPowerup');
+        let game_running = player.getComponent('CGameRunning');
 
-        if (playerInput.up) {
-            if (playerPowerup.drunk) {
-                if (playerState.state === "grounded" || playerState.state === "running") {
-                    newState = "jumping";
-                    playerTransform.velocity.y = config.player.drunk_jump;
+        if (game_running.running) {
+
+            if (playerInput.up) {
+                if (playerPowerup.drunk) {
+                    if (playerState.state === "grounded" || playerState.state === "running") {
+                        newState = "jumping";
+                        playerTransform.velocity.y = config.player.drunk_jump;
+                    }
+                }
+                else {
+                    if (playerState.state === "grounded" || playerState.state === "running") {
+                        newState = "jumping";
+                        playerTransform.velocity.y = config.player.jump;
+                    }
+                }
+                
+            }
+
+            if (playerInput.left) {
+                if (playerPowerup.superSpeed) {
+                    playerTransform.velocity.x = -config.player.speed - 10;
+                    playerTransform.scale = -1;
+                    newState = "running"
+                }
+                else {
+                    playerTransform.velocity.x = -config.player.speed;
+                    playerTransform.scale = -1;
+                    newState = "running"
                 }
             }
-            else {
-                if (playerState.state === "grounded" || playerState.state === "running") {
-                    newState = "jumping";
-                    playerTransform.velocity.y = config.player.jump;
+
+            if (playerInput.right) {
+                if (playerPowerup.superSpeed) {
+                    playerTransform.velocity.x = config.player.speed + 10;
+                    playerTransform.scale = 1;
+                    newState = "running"
+                }
+                else {
+                    playerTransform.velocity.x = config.player.speed;
+                    playerTransform.scale = 1;
+                    newState = "running"
                 }
             }
-            
-        }
 
-        if (playerInput.left) {
-            if (playerPowerup.superSpeed) {
-                playerTransform.velocity.x = -config.player.speed - 10;
-                playerTransform.scale = -1;
-                newState = "running"
+            if (playerInput.down) {
+                playerTransform.velocity.y = -config.player.jump;
+                newState = "jumping";
             }
-            else {
-                playerTransform.velocity.x = -config.player.speed;
-                playerTransform.scale = -1;
-                newState = "running"
-            }
-        }
 
-        if (playerInput.right) {
-            if (playerPowerup.superSpeed) {
-                playerTransform.velocity.x = config.player.speed + 10;
-                playerTransform.scale = 1;
-                newState = "running"
-            }
-            else {
-                playerTransform.velocity.x = config.player.speed;
-                playerTransform.scale = 1;
-                newState = "running"
-            }
-        }
-
-        if (playerInput.down) {
-            playerTransform.velocity.y = -config.player.jump;
-            newState = "jumping";
-        }
-
-        if (playerInput.left && playerInput.right) {
-            playerTransform.velocity.x = 0;
-            playerTransform.scale = -1;
-            newState = "grounded";
-        }
-
-        // stop player from walking left off level
-        if (playerTransform.position.x < 0) {
-            playerTransform.position = playerTransform.previous_position;
-        }
-
-        // add inertia
-        if (!playerInput.left && !playerTransform.right) {
-
-            // if slow enough, stop to 0
-            if (Math.abs(playerTransform.velocity.x) < config.player.minSpeed) {
+            if (playerInput.left && playerInput.right) {
                 playerTransform.velocity.x = 0;
+                playerTransform.scale = -1;
                 newState = "grounded";
             }
 
-            if (playerTransform.velocity.x > 0) {
-                playerTransform.velocity.x *= config.player.inertia;
-                newState = "running"
-
-            } else if (playerTransform.velocity.x < 0) {
-                playerTransform.velocity.x *= config.player.inertia;
-                newState = "running";
-            }
-        }
-
-        // update all entities position based on velocity
-        for (let entity of this.entity_manager.getEntities()){
-            if (entity.tag === "bg-img"){continue}
-            let eTransform = entity.getComponent('CTransform');
-
-                // add gravity effects to every entity that has CGravity
-                if (entity.hasComponent('CGravity')) {
-                    if (player.getComponent('CPowerup').drunk) {
-                        //let eGravity = entity.getComponent('CGravity');
-                        eTransform.velocity.y += config.game_engine.drunk_gravity;
-                    }
-                    else {
-                        let eGravity = entity.getComponent('CGravity');
-                        eTransform.velocity.y += eGravity.gravity;
-                    }
-
-                }
-
-            if (entity.tag === 'enemy'){
-                let direction = playerTransform.position.subtract(eTransform.position);
-
-                direction.normalize();
-                direction = direction.multiply(config.player.maxspeed * 0.1);
-                direction.y = eTransform.velocity.y;
-                direction.x += eTransform.velocity.x / 2;
-                eTransform.velocity = direction;
-
-                    if (eTransform.velocity.x < 0) {
-                        eTransform.scale = 1;
-                    }
-                    if (eTransform.velocity.x > 0) {
-                        eTransform.scale = -1;
-                    }
-                }
-
-            if (entity.tag === 'bullet') {
-                eTransform.position.x += eTransform.velocity.x
+            // stop player from walking left off level
+            if (playerTransform.position.x < 0) {
+                playerTransform.position = playerTransform.previous_position;
             }
 
-            eTransform.previous_position = eTransform.position;
-            eTransform.position = eTransform.position.add(eTransform.velocity);
-        }
+            // add inertia
+            if (!playerInput.left && !playerTransform.right) {
+
+                // if slow enough, stop to 0
+                if (Math.abs(playerTransform.velocity.x) < config.player.minSpeed) {
+                    playerTransform.velocity.x = 0;
+                    newState = "grounded";
+                }
+
+                if (playerTransform.velocity.x > 0) {
+                    playerTransform.velocity.x *= config.player.inertia;
+                    newState = "running"
+
+                } else if (playerTransform.velocity.x < 0) {
+                    playerTransform.velocity.x *= config.player.inertia;
+                    newState = "running";
+                }
+            }
+
+            // update all entities position based on velocity
+            for (let entity of this.entity_manager.getEntities()) {
+                if (entity.tag === "bg-img"){continue}
+                let eTransform = entity.getComponent('CTransform');
+
+                    // add gravity effects to every entity that has CGravity
+                    if (entity.hasComponent('CGravity')) {
+                        if (player.getComponent('CPowerup').drunk) {
+                            //let eGravity = entity.getComponent('CGravity');
+                            eTransform.velocity.y += config.game_engine.drunk_gravity;
+                        }
+                        else {
+                            let eGravity = entity.getComponent('CGravity');
+                            eTransform.velocity.y += eGravity.gravity;
+                        }
+
+                    }
+
+                if (entity.tag === 'enemy'){
+                    let direction = playerTransform.position.subtract(eTransform.position);
+
+                    direction.normalize();
+                    direction = direction.multiply(config.player.maxspeed * 0.1);
+                    direction.y = eTransform.velocity.y;
+                    direction.x += eTransform.velocity.x / 2;
+                    eTransform.velocity = direction;
+
+                        if (eTransform.velocity.x < 0) {
+                            eTransform.scale = 1;
+                        }
+                        if (eTransform.velocity.x > 0) {
+                            eTransform.scale = -1;
+                        }
+                    }
+
+                if (entity.tag === 'bullet') {
+                    eTransform.position.x += eTransform.velocity.x
+                }
+
+                eTransform.previous_position = eTransform.position;
+                eTransform.position = eTransform.position.add(eTransform.velocity);
+            }
 
             // truncate player speed if above max
             if (playerTransform.velocity.length() > config.player.maxspeed) {
@@ -428,9 +432,10 @@ class GameEngine {
                 playerTransform.velocity = playerTransform.velocity.multiply(config.player.maxspeed);
             }
 
-        if (playerState.state !== newState){
-            playerState.state = newState;
-            this.updatePlayerAnimation();
+            if (playerState.state !== newState){
+                playerState.state = newState;
+                this.updatePlayerAnimation();
+            }
         }
     }
 
@@ -490,6 +495,7 @@ class GameEngine {
             let overlap = physics.getOverLap(enemy, player);
             let playerHealth = player.getComponent('CHealth');
             let playerPowerup = player.getComponent('CPowerup');
+            let game_running = player.getComponent("CGameRunning");
 
             if (overlap.x > 0 && overlap.y > 0){
                 if (playerPowerup.invincibility) {
@@ -509,8 +515,9 @@ class GameEngine {
                         setTimeout(() => playerHealth.invincible = false, 800)
                     }
                     if (playerHealth.health === 0) {
-                        player.destroy();
-                        //console.log('player dead');
+                        console.log('player dead');
+                        game_running.running = false;
+                        
                     }
                 }
             }
@@ -617,12 +624,11 @@ class GameEngine {
 
         // player / taxi collision 
         for (let taxi of this.entity_manager.getEntitiesByTag("taxi")) {
-            let deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
             let overlap = physics.getOverLap(player, taxi);
             if (overlap.x > 0 && overlap.y > 0) {
                 // level end, check if player delivered all screech
                 // if so, go to next level, if not, show level failed screen.
-                this.sGameState();
+                this.sLevelEnd();
                 
             }
         }
@@ -752,7 +758,7 @@ class GameEngine {
     }
 
     // check if player completed level successfully
-    sGameState() {
+    sLevelEnd() {
         const player = this.entity_manager.getEntitiesByTag("player")[0];
         const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
         const score = this.entity_manager.getEntitiesByTag("score")[0];
@@ -766,17 +772,7 @@ class GameEngine {
             console.log("You missed one or more deliveries, game over!")
             // show level restart screen
         }
-        for (let entity of this.entity_manager.getEntitiesByTag("bar")) {
-            let state = entity.getComponent('CState').state;
-            let time = entity.getComponent('CBar').value;
-            if (state === "timer") {
-                if (time === 0) {
-                    console.log("You ran out of time, game over!");
-                    // show level restart screen
-                }
-                
-            }
-        }
+
         if (screech === 0 && deliveries > 0) {
             console.log("You ran out of screech, game over!");
             // show level restart screen
@@ -784,10 +780,19 @@ class GameEngine {
         if (deliveries === 0){
             console.log("level complete");
             // segue player back to overworld with next level unlocked
+            // store level score in player collection in database
         }
 
+    }
 
+    // check if game running is false, if so stop game
+    sGameState() {
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+        let game_running = player.getComponent("CGameRunning").running;
 
+        if (!game_running) {
+            console.log("level failed");
+        }
     }
 
     returnGameState(){
