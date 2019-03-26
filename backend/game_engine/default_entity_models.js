@@ -19,7 +19,7 @@ class EntityModels {
         player_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(0, 0), 1, new Vector(0, 0), 0));
         player_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
         player_entity.addComponent(components.CState("grounded"));
-        player_entity.addComponent(components.CPowerup(false, false, false, false, 0))
+        player_entity.addComponent(components.CPowerup(false, false, false, false))
         player_entity.addComponent(components.CScreech(25))
         player_entity.addComponent(components.CGameRunning(true));
     };
