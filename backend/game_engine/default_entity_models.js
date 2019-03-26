@@ -172,7 +172,7 @@ class EntityModels {
         const checkpoint = this.entity_manager.addEntity("checkpoint");
         checkpoint.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         checkpoint.addComponent(components.CAnimation('checkpoint_small', 1, 0, 0));
-        checkpoint.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+        checkpoint.addComponent(components.CBoundingBox(new Vector(130, 64), new Vector(70, 32)));
     }
 
     deliveries_left(deliveries_left, x=210, y=140) {
