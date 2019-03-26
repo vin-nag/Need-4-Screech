@@ -60,8 +60,11 @@ class GameEngine {
         this.entity_manager.addModel.powerup_shield(400,590);
         this.entity_manager.addModel.powerup_invincible(600, 590);
         this.entity_manager.addModel.powerup_speed(800, 590);
-        this.entity_manager.addModel.checkpoints(1000, 520);
 
+        for (let x = 1000; x < 2500; x+=300){
+            this.entity_manager.addModel.checkpoints(x, 475);
+        }
+        
         this.entity_manager.addModel.score();
         this.entity_manager.addModel.screech_remaining(15);
         this.entity_manager.addModel.deliveries_left(5);
@@ -149,6 +152,17 @@ class GameEngine {
         boom.addComponent(components.CAnimation('boom', 13, 0, .8));
         boom.addComponent(components.CLifeSpan(2000))
 
+    }
+
+    spawnCheckpointSuccess(checkpoint) {
+        let checkpointTransform = checkpoint.getComponent('CTransform');
+        let position = checkpointTransform.position;
+        let prevPos = checkpointTransform.prevPos;
+        let velocity = checkpointTransform.velocity;
+        const checkpoint_success = this.entity_manager.addEntity("checkpoint_success");
+        checkpoint_success.addComponent(components.CTransform(position, prevPos, 1, velocity, 0));
+        checkpoint_success.addComponent(components.CAnimation('checkpoint_success', 1, 0, 0));
+        checkpoint_success.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
     }
 
 
@@ -588,8 +602,9 @@ class GameEngine {
                 const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
                 let overlap = physics.getOverLap(bottle, checkpoint);
                 if (overlap.x > 0 && overlap.y > 0) {
+                    this.spawnCheckpointSuccess(checkpoint)
                     bottle.destroy();
-                    //checkpoint.destroy();
+                    checkpoint.destroy();
                     score.getComponent('CScore').score += 100;
                     deliveries_left.getComponent('CScore').score -= 1;
                     console.log("screech delivered");
@@ -765,7 +780,7 @@ class GameEngine {
         const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
 
         let deliveries = deliveries_left.getComponent('CScore').score;
-        let level_score = score.getComponent('CScore').score;
+        let level_score = score.getComponent('CScore').score; // will use this later to write score to db after each level
         let screech = screech_remaining.getComponent('CScreech').screechCount;
 
         if (deliveries > 0) {
@@ -792,6 +807,7 @@ class GameEngine {
 
         if (!game_running) {
             console.log("level failed");
+            // show level restart screen
         }
     }
 
