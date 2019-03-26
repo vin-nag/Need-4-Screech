@@ -19,8 +19,9 @@ class EntityModels {
         player_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(0, 0), 1, new Vector(0, 0), 0));
         player_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
         player_entity.addComponent(components.CState("grounded"));
-        player_entity.addComponent(components.CPowerup(false, false, false, false))
+        player_entity.addComponent(components.CPowerup(false, false, false, false, 0))
         player_entity.addComponent(components.CScreech(25))
+        player_entity.addComponent(components.CGameRunning(true));
     };
 
     bar_timer(x=10, y=10) {
@@ -42,7 +43,7 @@ class EntityModels {
     bar_screech(x=950, y=10) {
         const screech_entity = this.entity_manager.addEntity("bar");
         screech_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        screech_entity.addComponent(components.CBar(config.player.health, config.player.health, "#9D702E"));
+        screech_entity.addComponent(components.CBar(0, config.player.drunk, "#9D702E"));
         screech_entity.addComponent(components.CAnimation("drunk", 1, 0, 0));
         screech_entity.addComponent(components.CState("drunk"));
     };
@@ -201,10 +202,8 @@ class EntityModels {
     game_bar(x=0, y=0) {
         const game_bar = this.entity_manager.addEntity("game_bar");
         game_bar.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        game_bar.addComponent(components.CAnimation('orange_bar', 1, 0, 0));
+        game_bar.addComponent(components.CAnimation('ice_bar', 1, 0, 0));
     }
-
-
 
 }
 

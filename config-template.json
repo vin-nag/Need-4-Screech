@@ -23,10 +23,13 @@
         "health": 100,
         "maxspeed": 15,
         "inertia": 0.9,
-        "minSpeed": 2.75
+        "minSpeed": 2.75,
+        "drunk": 100,
+        "drunk_jump": -150
     },
     "game_engine": {
-        "gravity": 3
+        "gravity": 3,
+        "drunk_gravity": 1
     },
     "controls": {
         "up": "87",
@@ -45,6 +48,7 @@
         "y": 35
     },
     "time": {
-        "limit": 1500
+        "limit": 3500,
+        "drunk": 1500
     }
 }
