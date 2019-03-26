@@ -285,7 +285,7 @@ class GameEngine {
                         entity.getComponent('CBar').value = entity.getComponent('CBar').maxValue;
                     }
                 }
-                setTimeout(() => CInput.canDrink = true, 400)
+                setTimeout(() => CInput.canDrink = true, 500)
             }
 
 
@@ -622,9 +622,7 @@ class GameEngine {
             if (overlap.x > 0 && overlap.y > 0) {
                 // level end, check if player delivered all screech
                 // if so, go to next level, if not, show level failed screen.
-                if (deliveries_left.getComponent('CScore').score === 0) {
-                    console.log("level complete");
-                }
+                this.sGameState();
                 
             }
         }
@@ -751,6 +749,45 @@ class GameEngine {
                 animation.speed = 0.25;
                 break;
         }
+    }
+
+    // check if player completed level successfully
+    sGameState() {
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+        const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
+        const score = this.entity_manager.getEntitiesByTag("score")[0];
+        const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
+
+        let deliveries = deliveries_left.getComponent('CScore').score;
+        let level_score = score.getComponent('CScore').score;
+        let screech = screech_remaining.getComponent('CScreech').screechCount;
+
+        if (deliveries > 0) {
+            console.log("You missed one or more deliveries, game over!")
+            // show level restart screen
+        }
+        for (let entity of this.entity_manager.getEntitiesByTag("bar")) {
+            let state = entity.getComponent('CState').state;
+            let time = entity.getComponent('CBar').value;
+            if (state === "timer") {
+                if (time === 0) {
+                    console.log("You ran out of time, game over!");
+                    // show level restart screen
+                }
+                
+            }
+        }
+        if (screech === 0 && deliveries > 0) {
+            console.log("You ran out of screech, game over!");
+            // show level restart screen
+        }
+        if (deliveries === 0){
+            console.log("level complete");
+            // segue player back to overworld with next level unlocked
+        }
+
+
+
     }
 
     returnGameState(){

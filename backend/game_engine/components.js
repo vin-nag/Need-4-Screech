@@ -60,7 +60,7 @@ const CAnimation = (animName, numOfFrames, currentFrame, speed) => ({name: "CAni
  * @param {bool} drunk drunk powerup of entity
  * 
  */
-const CPowerup = (superSpeed, invincibility, shield, drunk, drunk_time) =>({name: "CPowerup", superSpeed, invincibility, shield, drunk, drunk_time});
+const CPowerup = (superSpeed, invincibility, shield, drunk) =>({name: "CPowerup", superSpeed, invincibility, shield, drunk});
 
 const CBar = (value, maxValue, color) => ({name: "CBar", value, maxValue, color});
 
