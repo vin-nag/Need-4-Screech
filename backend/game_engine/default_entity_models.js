@@ -133,7 +133,8 @@ class EntityModels {
         enemy_entity.addComponent(components.CAnimation('snake_walk', 7, 0, 0.75));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         enemy_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
-        enemy_entity.addComponent(components.CEnemyAI("melee",  5, config.enemy.melee.roamDistance, 5000, config.enemy.melee.sight, false, false, new Vector(0, 0), true, "snake_walk", 7, "snake_walk", 7));
+        enemy_entity.addComponent(components.CEnemyAI("melee",  5, config.enemy.melee.roamDistance, 5000, config.enemy.melee.sight, false, false, new Vector(0, 0), true));
+        enemy_entity.addComponent(components.CEnemyAnim("snake_walk", 7, "snake_walk", 7));
         enemy_entity.addComponent(components.CState("grounded"));
     };
 
@@ -147,8 +148,9 @@ class EntityModels {
         enemy_entity.addComponent(components.CHealth(2, 2, false, false));
         enemy_entity.addComponent(components.CAnimation('moose_run', 15, 0, 0.25));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        enemy_entity.addComponent(components.CBoundingBox(new Vector(67.5, 64), new Vector(34, 32)));
-        enemy_entity.addComponent(components.CEnemyAI("melee",  5, config.enemy.melee.roamDistance, 5000, config.enemy.melee.sight, false, false, new Vector(0, 0), true, "moose_charge", 15, "moose_run", 15));
+        enemy_entity.addComponent(components.CBoundingBox(new Vector(124, 124), new Vector(62, 62)));
+        enemy_entity.addComponent(components.CEnemyAI("melee",  5, config.enemy.melee.roamDistance, 5000, config.enemy.melee.sight, false, false, new Vector(0, 0), true));
+        enemy_entity.addComponent(components.CEnemyAnim("moose_charge", 15, "moose_run", 15));
         enemy_entity.addComponent(components.CState("grounded"));
     };
 
@@ -160,7 +162,8 @@ class EntityModels {
         enemy_entity.addComponent(components.CAnimation('chef_walk', 16, 0, 0.5));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         enemy_entity.addComponent(components.CBoundingBox(new Vector(98.4, 75), new Vector(49.2, 37.5)));
-        enemy_entity.addComponent(components.CEnemyAI("ranged",  10, config.enemy.ranged.roamDistance, 5000, config.enemy.ranged.sight, false, false, new Vector(0, 0), true, "chef_walk", 16, "chef_attack", 12));
+        enemy_entity.addComponent(components.CEnemyAI("ranged",  10, config.enemy.ranged.roamDistance, 5000, config.enemy.ranged.sight, false, false, new Vector(0, 0), true));
+        enemy_entity.addComponent(components.CEnemyAnim("chef_walk", 16, "chef_attack", 12));
         enemy_entity.addComponent(components.CState("grounded"));
     };
 
@@ -171,7 +174,8 @@ class EntityModels {
         enemy_entity.addComponent(components.CAnimation('black_bird_fly', 8, 0, 0.75));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         enemy_entity.addComponent(components.CBoundingBox(new Vector(110, 101), new Vector(55, 50)));
-        enemy_entity.addComponent(components.CEnemyAI("flying",  0, config.enemy.flying.roamDistance, 5000, config.enemy.flying.sight, false, false, new Vector(0, 0), true, "black_bird_fly", 8, "black_bird_fly", 8));
+        enemy_entity.addComponent(components.CEnemyAI("flying",  0, config.enemy.flying.roamDistance, 5000, config.enemy.flying.sight, false, false, new Vector(0, 0), true));
+        enemy_entity.addComponent(components.CEnemyAnim("black_bird_fly", 8, "black_bird_fly", 8));
         enemy_entity.addComponent(components.CState("grounded"));
     };
 
