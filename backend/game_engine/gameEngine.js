@@ -62,6 +62,7 @@ class GameEngine {
         this.entity_manager.addModel.powerup_shield(400,590);
         this.entity_manager.addModel.powerup_invincible(600, 590);
         this.entity_manager.addModel.powerup_speed(800, 590);
+        this.entity_manager.addModel.powerup_health(1200, 590);
 
         for (let x = 1000; x < 2500; x+=300){
             this.entity_manager.addModel.checkpoints(x, 475);
@@ -211,6 +212,9 @@ class GameEngine {
                 case "health":
                     if (game_running.running) {
                         values.value = player.getComponent("CHealth").health;
+                        if (values.value === 0) {
+                            game_running.running = false;
+                        }
                     }
                     break;
 
@@ -310,10 +314,13 @@ class GameEngine {
             if (game_running.running) {
                 if (CInput.canScreech) {
                     const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
+                    const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
+                    let screech_count = screech_remaining.getComponent('CScreech').screechCount;
+                    let deliveries = deliveries_left.getComponent('CScore').score;
                     this.spawnScreech();
                     screech_remaining.getComponent('CScreech').screechCount -= 1;
                     CInput.canScreech = false
-                    if (screech_remaining.getComponent('CScreech').screechCount === 0) {
+                    if (screech_count === 0 && deliveries > 0) {
                         game_running.running = false;
                         screech_remaining.getComponent('CScreech').screechCount = 0;
                     }
@@ -565,7 +572,6 @@ class GameEngine {
                     }
                     if (playerHealth.health === 0) {
                         console.log('player dead');
-                        game_running.running = false;
                         
                     }
                 }
@@ -625,6 +631,15 @@ class GameEngine {
                     // shield
                     console.log("shield")
                     player.getComponent('CPowerup').shield = true;
+                    powerup.destroy();
+                }
+
+                if (powerup.getComponent('CAnimation').animName === 'health_pack') {
+                    // health
+                    console.log("shield")
+                    if (player.getComponent('CHealth').health < 100) {
+                        player.getComponent('CHealth').health += 20;
+                    }
                     powerup.destroy();
                 }
             }
@@ -817,14 +832,17 @@ class GameEngine {
         let deliveries = deliveries_left.getComponent('CScore').score;
         let level_score = score.getComponent('CScore').score; // will use this later to write score to db after each level
         let screech = screech_remaining.getComponent('CScreech').screechCount;
+        let game_running = player.getComponent("CGameRunning");
 
         if (deliveries > 0) {
             console.log("You missed one or more deliveries, game over!")
+            game_running.running = false;
             // show level restart screen
         }
 
         if (screech === 0 && deliveries > 0) {
             console.log("You ran out of screech, game over!");
+            game_running.running = false;
             // show level restart screen
         }
         if (deliveries === 0){

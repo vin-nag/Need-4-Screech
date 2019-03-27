@@ -55,7 +55,7 @@ span {
 
 .fishnchips {
     position: fixed;
-    left: 37%;
+    left: 20%;
     top: 65%;
 
 }
@@ -63,8 +63,22 @@ span {
 .screech {
     position: fixed;
     text-align: right;
-    left: 86%;
-    bottom: 39%;
+    left: 80%;
+    bottom: 40%;
+}
+
+.purity {
+    position: fixed;
+    text-align: right;
+    left: 69%;
+    bottom: 6%;
+}
+
+.fries {
+    position: fixed;
+    text-align: center;
+    left: 45%;
+    bottom: 6%;
 }
 
 .quick-nav {
