@@ -12,6 +12,7 @@ class GameEngine {
         this.sessionId = sessionId;
         this.entity_manager = new EntityManager();
         this.gameStarted = false;
+        this.editorEntityType = "tile"
 
         // last input
         this.lastInput = {event: "initialized"} ;
@@ -223,6 +224,36 @@ class GameEngine {
             }
         }
 
+        //Level Editor Input
+
+        if (this.lastInput[config.controls.new] === true){
+
+            let tile = this.entity_manager.addEntity(this.editorEntityType);
+
+            // animation
+            tile.addComponent(components.CAnimation('GreyTile',1,0,0))
+
+            // transform
+            let position = new Vector(250,125);
+            let previous_position = new Vector(250, 125);
+            let velocity = new Vector(0, 0);
+            tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
+
+            //bounding box
+            let size = new Vector(64, 64);
+            let half_size = new Vector(32, 32);
+            tile.addComponent(components.CBoundingBox(size, half_size));
+        }
+
+
+        //Not working currently
+        if (this.lastInput[config.controls.mouseclick] === true){
+            console.log("Mouse Clicked")
+
+
+
+        }
+
         if (CInput.interact){
             // open door logic
             console.log("E pressed")
@@ -267,39 +298,6 @@ class GameEngine {
                 setTimeout(() => CInput.canDrink = true, config.time.drunk_duration)
             }
         }
-
-
-        //Level Editor Input
-
-        if (this.lastInput[config.controls.new] === true){
-            //console.log("Input N TILE IS SPAWNED!!!!!!");
-
-            let tile = this.entity_manager.addEntity("tile");
-
-            // animation
-            tile.addComponent(components.CAnimation('GreyTile',1,0,0))
-
-            // transform
-            let position = new Vector(250,125);
-            let previous_position = new Vector(250, 125);
-            let velocity = new Vector(0, 0);
-            tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
-
-            //bounding box
-            let size = new Vector(64, 64);
-            let half_size = new Vector(32, 32);
-            tile.addComponent(components.CBoundingBox(size, half_size));
-        }
-
-
-        //Not working currently
-        if (this.lastInput[config.controls.mouseclick] === true){
-            console.log("Mouse Clicked")
-
-
-
-        }
-
     }
 
     sMovement() {
@@ -950,6 +948,10 @@ class GameEngine {
 
     returnGameState(){
         return this.entity_manager.getEntities();
+    }
+
+    setEditorEntityType(entityType){
+        this.editorEntityType = entityType
     }
 
 }
