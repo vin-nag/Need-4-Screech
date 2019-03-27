@@ -35,12 +35,11 @@ export const listen = () => {
     document.addEventListener("wheel", (e) => {
         if(app.getActiveWindow() === APP_WINDOWS.LEVEL_EDITOR){ levelEditor.handleMouseWheel(e) }
     })
-    document.addEventListener("keypress", (e) => {
-        if(app.getActiveWindow() === APP_WINDOWS.LEVEL_EDITOR){ levelEditor.handleKeyPress(e) } 
-    })
+    
     document.addEventListener("keydown", (event) => {
         if(app.getActiveWindow() === APP_WINDOWS.MENU){ menuService.handleKeyPress(event) }
         else if (app.getActiveWindow() === APP_WINDOWS.GAME_PLAY){ gamePlay.handleKeyPress(event) }
+        else if(app.getActiveWindow() === APP_WINDOWS.LEVEL_EDITOR){ levelEditor.handleKeyPress(event) } 
 
         if(event.keyCode === 27 && ![APP_WINDOWS.LOGIN, APP_WINDOWS.REGISTER, APP_WINDOWS.MENU].includes(app.getActiveWindow())){ //Escape
             app.switchToWindow(APP_WINDOWS.MENU)
@@ -48,6 +47,7 @@ export const listen = () => {
     })
     document.addEventListener("keyup", (e) => {
         if (app.getActiveWindow() === APP_WINDOWS.GAME_PLAY){ gamePlay.handleKeyPress(e) }
+        else if(app.getActiveWindow() === APP_WINDOWS.LEVEL_EDITOR){ levelEditor.handleKeyPress(e) } 
     })
     
 }
