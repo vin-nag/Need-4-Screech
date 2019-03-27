@@ -10,7 +10,7 @@ class LevelEditor {
         this.updateStateInterval = null
 
         this.entityType = {
-            options: ["tile", "decoration", "player", "enemy", "powerup"],
+            options: ["tile", "decoration", "player", "enemy", "powerup", "checkpoint"],
             selectedIndex: 0
         }
     }
