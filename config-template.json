@@ -34,6 +34,7 @@
         "left": "65",
         "right": "68",
         "shoot": "32",
+        "new": "78",
         "bounding": "66",
         "ray": "86"
      },

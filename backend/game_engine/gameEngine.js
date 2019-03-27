@@ -20,6 +20,8 @@ class GameEngine {
         this.lastInput[config.controls.left] = false;
         this.lastInput[config.controls.right] = false;
         this.lastInput[config.controls.shoot] = false;
+        this.lastInput[config.controls.new]= false;
+        this.lastInput[config.controls.mouseclick] = false;
         this.lastInput[config.controls.bounding] = false;
         this.lastInput[config.controls.ray] = false;
     }
@@ -145,6 +147,8 @@ class GameEngine {
         CInput.bounding = this.lastInput[config.controls.bounding];
         CInput.ray = this.lastInput[config.controls.ray];
 
+
+
         if (CInput.shoot) {
             if (CInput.canShoot) {
                 this.spawnBullet();
@@ -166,6 +170,38 @@ class GameEngine {
                 entity.getComponent("CEnemyAI").show = !entity.getComponent("CEnemyAI").show;
             }
         }
+
+        //Level Editor Input
+
+        if (this.lastInput[config.controls.new] === true){
+            //console.log("Input N TILE IS SPAWNED!!!!!!");
+
+            let tile = this.entity_manager.addEntity("tile");
+
+            // animation
+            tile.addComponent(components.CAnimation('GreyTile',1,0,0))
+
+            // transform
+            let position = new Vector(250,125);
+            let previous_position = new Vector(250, 125);
+            let velocity = new Vector(0, 0);
+            tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
+
+            //bounding box
+            let size = new Vector(64, 64);
+            let half_size = new Vector(32, 32);
+            tile.addComponent(components.CBoundingBox(size, half_size));
+        }
+
+
+        //Not working currently
+        if (this.lastInput[config.controls.mouseclick] === true){
+            console.log("Mouse Clicked")
+
+
+
+        }
+
     }
 
     sMovement() {
