@@ -98,6 +98,7 @@ const onLoadLevel = (socket, data) => {
 }
 
 const updateEntityPosition = (socket, data) => {
+    //still needs to account for viewport
     let newXpos = data.event.x
     let newYpos = data.event.y
     const gameEngine = gameSessionService.getSession(data.sessionId)
