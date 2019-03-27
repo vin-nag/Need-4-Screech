@@ -12,6 +12,8 @@ class GameEngine {
         this.sessionId = sessionId;
         this.entity_manager = new EntityManager();
         this.gameStarted = false;
+        this.selectedEntity = null
+        this.mousePositiion = new Vector(0,0)
 
         // last input
         this.lastInput = {event: "initialized"} ;
@@ -544,6 +546,20 @@ class GameEngine {
                 animation.speed = 0.25;
                 break;
         }
+    }
+
+    sEditor(){
+
+
+    }
+
+    setSelectedEntity(entity){
+        this.selectedEntity = entity
+    }
+
+    setMousePosition(x, y){
+        this.mousePositiion.x = x
+        this.mousePositiion.y = y
     }
 
     returnGameState(){
