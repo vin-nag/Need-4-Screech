@@ -6,7 +6,6 @@ class LevelEditor {
         this.paused = false
         this.sessionId = null
         this.entities = []
-        this.selectedEntity = null
         this.updateStateInterval = null
     }
 
@@ -75,7 +74,9 @@ class LevelEditor {
                 if (inXrange && inYrange){
                     socket.emit("setSelectedEntity", {
                         "selectedEntity": entity,
-                        "sessionId": this.sessionId})
+                        "sessionId": this.sessionId
+                    })
+                    break
                 }
             }
         }
@@ -84,7 +85,6 @@ class LevelEditor {
     handleMouseMove(event){
         if (this.selectedEntity != null){
             socket.emit("updateEntityPosition", {
-                "selectedEntity": this.selectedEntity,
                 "event": event,
                 "sessionId": this.sessionId
             })
