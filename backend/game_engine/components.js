@@ -43,7 +43,7 @@ const CBoundingBox = (size, halfSize, show=false) => ({name: "CBoundingBox", siz
 @param {bool} shoot shoot of the entity
 @param {bool} canShoot can shoot of the entity
 */
-const CInput = (up, down, left, right, shoot, canShoot) => ({name: "CInput", up, down, left, right, shoot, canShoot});
+const CInput = (up, down, left, right, shoot, canShoot, canScreech, canDrink) => ({name: "CInput", up, down, left, right, shoot, canShoot, canScreech, canDrink});
 
 /**
  * @param {string} animName The name of the animation file (should be located in the assets/animations folder)
@@ -66,4 +66,10 @@ const CBar = (value, maxValue, color) => ({name: "CBar", value, maxValue, color}
 
 const CEnemyAI = (enemy_type, aggro_time=5000, detection_distance=1000, player_detected=false, show=false, playerPosition) => ({name: "CEnemyAI", enemy_type, aggro_time, detection_distance, player_detected, show, playerPosition});
 
-module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup, CEnemyAI};
+const CScreech = (screechCount) => ({name: "CScreech", screechCount});
+
+const CScore = (score) => ({name: "CScore", score});
+
+const CGameRunning = (running) => ({name: "CGameRunning", running})
+
+module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup, CEnemyAI, CScreech, CScore, CGameRunning};

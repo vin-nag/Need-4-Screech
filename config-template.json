@@ -23,10 +23,13 @@
         "health": 100,
         "maxspeed": 15,
         "inertia": 0.9,
-        "minSpeed": 2.75
+        "minSpeed": 2.75,
+        "drunk": 100,
+        "drunk_jump": -150
     },
     "game_engine": {
-        "gravity": 3
+        "gravity": 3,
+        "drunk_gravity": 1
     },
     "controls": {
         "up": "87",
@@ -36,13 +39,17 @@
         "shoot": "32",
         "new": "78",
         "bounding": "66",
-        "ray": "86"
+        "ray": "86",
+        "interact": "69",
+        "screech": "79",
+        "drink": "70"
      },
     "canvas": {
         "x": 1125,
         "y": 35
     },
     "time": {
-        "limit": 1500
+        "limit": 3500,
+        "drunk_duration": 1000
     }
 }
