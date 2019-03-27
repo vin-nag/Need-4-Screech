@@ -97,10 +97,16 @@ const onLoadLevel = (socket, data) => {
     })
 }
 
+const onUpdateEditorEntityType = (socket, data) => {
+    const gameEngine = gameSessionService.getSession(data.sessionId)
+    gameEngine.setEditorEntityType(data.entityType)
+}
+
 module.exports = {
     onRequestGameStateUpdate,
     onRemoveSession,
     onSaveLevel,
     onListLevels,
-    onLoadLevel
+    onLoadLevel,
+    onUpdateEditorEntityType
 }
