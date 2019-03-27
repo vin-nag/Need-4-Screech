@@ -12,6 +12,7 @@ class GameEngine {
         this.sessionId = sessionId;
         this.entity_manager = new EntityManager();
         this.gameStarted = false;
+        this.editorEntityType = "tile"
 
         // last input
         this.lastInput = {event: "initialized"} ;
@@ -274,9 +275,8 @@ class GameEngine {
         //Level Editor Input
 
         if (this.lastInput[config.controls.new] === true){
-            //console.log("Input N TILE IS SPAWNED!!!!!!");
 
-            let tile = this.entity_manager.addEntity("tile");
+            let tile = this.entity_manager.addEntity(this.editorEntityType);
 
             // animation
             tile.addComponent(components.CAnimation('GreyTile',1,0,0))
@@ -866,6 +866,10 @@ class GameEngine {
 
     returnGameState(){
         return this.entity_manager.getEntities();
+    }
+
+    setEditorEntityType(entityType){
+        this.editorEntityType = entityType
     }
 
 }
