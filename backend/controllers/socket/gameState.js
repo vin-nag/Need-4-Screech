@@ -1,7 +1,6 @@
 const gameSessionService = require("./../../services/GameSessionService");
 const { db, mongoUid } = require("../../services/db")
 const models = require("../../models/models")
-const gameEngine = require("../game_engine/gameEngine")
 
 const onRequestGameStateUpdate = (socket, data) => {
     if(!data.sessionId) { return }
@@ -101,19 +100,14 @@ const onLoadLevel = (socket, data) => {
 const updateEntityPosition = (socket, data) => {
     let newXpos = data.event.x
     let newYpos = data.event.y
-    let entityID = data.entityID
-    let entities = gameEngine.entity_manager.getEntities()
-    for (let item of entities){
-        if(item.getId() == entityID){
-            item.componentMap["CTransform"].position.x = newXpos
-            item.componentMap["CTransform"].position.y = newYpos
-        }
-    }
+    const gameEngine = gameSessionService.getSession(data.sessionId)
+    gameEngine.setMousePosition(newXpos, newYpos)
 }
 
 const updateSelectedEntity = (socket, data) => {
     let entity = data.selectedEntity
-    gameEngine.updateSelectedEntity(entity)
+    const gameEngine = gameSessionService.getSession(data.sessionId)
+    gameEngine.setSelectedEntity(entity)
 }
 
 module.exports = {

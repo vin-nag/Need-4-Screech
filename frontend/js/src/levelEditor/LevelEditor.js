@@ -73,7 +73,9 @@ class LevelEditor {
                 let inXrange = xClick >= entity.componentMap.size.position.x && xClick <= xRange
                 let inYrange = yClick >= entity.componentMap.size.position.y && yClick <= yRange
                 if (inXrange && inYrange){
-                    socket.emit("setSelectedEntity", {"selectedEntity": entity})
+                    socket.emit("setSelectedEntity", {
+                        "selectedEntity": entity,
+                        "sessionId": this.sessionId})
                 }
             }
         }
@@ -83,7 +85,8 @@ class LevelEditor {
         if (this.selectedEntity != null){
             socket.emit("updateEntityPosition", {
                 "selectedEntity": this.selectedEntity,
-                "event": event
+                "event": event,
+                "sessionId": this.sessionId
             })
         }
     }
