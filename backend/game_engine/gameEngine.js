@@ -550,7 +550,6 @@ class GameEngine {
 
     sEditor(){
 
-
     }
 
     setSelectedEntity(entity){

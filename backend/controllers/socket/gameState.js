@@ -1,6 +1,7 @@
 const gameSessionService = require("./../../services/GameSessionService");
 const { db, mongoUid } = require("../../services/db")
 const models = require("../../models/models")
+const gameEngine = require("../game_engine/gameEngine")
 
 const onRequestGameStateUpdate = (socket, data) => {
     if(!data.sessionId) { return }
@@ -110,11 +111,17 @@ const updateEntityPosition = (socket, data) => {
     }
 }
 
+const updateSelectedEntity = (socket, data) => {
+    let entity = data.selectedEntity
+    gameEngine.updateSelectedEntity(entity)
+}
+
 module.exports = {
     onRequestGameStateUpdate,
     onRemoveSession,
     onSaveLevel,
     onListLevels,
     onLoadLevel,
-    updateEntityPosition
+    updateEntityPosition,
+    updateSelectedEntity
 }
