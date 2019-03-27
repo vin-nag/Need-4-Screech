@@ -36,7 +36,6 @@
         "shoot": "32",
         "new": "78",
         "bounding": "66",
-        "mouseClick": "onClick",
         "ray": "86"
      },
     "canvas": {
