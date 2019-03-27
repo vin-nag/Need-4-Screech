@@ -344,7 +344,7 @@ class GameEngine {
                         entity.getComponent('CBar').value = entity.getComponent('CBar').maxValue;
                     }
                 }
-                setTimeout(() => CInput.canDrink = true, 500)
+                setTimeout(() => CInput.canDrink = true, config.time.drunk_duration)
             }
         } 
     }

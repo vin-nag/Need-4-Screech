@@ -50,6 +50,6 @@
     },
     "time": {
         "limit": 3500,
-        "drunk": 1500
+        "drunk_duration": 1000
     }
 }
