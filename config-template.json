@@ -29,7 +29,7 @@
     },
     "game_engine": {
         "drunk_gravity": 1,
-        "gravity": 2
+        "gravity": 3
     },
     "controls": {
         "up": "87",
@@ -49,9 +49,8 @@
         "y": 35
     },
     "time": {
-        "limit": 3500,
+        "limit": 2500,
         "drunk_duration": 1000
-        "limit": 1500
     },
     "enemy": {
         "melee": {

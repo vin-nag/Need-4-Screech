@@ -15,7 +15,7 @@ class EntityModels {
         player_entity.addComponent(components.CGravity(config.game_engine.gravity));
         player_entity.addComponent(components.CHealth(config.player.health, config.player.health, false, false));
         player_entity.addComponent(components.CAnimation('skeet_idle', 4, 0, 0.25));
-        player_entity.addComponent(components.CInput(false, false, false, false, false, true));
+        player_entity.addComponent(components.CInput(false, false, false, false, false, true, true, true));
         player_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(0, 0), 1, new Vector(0, 0), 0));
         player_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
         player_entity.addComponent(components.CState("grounded"));
@@ -57,6 +57,16 @@ class EntityModels {
         bullet_entity.addComponent(components.CState('shooting'));
         bullet_entity.addComponent(components.CLifeSpan(1000));
     };
+
+    screech(x=0, y=0, velocity, scale){
+        const screech_entity = this.entity_manager.addEntity("screech");
+        let offsetX = scale === -1? x-58: x+5;
+        screech_entity.addComponent(components.CTransform(new Vector(offsetX, y), new Vector(offsetX, y), scale, new Vector(scale*10 + velocity.x, -15), 0));
+        screech_entity.addComponent(components.CBoundingBox(new Vector(48, 16), new Vector(24, 8)));
+        screech_entity.addComponent(components.CAnimation('screech', 1, 0, 0));
+        screech_entity.addComponent(components.CState('shooting'));
+        screech_entity.addComponent(components.CGravity(config.game_engine.gravity));
+    }
 
     bullet_knife(x=0, y=0, scale) {
         const bullet_entity = this.entity_manager.addEntity("bullet");

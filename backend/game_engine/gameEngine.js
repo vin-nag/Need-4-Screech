@@ -35,10 +35,6 @@ class GameEngine {
     init(){
         this.entity_manager.addModel.background_img_george();
         this.entity_manager.addModel.player(100,435);
-        //this.entity_manager.addModel.enemy_melee_moose(800, 450);
-        //this.entity_manager.addModel.enemy_flying_blackbird(700, 300);
-        this.entity_manager.addModel.enemy_melee_moose(800, 450);
-        //this.entity_manager.addModel.enemy_melee_snake(700, 550);
         this.entity_manager.addModel.enemy_ranged_chef(1000, 450);
         this.entity_manager.addModel.enemy_flying_blackbird(700, 100);
 
@@ -88,54 +84,6 @@ class GameEngine {
         console.log('game started');
     }
 
-    spawnBullet() {
-        /*
-        This function spawns a bullet, adding all the necessary components
-         */
-        let bullet = this.entity_manager.addEntity("bullet");
-        let player = this.entity_manager.getEntitiesByTag("player")[0];
-        let playerTransform = player.getComponent('CTransform');
-        let bulletPosition = new Vector(playerTransform.position.x, playerTransform.position.y + 15);
-        let bulletPrevious = new Vector(playerTransform.position.x, playerTransform.position.y);
-        let size = new Vector(48, 16);
-        let half_size = new Vector(24, 8);
-        let velocity = new Vector(12 + playerTransform.velocity.x, 0);
-        if (playerTransform.scale === -1) {
-            velocity = new Vector(-12 + playerTransform.velocity.x, 0);
-        }
-
-        bullet.addComponent(components.CTransform(bulletPosition, bulletPrevious, 1, velocity, 0));
-        bullet.addComponent(components.CBoundingBox(size, half_size));
-        bullet.addComponent(components.CAnimation('buster', 1, 0, 0));
-        bullet.addComponent(components.CState('shooting'));
-        bullet.addComponent(components.CLifeSpan(1000))
-    }
-
-    spawnScreech() {
-        /*
-        This function spawns a screech bottle, which if collide with checkpoint
-        * screech delivered += 1, else it will smash on ground and catch on fire
-         */
-        let screech = this.entity_manager.addEntity("screech");
-        let player = this.entity_manager.getEntitiesByTag("player")[0];
-        let playerTransform = player.getComponent('CTransform');
-        let bulletPosition = new Vector(playerTransform.position.x, playerTransform.position.y + 15);
-        let bulletPrevious = new Vector(playerTransform.position.x, playerTransform.position.y);
-        let size = new Vector(48, 16);
-        let half_size = new Vector(24, 8);
-        let velocity = new Vector(12 + playerTransform.velocity.x, 0);
-        if (playerTransform.scale === -1) {
-            velocity = new Vector(-12 + playerTransform.velocity.x, 0);
-        }
-
-        screech.addComponent(components.CTransform(bulletPosition, bulletPrevious, 1, velocity, 0));
-        screech.addComponent(components.CBoundingBox(size, half_size));
-        screech.addComponent(components.CAnimation('screech', 1, 0, 0));
-        screech.addComponent(components.CState('shooting'));
-        // has no CLifespan component, as the bottle will has an arc when thrown and
-        // either collide with checkpoint or hit ground
-    }
-
     spawnFire(e) {
         let fire = this.entity_manager.addEntity("fire");
         let size = new Vector(50, 50);
@@ -161,7 +109,6 @@ class GameEngine {
         boom.addComponent(components.CBoundingBox(size, half_size));
         boom.addComponent(components.CAnimation('boom', 13, 0, .8));
         boom.addComponent(components.CLifeSpan(2000))
-
     }
 
     spawnCheckpointSuccess(checkpoint) {
@@ -187,6 +134,7 @@ class GameEngine {
             // console.log('game continuing', this.entity_manager.getEntities());
             this.sInput();
             this.sMovement();
+            this.sGravity();
             this.sAnimation();
             this.sLifespan();
             this.sBars();
@@ -257,8 +205,6 @@ class GameEngine {
         CInput.screech = this.lastInput[config.controls.screech];
         CInput.drink = this.lastInput[config.controls.drink];
 
-
-
         if (CInput.shoot) {
             if (CInput.canShoot) {
                 let offsetX = playerTransform.scale === -1? playerTransform.position.x - 5: playerTransform.position.x + playerBounding.size.x + 5;
@@ -269,7 +215,7 @@ class GameEngine {
         }
 
         if (CInput.bounding){
-            for (let entity of this.entity_manager.getEntitiesByTag("enemy")){
+            for (let entity of this.entity_manager.getEntities()){
                 if (entity.hasComponent('CBoundingBox')){
                     entity.getComponent('CBoundingBox').show = !entity.getComponent('CBoundingBox').show;
                 }
@@ -281,6 +227,53 @@ class GameEngine {
                 entity.getComponent("CEnemyAI").show = !entity.getComponent("CEnemyAI").show;
             }
         }
+
+        if (CInput.interact){
+            // open door logic
+            console.log("E pressed")
+        }
+
+        if (CInput.screech){
+            // throw screech
+            let game_running = player.getComponent("CGameRunning");
+            console.log("O pressed");
+            if (game_running.running) {
+                if (CInput.canScreech) {
+                    const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
+                    const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
+                    let screech_count = screech_remaining.getComponent('CScreech').screechCount;
+                    let deliveries = deliveries_left.getComponent('CScore').score;
+                    this.entity_manager.addModel.screech(playerTransform.position.x, playerTransform.position.y + 15, playerTransform.velocity, playerTransform.scale);
+                    screech_remaining.getComponent('CScreech').screechCount -= 1;
+                    CInput.canScreech = false;
+                    if (screech_count === 0 && deliveries > 0) {
+                        game_running.running = false;
+                        screech_remaining.getComponent('CScreech').screechCount = 0;
+                    }
+                    setTimeout(() => CInput.canScreech = true, 400)
+                }
+            }
+
+        }
+
+        if (CInput.drink){
+            // drink screech
+            const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
+            console.log("F pressed")
+            if (CInput.canDrink) {
+                let player_powerup = player.getComponent('CPowerup');
+                player_powerup.drunk = true
+                screech_remaining.getComponent('CScreech').screechCount -= 1;
+                CInput.canDrink = false;
+                for (let entity of this.entity_manager.getEntitiesByTag("bar")) {
+                    if (entity.getComponent('CState').state === "drunk") {
+                        entity.getComponent('CBar').value = entity.getComponent('CBar').maxValue;
+                    }
+                }
+                setTimeout(() => CInput.canDrink = true, config.time.drunk_duration)
+            }
+        }
+
 
         //Level Editor Input
 
@@ -313,51 +306,6 @@ class GameEngine {
 
         }
 
-        if (CInput.interact){
-            // open door logic
-            console.log("E pressed")
-        }
-
-        if (CInput.screech){
-            // throw screech
-            let game_running = player.getComponent("CGameRunning");
-            console.log("O pressed")
-            if (game_running.running) {
-                if (CInput.canScreech) {
-                    const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
-                    const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
-                    let screech_count = screech_remaining.getComponent('CScreech').screechCount;
-                    let deliveries = deliveries_left.getComponent('CScore').score;
-                    this.spawnScreech();
-                    screech_remaining.getComponent('CScreech').screechCount -= 1;
-                    CInput.canScreech = false
-                    if (screech_count === 0 && deliveries > 0) {
-                        game_running.running = false;
-                        screech_remaining.getComponent('CScreech').screechCount = 0;
-                    }
-                    setTimeout(() => CInput.canScreech = true, 400)
-                }
-            }
-
-        }
-
-        if (CInput.drink){
-            // drink screech
-            const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
-            console.log("F pressed")
-            if (CInput.canDrink) {
-                let player_powerup = player.getComponent('CPowerup');
-                player_powerup.drunk = true
-                screech_remaining.getComponent('CScreech').screechCount -= 1;
-                CInput.canDrink = false;
-                for (let entity of this.entity_manager.getEntitiesByTag("bar")) {
-                    if (entity.getComponent('CState').state === "drunk") {
-                        entity.getComponent('CBar').value = entity.getComponent('CBar').maxValue;
-                    }
-                }
-                setTimeout(() => CInput.canDrink = true, config.time.drunk_duration)
-            }
-        }
     }
 
     sMovement() {
@@ -450,8 +398,6 @@ class GameEngine {
                 }
             }
 
-        let pGravity = player.getComponent('CGravity');
-        playerTransform.velocity.y += pGravity.gravity;
         playerTransform.position.x += playerTransform.velocity.x;
 
         // truncate player speed if above max
@@ -470,15 +416,39 @@ class GameEngine {
         playerTransform.position = playerTransform.position.add(playerTransform.velocity);
 
         // update all bullets position based on velocity
-        for (let entity of this.entity_manager.getEntitiesByTag("bullet")){
+        for (let entity of this.entity_manager.getEntities()){
 
-            let eTransform = entity.getComponent('CTransform');
-            eTransform.position.x += eTransform.velocity.x;
+            if (entity.tag !== "bullet" && entity.tag !== "screech"){continue}
 
-            eTransform.previous_position = eTransform.position;
-            eTransform.position = eTransform.position.add(eTransform.velocity);
+            if (entity.hasComponent('CTransform')){
+                let eTransform = entity.getComponent('CTransform');
+                eTransform.position.x += eTransform.velocity.x;
+                eTransform.position.y += eTransform.velocity.y;
+                eTransform.previous_position = eTransform.position;
+                eTransform.position = eTransform.position.add(eTransform.velocity);
+            }
+
         }
 
+    }
+
+    sGravity(){
+        const player = this.entity_manager.getEntitiesByTag('player')[0];
+        let player_powerup = player.getComponent('CPowerup');
+
+        for (let entity of this.entity_manager.getEntities()){
+            if (entity.hasComponent('CGravity')){
+                let eTransform = entity.getComponent('CTransform');
+                let eGravity = entity.getComponent('CGravity');
+
+                if (player_powerup.drunk){
+                    eTransform.velocity.y += config.game_engine.drunk_gravity;
+                }
+                else {
+                    eTransform.velocity.y += eGravity.gravity;
+                }
+            }
+        }
     }
 
     sCollision(){
@@ -564,7 +534,6 @@ class GameEngine {
                     }
                     if (playerHealth.health === 0) {
                         console.log('player dead');
-
                     }
                 }
             }
@@ -691,7 +660,7 @@ class GameEngine {
                 }
 
                 if (playerHealth.health === 0) {
-                    player.destroy();
+                    //player.destroy();
                     bullet.destroy();
                 }
             }
@@ -870,11 +839,6 @@ class GameEngine {
                         }
                         break;
                 }
-            }
-
-            if (enemy.hasComponent('CGravity')){
-                let eGravity = enemy.getComponent('CGravity');
-                enemyTransform.velocity.y += eGravity.gravity;
             }
 
             enemyTransform.position.x += enemyTransform.velocity.x;
