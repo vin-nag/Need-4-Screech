@@ -549,7 +549,11 @@ class GameEngine {
     }
 
     sEditor(){
-
+        // Updating entity position according to mouse position
+        let entity = this.selectedEntity
+        let eTransform = entity.getComponent('CTransform')
+        eTransform.position.x = this.mousePositiion.x
+        eTransform.position.y = this.mousePositiion.y
     }
 
     setSelectedEntity(entity){
