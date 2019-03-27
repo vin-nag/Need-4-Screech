@@ -15,11 +15,13 @@ class EntityModels {
         player_entity.addComponent(components.CGravity(config.game_engine.gravity));
         player_entity.addComponent(components.CHealth(config.player.health, config.player.health, false, false));
         player_entity.addComponent(components.CAnimation('skeet_idle', 4, 0, 0.25));
-        player_entity.addComponent(components.CInput(false, false, false, false, false, true));
+        player_entity.addComponent(components.CInput(false, false, false, false, false, true, true, true));
         player_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(0, 0), 1, new Vector(0, 0), 0));
         player_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
         player_entity.addComponent(components.CState("grounded"));
         player_entity.addComponent(components.CPowerup(false, false, false, false))
+        player_entity.addComponent(components.CScreech(25))
+        player_entity.addComponent(components.CGameRunning(true));
     };
 
     bar_timer(x=10, y=10) {
@@ -41,7 +43,7 @@ class EntityModels {
     bar_screech(x=950, y=10) {
         const screech_entity = this.entity_manager.addEntity("bar");
         screech_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        screech_entity.addComponent(components.CBar(config.player.health, config.player.health, "#9D702E"));
+        screech_entity.addComponent(components.CBar(0, config.player.drunk, "#9D702E"));
         screech_entity.addComponent(components.CAnimation("drunk", 1, 0, 0));
         screech_entity.addComponent(components.CState("drunk"));
     };
@@ -78,6 +80,19 @@ class EntityModels {
         lantern_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         lantern_entity.addComponent(components.CAnimation("lantern", 4, 0, 0.25));
     };
+
+    decorator_van(x=0, y=0) {
+        const van_entity = this.entity_manager.addEntity("decorator");
+        van_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        van_entity.addComponent(components.CAnimation("van", 1, 0, 0));
+    }
+
+    level_end_taxi(x=0, y=0) {
+        const taxi_entity = this.entity_manager.addEntity("taxi");
+        taxi_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        taxi_entity.addComponent(components.CAnimation("jiffy", 1, 0, 0));
+        taxi_entity.addComponent(components.CBoundingBox(new Vector(200, 120), new Vector(100, 60)));
+    }
 
     enemy_snake(x=0, y=0) {
         const enemy_entity = this.entity_manager.addEntity("enemy");
@@ -152,6 +167,50 @@ class EntityModels {
         powerup_entity.addComponent(components.CAnimation('Shield', 4, 0, .50));
         powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 10), new Vector(10, 5)));
     };
+
+    powerup_health(x=0, y=0) {
+        const powerup_entity = this.entity_manager.addEntity("powerup");
+        powerup_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        powerup_entity.addComponent(components.CAnimation('health_pack', 1, 0, 0));
+        powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 10), new Vector(10, 5)));
+    }
+
+    checkpoints(x=0, y=0) {
+        const checkpoint = this.entity_manager.addEntity("checkpoint");
+        checkpoint.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        checkpoint.addComponent(components.CAnimation('checkpoint_small', 1, 0, 0));
+        checkpoint.addComponent(components.CBoundingBox(new Vector(64, 130), new Vector(32, 70)));
+    }
+
+    deliveries_left(deliveries_left, x=210, y=140) {
+        const deliveries = this.entity_manager.addEntity("deliveries_left");
+        deliveries.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        deliveries.addComponent(components.CAnimation('transparent', 1, 0, 0));
+        deliveries.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+        deliveries.addComponent(components.CScore(deliveries_left));
+    }
+
+    screech_remaining(screech, x=675, y=140) {
+        const screech_remaining = this.entity_manager.addEntity("screech_remaining");
+        screech_remaining.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        screech_remaining.addComponent(components.CAnimation('transparent', 1, 0, 0));
+        screech_remaining.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+        screech_remaining.addComponent(components.CScreech(screech));
+    }
+
+    score(x=1150, y=140) {
+        const score = this.entity_manager.addEntity("score");
+        score.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        score.addComponent(components.CAnimation('transparent', 1, 0, 0));
+        score.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+        score.addComponent(components.CScore(0));
+    }
+
+    game_bar(x=0, y=0) {
+        const game_bar = this.entity_manager.addEntity("game_bar");
+        game_bar.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        game_bar.addComponent(components.CAnimation('ice_bar', 1, 0, 0));
+    }
 
 }
 

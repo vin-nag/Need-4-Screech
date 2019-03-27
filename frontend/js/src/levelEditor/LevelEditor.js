@@ -97,7 +97,19 @@ class LevelEditor {
     }
 
     handleKeyPress(event){
-        //Stub: Map key presses to level editor functions
+        if (event.type === 'keydown') {
+            socketClient.emit('onKeyDown', {
+                keyCode: event.keyCode,
+                sessionID: this.sessionId
+            })   
+        }
+
+        if (event.type === 'keyup') {
+            socketClient.emit('onKeyUp', {
+                keyCode: event.keyCode,
+                sessionID: this.sessionId
+            })
+        }
     }
 
 }

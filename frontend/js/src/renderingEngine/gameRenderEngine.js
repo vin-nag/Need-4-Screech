@@ -18,7 +18,6 @@ const engine = (entities, canvasID) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(bg_img, 0, 0, bg_img.width, bg_img.height, 0, 0, canvas.width, canvas.height);
 
-
     let camX = 0;
     let camY = 0;
     for (let entity of entities) {
@@ -65,7 +64,29 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
     }
 
     else {
-        if (entity.tag === "bar"){
+
+        if (entity.tag === "score") {
+            if ("CScore" in entity.componentMap) {
+                let score = entity.componentMap["CScore"];
+                canvasService.draw.text(ctx, "Score: " + score.score, Math.max(transform.position.x, transform.position.x - camX), transform.position.y, "30px", "#fff", "Permanent Marker")
+            }
+        }
+
+        if (entity.tag === "screech_remaining") {
+            if ("CScreech" in entity.componentMap) {
+                let screech = entity.componentMap["CScreech"];
+                canvasService.draw.text(ctx, "Screech Remaining: " + screech.screechCount, Math.max(transform.position.x, transform.position.x - camX), transform.position.y, "30px", "#fff", "Permanent Marker")
+            }
+        }
+
+        if (entity.tag === "deliveries_left") {
+            if ("CScore" in entity.componentMap) {
+                let score = entity.componentMap["CScore"];
+                canvasService.draw.text(ctx, "Deliveries left: " + score.score, Math.max(transform.position.x, transform.position.x - camX), transform.position.y, "30px", "#fff", "Permanent Marker")
+            }
+        }
+
+        if (entity.tag === "bar") {
 
             ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, Math.max(transform.position.x, transform.position.x-camX), transform.position.y, frameWidth, frameHeight);
 
@@ -80,12 +101,11 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
 
                 canvasService.draw.text(ctx, "Current " + state.state + ": " + values.value, Math.max(transform.position.x + offsetX, transform.position.x + offsetX - camX), transform.position.y + offsetY, "18px", "#fff", "Permanent Marker")
             }
-
         }
+
         else {
         ctx.drawImage(img, currentFrame*frameWidth, 0, frameWidth, frameHeight, transform.position.x, transform.position.y, frameWidth, frameHeight)
         }
-
     }
 
     if ("CBoundingBox" in entity.componentMap && entity.componentMap["CBoundingBox"].show === true){
