@@ -168,11 +168,18 @@ class EntityModels {
         powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 10), new Vector(10, 5)));
     };
 
+    powerup_health(x=0, y=0) {
+        const powerup_entity = this.entity_manager.addEntity("powerup");
+        powerup_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        powerup_entity.addComponent(components.CAnimation('health_pack', 1, 0, 0));
+        powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 10), new Vector(10, 5)));
+    }
+
     checkpoints(x=0, y=0) {
         const checkpoint = this.entity_manager.addEntity("checkpoint");
         checkpoint.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         checkpoint.addComponent(components.CAnimation('checkpoint_small', 1, 0, 0));
-        checkpoint.addComponent(components.CBoundingBox(new Vector(130, 64), new Vector(70, 32)));
+        checkpoint.addComponent(components.CBoundingBox(new Vector(64, 130), new Vector(32, 70)));
     }
 
     deliveries_left(deliveries_left, x=210, y=140) {
