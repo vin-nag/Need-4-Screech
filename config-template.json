@@ -21,15 +21,15 @@
         "angle": 0,
         "lifeSpan": 10,
         "health": 100,
-        "maxspeed": 17,
+        "maxspeed": 15,
         "inertia": 0.9,
         "minSpeed": 2.75,
         "drunk": 100,
         "drunk_jump": -150
     },
     "game_engine": {
-        "drunk_gravity": 1,
-        "gravity": 2
+        "gravity": 3,
+        "drunk_gravity": 1
     },
     "controls": {
         "up": "87",
@@ -49,30 +49,7 @@
         "y": 35
     },
     "time": {
-        "limit": 2500,
+        "limit": 3500,
         "drunk_duration": 1000
-    },
-    "enemy": {
-        "melee": {
-            "speed": 2,
-            "sight": 750,
-            "maxSpeed": 4,
-            "roamDistance": 75,
-            "lifeSpan": 4
-        },
-        "ranged": {
-            "speed": 1,
-            "sight": 750,
-            "maxSpeed": 3,
-            "roamDistance": 75,
-            "lifeSpan": 2
-        },
-        "flying": {
-            "speed": 2.5,
-            "sight": 750,
-            "maxSpeed": 4,
-            "roamDistance": 100,
-            "lifeSpan": 1
-        }
     }
 }
