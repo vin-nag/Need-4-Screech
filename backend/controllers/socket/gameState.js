@@ -123,7 +123,7 @@ module.exports = {
     onListLevels,
     onLoadLevel,
     updateEntityPosition,
-    updateSelectedEntity
+    updateSelectedEntity,
     onLoadLevel,
     onUpdateEditorEntityType
 }
