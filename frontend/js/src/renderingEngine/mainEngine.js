@@ -12,7 +12,8 @@ const windowToElement = {
     [APP_WINDOWS.REGISTER]: "signUp",
     [APP_WINDOWS.LEVEL_EDITOR]: "levelEditor",
     [APP_WINDOWS.MENU]: "menu",
-    [APP_WINDOWS.GAME_PLAY]: "gamePlay"
+    [APP_WINDOWS.GAME_PLAY]: "gamePlay",
+    [APP_WINDOWS.OVERWORLD]: "overworld"
 }
 
 const engine = (activeWindow) => {

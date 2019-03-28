@@ -62,7 +62,7 @@ const _triggerSelectedItem = () => {
 }
 
 const _menuOptions = {
-    "Campaign": {handler: () => app.switchToWindow(APP_WINDOWS.GAME_PLAY), children: []},
+    "Campaign": {handler: () => app.switchToWindow(APP_WINDOWS.OVERWORLD), children: []},
     "Multiplayer": {handler: () => goToMenu("Multiplayer"), children: ["Host Session", "Join Session"]},
     "Profile": {handler: () => goToMenu("Profile"), children: ["Change Username", "Change Password"]},
     "Level Editor": {handler: () => app.switchToWindow(APP_WINDOWS.LEVEL_EDITOR), children: []},
