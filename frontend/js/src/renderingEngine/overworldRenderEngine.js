@@ -18,8 +18,20 @@ const engine = (menuItems, selectedItemIndex) => {
     for(let i = 0; i < menuItems.length; i++){
         const x = canvas.width/2
         const y = (i+0.5)*menuItemHeight + menuVerticalPadding
-        const color = (i === selectedItemIndex) ? "rgba(255,255,255,0.5)" : "#fff"
-        canvasService.draw.text(ctx, menuItems[i], x, y, "30px", color, "Permanent Marker")
+        const color = (i === selectedItemIndex) ? "#fff" : "#ff0000"
+
+        if (menuItems[i] === "George Street") {
+            canvasService.draw.rectangle(ctx, 585, 550, 235, 50, "rgba(0, 0, 0, 0.6)")
+            canvasService.draw.text(ctx, menuItems[i], 700, 585, "30px", color, "Permanent Marker")
+        }
+        else if (menuItems[i] === "Memorial University") {
+            canvasService.draw.rectangle(ctx, 240, 165, 320, 50, "rgba(0, 0, 0, 0.6)")
+            canvasService.draw.text(ctx, menuItems[i], 400, 200, "30px", color, "Permanent Marker")
+        }
+        else if (menuItems[i] === "Cape Spear") {
+            canvasService.draw.rectangle(ctx, 808, 68, 187, 50, "rgba(0, 0, 0, 0.6)")
+            canvasService.draw.text(ctx, menuItems[i], 900, 100, "30px", color, "Permanent Marker")
+        }
     }
 }
 

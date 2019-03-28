@@ -2,9 +2,9 @@ import app from "../app"
 import APP_WINDOWS from "../../enums/app_windows"
 
 /**
- * Shows the menu items for the given menu label
+ * Shows the overworld levels
  * 
- * @param {*} menu The label of the menu/sub-menu to be set as active
+ * @param {*} menu The label of the overworld level to be set as active
  */
 const goToMenu = (menu) => {
     _menuState.activeMenu = menu
@@ -18,7 +18,7 @@ const getActiveMenuItems = () => {
     const { activeMenu } = _menuState
     
     if(activeMenu === "Main"){
-        //Return the main menu items
+        //Return the overworld levels
         return ["George Street", "Memorial University", "Cape Spear"];
     }
 
