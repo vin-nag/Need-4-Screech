@@ -12,6 +12,8 @@ class GameEngine {
         this.sessionId = sessionId;
         this.entity_manager = new EntityManager();
         this.gameStarted = false;
+        this.selectedEntity = null
+        this.mousePositiion = new Vector(0,0)
         this.editorEntityType = "tile"
 
         // last input
@@ -902,6 +904,23 @@ class GameEngine {
         }
         animation.currentFrame = 0;
 
+    }
+
+    sEditor(){
+        // Updating entity position according to mouse position
+        let entity = this.selectedEntity
+        let eTransform = entity.getComponent('CTransform')
+        eTransform.position.x = this.mousePositiion.x
+        eTransform.position.y = this.mousePositiion.y
+    }
+
+    setSelectedEntity(entity){
+        this.selectedEntity = entity
+    }
+
+    setMousePosition(x, y){
+        this.mousePositiion.x = x
+        this.mousePositiion.y = y
     }
 
     // check if player completed level successfully
