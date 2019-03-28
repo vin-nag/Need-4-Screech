@@ -41,6 +41,7 @@ const handleKeyPress = (event) => {
     else if(event.keyCode === 40){ _shiftSelectedItemDown() } //Down Arrow Key
     else if(event.keyCode === 13){ _triggerSelectedItem() } //Enter Key
     else if(event.keyCode === 27){ goToMenu("Main") } //Escape Key
+    console.log(event)
 }
 
 //--------------Private Variables and Functions------------//

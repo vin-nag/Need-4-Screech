@@ -6,6 +6,7 @@ import domService from "./dom"
 import levelEditor from "../levelEditor"
 import gamePlay from "../gamePlay";
 import socketClient from "../socketClient"
+import overworldService from "./overworld"
 
 export const listen = () => {
     document.getElementById("goToSignup").addEventListener("click", () => app.switchToWindow(APP_WINDOWS.REGISTER))
@@ -39,7 +40,8 @@ export const listen = () => {
     document.addEventListener("keydown", (event) => {
         if(app.getActiveWindow() === APP_WINDOWS.MENU){ menuService.handleKeyPress(event) }
         else if (app.getActiveWindow() === APP_WINDOWS.GAME_PLAY){ gamePlay.handleKeyPress(event) }
-        else if(app.getActiveWindow() === APP_WINDOWS.LEVEL_EDITOR){ levelEditor.handleKeyPress(event) } 
+        else if (app.getActiveWindow() === APP_WINDOWS.LEVEL_EDITOR){ levelEditor.handleKeyPress(event) } 
+        else if (app.getActiveWindow() === APP_WINDOWS.OVERWORLD){ overworldService.handleKeyPress(event) } 
 
         if(event.keyCode === 27 && ![APP_WINDOWS.LOGIN, APP_WINDOWS.REGISTER, APP_WINDOWS.MENU].includes(app.getActiveWindow())){ //Escape
             app.switchToWindow(APP_WINDOWS.MENU)

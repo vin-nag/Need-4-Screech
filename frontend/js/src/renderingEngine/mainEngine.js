@@ -2,10 +2,12 @@ import APP_WINDOWS from "../../enums/app_windows"
 import gameRenderEngine from "./gameRenderEngine"
 import menuRenderEngine from "./menuRenderEngine"
 import editorRenderEngine from "./editorRenderEngine"
+import overworldRenderEngine from "./overworldRenderEngine";
 
 import levelEditor from "../levelEditor"
 import gamePlay from '../gamePlay'
 import menuService from "../services/menu"
+import overworldService from "../services/overworld"
 
 const windowToElement = {
     [APP_WINDOWS.LOGIN]: "login",
@@ -41,6 +43,10 @@ const delegateRendering = (activeWindow) => {
     else if(activeWindow === APP_WINDOWS.MENU){
         menuRenderEngine(menuService.getActiveMenuItems(), menuService.getSelectedItemIndex())
     }
+    else if(activeWindow === APP_WINDOWS.OVERWORLD){
+        overworldRenderEngine(overworldService.getActiveMenuItems(), overworldService.getSelectedItemIndex())
+    }
+    
 }
 
 export default engine
