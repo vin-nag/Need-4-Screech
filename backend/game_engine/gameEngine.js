@@ -14,6 +14,7 @@ class GameEngine {
         this.gameStarted = false;
         this.selectedEntity = null
         this.mousePositiion = new Vector(0,0)
+        this.editorEntityType = "tile"
 
         // last input
         this.lastInput = {event: "initialized"} ;
@@ -36,8 +37,11 @@ class GameEngine {
 
     init(){
         this.entity_manager.addModel.background_img_george();
-        this.entity_manager.addModel.player(390,435);
-        this.entity_manager.addModel.enemy_snake(700, 415);
+        this.entity_manager.addModel.player(100,435);
+        this.entity_manager.addModel.enemy_ranged_chef(1000, 550);
+        this.entity_manager.addModel.enemy_flying_blackbird(700, 100);
+        this.entity_manager.addModel.enemy_melee_moose(750, 500);
+
 
         this.entity_manager.addModel.decorator_lantern(800, 500);
         this.entity_manager.addModel.decorator_pole_1(50, 325);
@@ -55,11 +59,6 @@ class GameEngine {
         for (let x = 64; x < 2560; x+=64){
             this.entity_manager.addModel.tile_grey_center(x, 625);
         }
-        // this.entity_manager.addModel.tile_grey_right(2560, 625);
-        // this.entity_manager.addModel.tile_grey_left(192, 561);
-        // this.entity_manager.addModel.tile_grey_right(256, 561);
-        // this.entity_manager.addModel.tile_grey_left(320, 495);
-        // this.entity_manager.addModel.tile_grey_right(384, 495);
 
         this.entity_manager.addModel.powerup_shield(400,590);
         this.entity_manager.addModel.powerup_invincible(600, 590);
@@ -69,11 +68,11 @@ class GameEngine {
         for (let x = 1000; x < 2500; x+=300){
             this.entity_manager.addModel.checkpoints(x, 475);
         }
-        
+
         this.entity_manager.addModel.score();
         this.entity_manager.addModel.screech_remaining(15);
         this.entity_manager.addModel.deliveries_left(5);
-        
+
     }
 
     startGame() {
@@ -81,54 +80,6 @@ class GameEngine {
         console.log('starting game');
         this.init();
         console.log('game started');
-    }
-
-    spawnBullet() {
-        /*
-        This function spawns a bullet, adding all the necessary components
-         */
-        let bullet = this.entity_manager.addEntity("bullet");
-        let player = this.entity_manager.getEntitiesByTag("player")[0];
-        let playerTransform = player.getComponent('CTransform');
-        let bulletPosition = new Vector(playerTransform.position.x, playerTransform.position.y + 15);
-        let bulletPrevious = new Vector(playerTransform.position.x, playerTransform.position.y);
-        let size = new Vector(48, 16);
-        let half_size = new Vector(24, 8);
-        let velocity = new Vector(12 + playerTransform.velocity.x, 0);
-        if (playerTransform.scale === -1) {
-            velocity = new Vector(-12 + playerTransform.velocity.x, 0);
-        }
-
-        bullet.addComponent(components.CTransform(bulletPosition, bulletPrevious, 1, velocity, 0));
-        bullet.addComponent(components.CBoundingBox(size, half_size));
-        bullet.addComponent(components.CAnimation('buster', 1, 0, 0));
-        bullet.addComponent(components.CState('shooting'));
-        bullet.addComponent(components.CLifeSpan(1000))
-    }
-
-    spawnScreech() {
-        /*
-        This function spawns a screech bottle, which if collide with checkpoint
-        * screech delivered += 1, else it will smash on ground and catch on fire
-         */
-        let screech = this.entity_manager.addEntity("screech");
-        let player = this.entity_manager.getEntitiesByTag("player")[0];
-        let playerTransform = player.getComponent('CTransform');
-        let bulletPosition = new Vector(playerTransform.position.x, playerTransform.position.y + 15);
-        let bulletPrevious = new Vector(playerTransform.position.x, playerTransform.position.y);
-        let size = new Vector(48, 16);
-        let half_size = new Vector(24, 8);
-        let velocity = new Vector(12 + playerTransform.velocity.x, 0);
-        if (playerTransform.scale === -1) {
-            velocity = new Vector(-12 + playerTransform.velocity.x, 0);
-        }
-
-        screech.addComponent(components.CTransform(bulletPosition, bulletPrevious, 1, velocity, 0));
-        screech.addComponent(components.CBoundingBox(size, half_size));
-        screech.addComponent(components.CAnimation('screech', 1, 0, 0));
-        screech.addComponent(components.CState('shooting'));
-        // has no CLifespan component, as the bottle will has an arc when thrown and
-        // either collide with checkpoint or hit ground
     }
 
     spawnFire(e) {
@@ -156,7 +107,6 @@ class GameEngine {
         boom.addComponent(components.CBoundingBox(size, half_size));
         boom.addComponent(components.CAnimation('boom', 13, 0, .8));
         boom.addComponent(components.CLifeSpan(2000))
-
     }
 
     spawnCheckpointSuccess(checkpoint) {
@@ -182,11 +132,13 @@ class GameEngine {
             // console.log('game continuing', this.entity_manager.getEntities());
             this.sInput();
             this.sMovement();
-            this.sCollision();
+            this.sGravity();
             this.sAnimation();
             this.sLifespan();
             this.sBars();
             this.sEnemyRayCasting();
+            this.sEnemyAI();
+            this.sCollision();
             this.sGameState();
             this.entity_manager.update();
         }
@@ -237,6 +189,8 @@ class GameEngine {
         // Input system
         const player = this.entity_manager.getEntitiesByTag("player")[0];
         let CInput = player.getComponent('CInput');
+        let playerTransform = player.getComponent('CTransform');
+        let playerBounding = player.getComponent("CBoundingBox");
 
         CInput.up = this.lastInput[config.controls.up];
         CInput.down = this.lastInput[config.controls.down];
@@ -249,12 +203,11 @@ class GameEngine {
         CInput.screech = this.lastInput[config.controls.screech];
         CInput.drink = this.lastInput[config.controls.drink];
 
-
-
         if (CInput.shoot) {
             if (CInput.canShoot) {
-                this.spawnBullet();
-                CInput.canShoot = false
+                let offsetX = playerTransform.scale === -1? playerTransform.position.x - 5: playerTransform.position.x + playerBounding.size.x + 5;
+                this.entity_manager.addModel.bullet_knife(offsetX, playerTransform.position.y + 15, playerTransform.scale);
+                CInput.canShoot = false;
                 setTimeout(() => CInput.canShoot = true, 400)
             }
         }
@@ -276,9 +229,8 @@ class GameEngine {
         //Level Editor Input
 
         if (this.lastInput[config.controls.new] === true){
-            //console.log("Input N TILE IS SPAWNED!!!!!!");
 
-            let tile = this.entity_manager.addEntity("tile");
+            let tile = this.entity_manager.addEntity(this.editorEntityType);
 
             // animation
             tile.addComponent(components.CAnimation('GreyTile',1,0,0))
@@ -312,16 +264,16 @@ class GameEngine {
         if (CInput.screech){
             // throw screech
             let game_running = player.getComponent("CGameRunning");
-            console.log("O pressed")
+            console.log("O pressed");
             if (game_running.running) {
                 if (CInput.canScreech) {
                     const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
                     const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
                     let screech_count = screech_remaining.getComponent('CScreech').screechCount;
                     let deliveries = deliveries_left.getComponent('CScore').score;
-                    this.spawnScreech();
+                    this.entity_manager.addModel.screech(playerTransform.position.x, playerTransform.position.y + 15, playerTransform.velocity, playerTransform.scale);
                     screech_remaining.getComponent('CScreech').screechCount -= 1;
-                    CInput.canScreech = false
+                    CInput.canScreech = false;
                     if (screech_count === 0 && deliveries > 0) {
                         game_running.running = false;
                         screech_remaining.getComponent('CScreech').screechCount = 0;
@@ -329,7 +281,6 @@ class GameEngine {
                     setTimeout(() => CInput.canScreech = true, 400)
                 }
             }
-
         }
 
         if (CInput.drink){
@@ -348,7 +299,7 @@ class GameEngine {
                 }
                 setTimeout(() => CInput.canDrink = true, config.time.drunk_duration)
             }
-        } 
+        }
     }
 
     sMovement() {
@@ -362,137 +313,131 @@ class GameEngine {
         let playerPowerup = player.getComponent('CPowerup');
         let game_running = player.getComponent('CGameRunning');
 
-        if (game_running.running) {
+        if (!game_running.running) {return}
 
-            if (playerInput.up) {
-                if (playerPowerup.drunk) {
-                    if (playerState.state === "grounded" || playerState.state === "running") {
-                        newState = "jumping";
-                        playerTransform.velocity.y = config.player.drunk_jump;
-                    }
-                }
-                else {
-                    if (playerState.state === "grounded" || playerState.state === "running") {
-                        newState = "jumping";
-                        playerTransform.velocity.y = config.player.jump;
-                    }
-                }
-                
-            }
-
-            if (playerInput.left) {
-                if (playerPowerup.superSpeed) {
-                    playerTransform.velocity.x = -config.player.speed - 10;
-                    playerTransform.scale = -1;
-                    newState = "running"
-                }
-                else {
-                    playerTransform.velocity.x = -config.player.speed;
-                    playerTransform.scale = -1;
-                    newState = "running"
+        if (playerInput.up) {
+            if (playerPowerup.drunk) {
+                if (playerState.state === "grounded" || playerState.state === "running") {
+                    newState = "jumping";
+                    playerTransform.velocity.y = config.player.drunk_jump;
                 }
             }
-
-            if (playerInput.right) {
-                if (playerPowerup.superSpeed) {
-                    playerTransform.velocity.x = config.player.speed + 10;
-                    playerTransform.scale = 1;
-                    newState = "running"
-                }
-                else {
-                    playerTransform.velocity.x = config.player.speed;
-                    playerTransform.scale = 1;
-                    newState = "running"
+            else {
+                if (playerState.state === "grounded" || playerState.state === "running") {
+                    newState = "jumping";
+                    playerTransform.velocity.y = config.player.jump;
                 }
             }
+        }
 
-            if (playerInput.down) {
-                playerTransform.velocity.y = -config.player.jump;
-                newState = "jumping";
-            }
-
-            if (playerInput.left && playerInput.right) {
-                playerTransform.velocity.x = 0;
+        if (playerInput.left) {
+            if (playerPowerup.superSpeed) {
+                playerTransform.velocity.x = -config.player.speed - 10;
                 playerTransform.scale = -1;
+                newState = "running"
+            }
+            else {
+                playerTransform.velocity.x = -config.player.speed;
+                playerTransform.scale = -1;
+                newState = "running"
+            }
+        }
+
+        if (playerInput.right) {
+            if (playerPowerup.superSpeed) {
+                playerTransform.velocity.x = config.player.speed + 10;
+                playerTransform.scale = 1;
+                newState = "running"
+            }
+            else {
+                playerTransform.velocity.x = config.player.speed;
+                playerTransform.scale = 1;
+                newState = "running"
+            }
+        }
+
+        if (playerInput.down) {
+            playerTransform.velocity.y = -config.player.jump;
+            newState = "jumping";
+        }
+
+        if (playerInput.left && playerInput.right) {
+            playerTransform.velocity.x = 0;
+            playerTransform.scale = -1;
+            newState = "grounded";
+        }
+
+        // stop player from walking left off level
+        if (playerTransform.position.x < 0) {
+            playerTransform.position = playerTransform.previous_position;
+        }
+
+        // add inertia
+        if (!playerInput.left && !playerTransform.right) {
+
+            // if slow enough, stop to 0
+            if (Math.abs(playerTransform.velocity.x) < config.player.minSpeed) {
+                playerTransform.velocity.x = 0;
                 newState = "grounded";
             }
 
-            // stop player from walking left off level
-            if (playerTransform.position.x < 0) {
-                playerTransform.position = playerTransform.previous_position;
+            if (playerTransform.velocity.x > 0) {
+                playerTransform.velocity.x *= config.player.inertia;
+                newState = "running"
+
+            } else if (playerTransform.velocity.x < 0) {
+                playerTransform.velocity.x *= config.player.inertia;
+                newState = "running";
+            }
+        }
+
+        playerTransform.position.x += playerTransform.velocity.x;
+
+        // truncate player speed if above max
+        if (playerTransform.velocity.length() > config.player.maxspeed) {
+            playerTransform.velocity.normalize();
+            playerTransform.velocity = playerTransform.velocity.multiply(config.player.maxspeed);
+        }
+
+            if (playerState.state !== newState) {
+                playerState.state = newState;
+                this.updatePlayerAnimation();
             }
 
-            // add inertia
-            if (!playerInput.left && !playerTransform.right) {
+        playerTransform.previous_position = playerTransform.position;
+        playerTransform.position = playerTransform.position.add(playerTransform.velocity);
 
-                // if slow enough, stop to 0
-                if (Math.abs(playerTransform.velocity.x) < config.player.minSpeed) {
-                    playerTransform.velocity.x = 0;
-                    newState = "grounded";
-                }
+        // update all bullets position based on velocity
+        for (let entity of this.entity_manager.getEntities()){
 
-                if (playerTransform.velocity.x > 0) {
-                    playerTransform.velocity.x *= config.player.inertia;
-                    newState = "running"
+            if (entity.tag !== "bullet" && entity.tag !== "screech"){continue}
 
-                } else if (playerTransform.velocity.x < 0) {
-                    playerTransform.velocity.x *= config.player.inertia;
-                    newState = "running";
-                }
-            }
-
-            // update all entities position based on velocity
-            for (let entity of this.entity_manager.getEntities()) {
-                if (entity.tag === "bg-img"){continue}
+            if (entity.hasComponent('CTransform')){
                 let eTransform = entity.getComponent('CTransform');
-
-                    // add gravity effects to every entity that has CGravity
-                    if (entity.hasComponent('CGravity')) {
-                        if (player.getComponent('CPowerup').drunk) {
-                            //let eGravity = entity.getComponent('CGravity');
-                            eTransform.velocity.y += config.game_engine.drunk_gravity;
-                        }
-                        else {
-                            let eGravity = entity.getComponent('CGravity');
-                            eTransform.velocity.y += eGravity.gravity;
-                        }
-
-                    }
-
-                if (entity.tag === 'enemy'){
-                    let direction = playerTransform.position.subtract(eTransform.position);
-
-                    direction.normalize();
-                    direction = direction.multiply(config.player.maxspeed * 0.1);
-                    direction.y = eTransform.velocity.y;
-                    direction.x += eTransform.velocity.x / 2;
-                    eTransform.velocity = direction;
-
-                        if (eTransform.velocity.x < 0) {
-                            eTransform.scale = 1;
-                        }
-                        if (eTransform.velocity.x > 0) {
-                            eTransform.scale = -1;
-                        }
-                    }
-
-                if (entity.tag === 'bullet') {
-                    eTransform.position.x += eTransform.velocity.x
-                }
-
+                eTransform.position.x += eTransform.velocity.x;
+                eTransform.position.y += eTransform.velocity.y;
                 eTransform.previous_position = eTransform.position;
                 eTransform.position = eTransform.position.add(eTransform.velocity);
             }
 
-            // truncate player speed if above max
-            if (playerTransform.velocity.length() > config.player.maxspeed) {
-                playerTransform.velocity.normalize();
-                playerTransform.velocity = playerTransform.velocity.multiply(config.player.maxspeed);
-            }
+        }
 
-            if (playerState.state !== newState){
-                playerState.state = newState;
-                this.updatePlayerAnimation();
+    }
+
+    sGravity(){
+        const player = this.entity_manager.getEntitiesByTag('player')[0];
+        let player_powerup = player.getComponent('CPowerup');
+        for (let entity of this.entity_manager.getEntities()){
+            if (entity.hasComponent('CGravity')){
+                let eTransform = entity.getComponent('CTransform');
+                let eGravity = entity.getComponent('CGravity');
+
+                if (player_powerup.drunk){
+                    eTransform.velocity.y += config.game_engine.drunk_gravity;
+                }
+                else {
+                    eTransform.velocity.y += eGravity.gravity;
+                }
             }
         }
     }
@@ -507,18 +452,15 @@ class GameEngine {
             if (!tile.hasComponent("CBoundingBox")) {continue;}
 
             let tileTransform = tile.getComponent("CTransform");
+
+            // tile-player collision
             let overlap = physics.getOverLap(player, tile);
-
             if (overlap.x > 0 && overlap.y > 0) {
-
                 let prevOverlap = physics.getPrevOverLap(player, tile);
-
                 if (prevOverlap.y > 0){
                     let direction = tileTransform.position.x > playerTransform.previous_position.x? -1: 1;
                     playerTransform.position.x += direction * overlap.x
-
                 }
-
                 else if (prevOverlap.x > 0){
                     let direction = tileTransform.position.y > playerTransform.previous_position.y? -1: 1;
                     playerTransform.position.y += direction * overlap.y;
@@ -526,14 +468,14 @@ class GameEngine {
                 }
             }
 
-            // enemy collision
+            // tile-enemy collision
             for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
 
                 let enemyTransform = enemy.getComponent("CTransform");
-                let overlap = physics.getOverLap(enemy, tile);
+                let overlap = physics.getOverLap(tile, enemy);
 
                 if (overlap.x > 0 && overlap.y > 0) {
-                    let prevOverlap = physics.getPrevOverLap(enemy, tile);
+                    let prevOverlap = physics.getPrevOverLap(tile, enemy);
                     if (prevOverlap.y > 0){
                         let direction = tileTransform.position.x > enemyTransform.previous_position.x? -1: 1;
                         enemyTransform.position.x += direction * overlap.x
@@ -546,8 +488,17 @@ class GameEngine {
                     }
                 }
             }
+
+            // tile-bullet collision
+            for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
+                let overlap = physics.getOverLap(tile, bullet);
+                if (overlap.x > 0 && overlap.y > 0){
+                    bullet.destroy();
+                }
+            }
         }
 
+        // enemy - player collision
         for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
 
             let overlap = physics.getOverLap(enemy, player);
@@ -563,7 +514,7 @@ class GameEngine {
                     if (playerPowerup.shield) {
                         playerPowerup.shield = false;
                         playerHealth.invincible = true;
-                        setTimeout(() => playerHealth.invincible = false, 800)
+                        setTimeout(() => playerHealth.invincible = false, 800);
                         return;
                     }
                     if (!playerHealth.invincible) {
@@ -574,14 +525,10 @@ class GameEngine {
                     }
                     if (playerHealth.health === 0) {
                         console.log('player dead');
-                        
                     }
                 }
             }
-        }
 
-        // bullet / enemy collision
-        for (let enemy of this.entity_manager.getEntitiesByTag("enemy")) {
             for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
                 const score = this.entity_manager.getEntitiesByTag("score")[0];
                 let overlap = physics.getOverLap(enemy, bullet);
@@ -597,16 +544,6 @@ class GameEngine {
                         enemy.destroy();
                         bullet.destroy();
                     }
-                }
-            }
-        }
-
-        // bullet / tile collision
-        for (let tile of this.entity_manager.getEntitiesByTag("tile")) {
-            for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
-                let overlap = physics.getOverLap(tile, bullet);
-                if (overlap.x > 0 && overlap.y > 0){
-                    bullet.destroy();
                 }
             }
         }
@@ -647,7 +584,7 @@ class GameEngine {
             }
         }
 
-        // screech / checkpoint collision 
+        // screech / checkpoint collision
         for (let bottle of this.entity_manager.getEntitiesByTag("screech")) {
             for (let checkpoint of this.entity_manager.getEntitiesByTag("checkpoint")) {
                 const score = this.entity_manager.getEntitiesByTag("score")[0];
@@ -689,14 +626,34 @@ class GameEngine {
             }
         }
 
-        // player / taxi collision 
+        // player / taxi collision
         for (let taxi of this.entity_manager.getEntitiesByTag("taxi")) {
             let overlap = physics.getOverLap(player, taxi);
             if (overlap.x > 0 && overlap.y > 0) {
                 // level end, check if player delivered all screech
                 // if so, go to next level, if not, show level failed screen.
                 this.sLevelEnd();
-                
+
+            }
+        }
+
+        // bullet-player collision
+        for (let bullet of this.entity_manager.getEntitiesByTag("bullet")){
+            let overlap = physics.getOverLap(player, bullet);
+            let playerHealth = player.getComponent('CHealth');
+            if (overlap.x > 0 && overlap.y > 0){
+                bullet.destroy();
+                if (!playerHealth.invincible) {
+                    playerHealth.invincible = true;
+                    playerHealth.health -= 20;
+                    // Invincibility frames
+                    setTimeout(() => playerHealth.invincible = false, 800)
+                }
+
+                if (playerHealth.health === 0) {
+                    //player.destroy();
+                    bullet.destroy();
+                }
             }
         }
 
@@ -746,6 +703,7 @@ class GameEngine {
             let enemyBounding = enemy.getComponent('CBoundingBox');
             let enemyOffSet = enemyTransform.position.add(enemyBounding.halfSize);
             let enemyAI = enemy.getComponent('CEnemyAI');
+            let oldState = enemyAI.player_detected;
             let distance_to_player = (playerOffSet.subtract(enemyOffSet)).abs();
 
             // ignore if player is farther than range of enemy
@@ -772,14 +730,119 @@ class GameEngine {
                     }
                 }
 
-                if (playerDetected){
-                    //console.log('player detected');
-                    break;
-                }
             }
             enemyAI.playerPosition = playerOffSet;
             enemyAI.player_detected = playerDetected;
             enemyAI.show = playerDetected;
+
+            if (playerDetected !== oldState){
+                this.updateEnemyAnimation(enemy);
+            }//
+        }
+    }
+
+    sEnemyAI(){
+
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+
+        for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
+            const enemyTransform = enemy.getComponent('CTransform');
+            const enemyAI = enemy.getComponent("CEnemyAI");
+
+            // if not aggro mode
+            if (enemyAI.player_detected === false){
+                let direction = enemyAI.currentRoam < 0 && enemyAI.currentRoam > -1* enemyAI.roamDistance? -1: 1;
+                enemyAI.currentRoam--;
+                // reset roam
+                if (enemyAI.currentRoam < -1*enemyAI.roamDistance){
+                    enemyAI.currentRoam = enemyAI.roamDistance;
+                    enemyTransform.velocity.x = 0;
+                }
+                enemyTransform.velocity.x += direction * config.enemy.melee.speed;
+
+                // truncate speed if above max
+                if (enemyTransform.velocity.length() > config.enemy.melee.maxSpeed) {
+                    enemyTransform.velocity.normalize();
+                    enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.melee.maxSpeed * 0.25 );
+                }
+            }
+            // if detected player
+            else {
+                const playerTransform = player.getComponent('CTransform');
+                let direction = playerTransform.position.subtract(enemyTransform.position);
+                let bounds = enemy.getComponent("CBoundingBox");
+                let offsetX = enemyTransform.scale === 1? bounds.size.x + enemyTransform.position.x + 5: enemyTransform.position.x - 5;
+                let offsetY = enemyTransform.position.y + 15;
+
+                switch (enemyAI.enemy_type) {
+
+                    case "melee":
+                        direction.normalize();
+                        direction = direction.multiply(config.enemy.melee.maxSpeed * 0.25);
+                        direction.y = enemyTransform.velocity.y;
+                        direction.x += enemyTransform.velocity.x / 2;
+                        enemyTransform.velocity = direction;
+
+                        // truncate speed if above max
+                        if (enemyTransform.velocity.length() > config.enemy.melee.maxSpeed) {
+                            enemyTransform.velocity.normalize();
+                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.melee.maxSpeed * 0.25);
+                        }
+                        break;
+
+                    case "ranged":
+                        direction.normalize();
+                        direction = direction.multiply(config.enemy.ranged.maxSpeed * 0.05);
+                        direction.y = enemyTransform.velocity.y;
+                        direction.x += enemyTransform.velocity.x;
+                        enemyTransform.velocity = direction;
+
+                        if (enemyAI.canAttack){
+                            this.entity_manager.addModel.bullet_knife(offsetX, offsetY, enemyTransform.scale);
+                            enemyAI.canAttack = false;
+                            setTimeout( () => {enemyAI.canAttack = true}, 1000)
+                        }
+                        // truncate speed if above max
+                        if (enemyTransform.velocity.length() > config.enemy.ranged.maxSpeed) {
+                            enemyTransform.velocity.normalize();
+                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.ranged.maxSpeed * 0.05);
+                        }
+                        break;
+
+                    case "flying":
+                        direction.normalize();
+                        direction = direction.multiply(config.enemy.flying.maxSpeed * 0.75);
+                        direction.y = enemyTransform.velocity.y;
+                        direction.x += enemyTransform.velocity.x / 2;
+                        enemyTransform.velocity = direction;
+                        offsetY = enemyTransform.position.y + bounds.size.y + 5;
+
+                        if (enemyAI.canAttack){
+                            this.entity_manager.addModel.bullet_dropping(offsetX, offsetY, enemyTransform.scale, enemyTransform.velocity);
+                            enemyAI.canAttack = false;
+                            setTimeout( () => {enemyAI.canAttack = true}, 2000)
+                        }
+
+                        // truncate speed if above max
+                        if (enemyTransform.velocity.length() > config.enemy.flying.maxSpeed) {
+                            enemyTransform.velocity.normalize();
+                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.flying.maxSpeed * 0.25);
+                        }
+                        break;
+                }
+            }
+
+            enemyTransform.position.x += enemyTransform.velocity.x;
+            enemyTransform.previous_position = enemyTransform.position;
+            enemyTransform.position = enemyTransform.position.add(enemyTransform.velocity);
+
+            if (enemyTransform.velocity.x < 0) {
+                enemyTransform.scale = -1;
+            }
+
+            if (enemyTransform.velocity.x > 0) {
+                enemyTransform.scale = 1;
+            }
         }
     }
 
@@ -822,6 +885,25 @@ class GameEngine {
                 animation.speed = 0.25;
                 break;
         }
+    }
+
+    updateEnemyAnimation(enemy){
+        //console.log('updated enemy animation');
+
+        let animation = enemy.getComponent("CAnimation");
+        let state = enemy.getComponent("CEnemyAI");
+        let animationOptions = enemy.getComponent('CEnemyAnim');
+
+        if (state.player_detected === true){
+            animation.animName = animationOptions.attackAnim;
+            animation.numOfFrames = animationOptions.attackAnimFrames;
+        }
+        else {
+            animation.animName = animationOptions.idleAnim;
+            animation.numOfFrames = animationOptions.idleAnimFrames;
+        }
+        animation.currentFrame = 0;
+
     }
 
     sEditor(){
@@ -885,6 +967,10 @@ class GameEngine {
 
     returnGameState(){
         return this.entity_manager.getEntities();
+    }
+
+    setEditorEntityType(entityType){
+        this.editorEntityType = entityType
     }
 
 }

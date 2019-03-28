@@ -111,6 +111,11 @@ const updateSelectedEntity = (socket, data) => {
     gameEngine.setSelectedEntity(entity)
 }
 
+const onUpdateEditorEntityType = (socket, data) => {
+    const gameEngine = gameSessionService.getSession(data.sessionId)
+    gameEngine.setEditorEntityType(data.entityType)
+}
+
 module.exports = {
     onRequestGameStateUpdate,
     onRemoveSession,
@@ -119,4 +124,6 @@ module.exports = {
     onLoadLevel,
     updateEntityPosition,
     updateSelectedEntity
+    onLoadLevel,
+    onUpdateEditorEntityType
 }

@@ -7,6 +7,11 @@ class LevelEditor {
         this.sessionId = null
         this.entities = []
         this.updateStateInterval = null
+
+        this.entityType = {
+            options: ["tile", "decoration", "player", "enemy", "powerup", "checkpoint"],
+            selectedIndex: 0
+        }
     }
 
     newSessionId() {
@@ -56,6 +61,19 @@ class LevelEditor {
             sessionId: this.sessionId
         })
 
+    }
+
+    changeEntityType(){
+        //Increment with wrap around the set of available entity type options
+        this.entityType.selectedIndex = (this.entityType.selectedIndex + 1) % this.entityType.options.length
+        const entityType = this.entityType.options[this.entityType.selectedIndex]
+        
+        socketClient.emit("updateEditorEntityType", {
+            sessionId: this.sessionId,
+            entityType: this.entityType.options[this.entityType.selectedIndex]
+        })
+
+        alert(`Switched editor entity type to: ${entityType}`)
     }
 
     handleClick(event){
