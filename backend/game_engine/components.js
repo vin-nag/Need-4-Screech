@@ -64,7 +64,9 @@ const CPowerup = (superSpeed, invincibility, shield, drunk) =>({name: "CPowerup"
 
 const CBar = (value, maxValue, color) => ({name: "CBar", value, maxValue, color});
 
-const CEnemyAI = (enemy_type, aggro_time=5000, detection_distance=1000, player_detected=false, show=false, playerPosition) => ({name: "CEnemyAI", enemy_type, aggro_time, detection_distance, player_detected, show, playerPosition});
+const CEnemyAI = (enemy_type, currentRoam, roamDistance, aggro_time=5000, detection_distance=1000, player_detected=false, show=false, playerPosition, canAttack=true) => ({name: "CEnemyAI", enemy_type, currentRoam, roamDistance, aggro_time, detection_distance, player_detected, show, playerPosition, canAttack});
+
+const CEnemyAnim = (idleAnim, idleAnimFrames, attackAnim, attackAnimFrames) => ({name: "CEnemyAnim", idleAnim, idleAnimFrames, attackAnim, attackAnimFrames})
 
 const CScreech = (screechCount) => ({name: "CScreech", screechCount});
 
@@ -72,4 +74,4 @@ const CScore = (score) => ({name: "CScore", score});
 
 const CGameRunning = (running) => ({name: "CGameRunning", running})
 
-module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup, CEnemyAI, CScreech, CScore, CGameRunning};
+module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup, CEnemyAI, CScreech, CScore, CGameRunning, CEnemyAnim};
