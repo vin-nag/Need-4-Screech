@@ -42,7 +42,8 @@
         "ray": "86",
         "interact": "69",
         "screech": "79",
-        "drink": "70"
+        "drink": "70",
+        "delete": "46"
      },
     "canvas": {
         "x": 1125,

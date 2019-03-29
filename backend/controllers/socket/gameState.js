@@ -99,15 +99,16 @@ const onLoadLevel = (socket, data) => {
 
 const updateEntityPosition = (socket, data) => {
     //still needs to account for viewport
-    let newXpos = data.event.x
-    let newYpos = data.event.y
+    let newXpos = data.x
+    let newYpos = data.y
     const gameEngine = gameSessionService.getSession(data.sessionId)
     gameEngine.setMousePosition(newXpos, newYpos)
 }
 
 const updateSelectedEntity = (socket, data) => {
-    let entity = data.selectedEntity
+    let entityId = data.selectedEntity
     const gameEngine = gameSessionService.getSession(data.sessionId)
+    const entity = entityId == null ? null : gameEngine.entity_manager.getEntityById(entityId)
     gameEngine.setSelectedEntity(entity)
 }
 

@@ -13,7 +13,7 @@ class GameEngine {
         this.entity_manager = new EntityManager();
         this.gameStarted = false;
         this.selectedEntity = null
-        this.mousePositiion = new Vector(0,0)
+        this.mousePosition = new Vector(0,0)
         this.editorEntityType = "tile"
 
         // last input
@@ -27,6 +27,7 @@ class GameEngine {
         this.lastInput[config.controls.mouseclick] = false;
         this.lastInput[config.controls.bounding] = false;
         this.lastInput[config.controls.ray] = false;
+        this.lastInput[config.controls.delete] = false;
     }
 
     loadSerializedEntities(entities){
@@ -140,6 +141,7 @@ class GameEngine {
             this.sEnemyAI();
             this.sCollision();
             this.sGameState();
+            this.sEditor();
             this.entity_manager.update();
         }
     }
@@ -247,6 +249,12 @@ class GameEngine {
             tile.addComponent(components.CBoundingBox(size, half_size));
         }
 
+        if(this.lastInput[config.controls.delete] === true){
+            if(this.selectedEntity){
+                this.selectedEntity.destroy()
+                this.selectedEntity = null
+            }
+        }
 
         //Not working currently
         if (this.lastInput[config.controls.mouseclick] === true){
@@ -908,10 +916,12 @@ class GameEngine {
 
     sEditor(){
         // Updating entity position according to mouse position
-        let entity = this.selectedEntity
-        let eTransform = entity.getComponent('CTransform')
-        eTransform.position.x = this.mousePositiion.x
-        eTransform.position.y = this.mousePositiion.y
+        if(this.selectedEntity){
+            let entity = this.selectedEntity
+            let eTransform = entity.getComponent('CTransform')
+            eTransform.position.x = this.mousePosition.x
+            eTransform.position.y = this.mousePosition.y
+        }
     }
 
     setSelectedEntity(entity){
@@ -919,8 +929,8 @@ class GameEngine {
     }
 
     setMousePosition(x, y){
-        this.mousePositiion.x = x
-        this.mousePositiion.y = y
+        this.mousePosition.x = x
+        this.mousePosition.y = y
     }
 
     // check if player completed level successfully
