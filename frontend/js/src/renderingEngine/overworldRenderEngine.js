@@ -6,11 +6,16 @@ const engine = (menuItems, selectedItemIndex) => {
     const ctx = canvas.getContext("2d")
 
     let bg_name = "overworld"
+    let title = "Need-4-Screech"
     let bg_img = assetManager.getAnimationImage(bg_name);
+    let title_img = assetManager.getAnimationImage(title);
+    const sub_title_color = "#000"
 
     ctx.setTransform(1,0,0,1,0,0); //reset the transform matrix as it is cumulative
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(bg_img, 0, 0, bg_img.width, bg_img.height, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(title_img, 0, 0, title_img.width, title_img.height, 480, 10, 360, 110);
+    canvasService.draw.text(ctx, "Overworld", 650, 133, "40px", sub_title_color, "Permanent Marker")
 
     for(let i = 0; i < menuItems.length; i++){
 
@@ -25,9 +30,10 @@ const engine = (menuItems, selectedItemIndex) => {
             canvasService.draw.text(ctx, menuItems[i], 400, 200, "30px", color, "Permanent Marker")
         }
         else if (menuItems[i] === "Cape Spear") {
-            canvasService.draw.rectangle(ctx, 808, 68, 187, 50, "rgba(0, 0, 0, 0.6)")
-            canvasService.draw.text(ctx, menuItems[i], 900, 100, "30px", color, "Permanent Marker")
+            canvasService.draw.rectangle(ctx, 960, 125, 187, 50, "rgba(0, 0, 0, 0.6)")
+            canvasService.draw.text(ctx, menuItems[i], 1050, 160, "30px", color, "Permanent Marker")
         }
+
     }
 }
 
