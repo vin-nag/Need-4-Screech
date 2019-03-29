@@ -41,6 +41,7 @@ const handleKeyPress = (event) => {
     else if(event.keyCode === 40){ _shiftSelectedItemDown() } //Down Arrow Key
     else if(event.keyCode === 13){ _triggerSelectedItem() } //Enter Key
     else if(event.keyCode === 27){ goToMenu("Main") } //Escape Key
+    console.log(event)
 }
 
 //--------------Private Variables and Functions------------//
@@ -62,7 +63,7 @@ const _triggerSelectedItem = () => {
 }
 
 const _menuOptions = {
-    "Campaign": {handler: () => app.switchToWindow(APP_WINDOWS.GAME_PLAY), children: []},
+    "Campaign": {handler: () => app.switchToWindow(APP_WINDOWS.OVERWORLD), children: []},
     "Multiplayer": {handler: () => goToMenu("Multiplayer"), children: ["Host Session", "Join Session"]},
     "Profile": {handler: () => goToMenu("Profile"), children: ["Change Username", "Change Password"]},
     "Level Editor": {handler: () => app.switchToWindow(APP_WINDOWS.LEVEL_EDITOR), children: []},
