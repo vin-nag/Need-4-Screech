@@ -37,7 +37,7 @@ const connectControllers = (socket) => {
     socket.on("updateEditorEntityType", data => gameStateController.onUpdateEditorEntityType(socket, data))
     socket.on("getAnimationsList", data => assetsController.onGetAnimationsList(socket, data))
     socket.on("updateEntityPosition", data => gameStateController.updateEntityPosition(socket, data))
-    socket.on("setSelectedEntity", data => gamseStateController.updateSelectedEntity(socket, data))
+    socket.on("setSelectedEntity", data => gameStateController.updateSelectedEntity(socket, data))
 }
 
 module.exports = {

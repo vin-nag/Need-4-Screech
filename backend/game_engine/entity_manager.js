@@ -75,6 +75,10 @@ class EntityManager {
         return this.entities.filter(entity => entity.tag === tag)
     }
 
+    getEntityById(id){
+        return this.entities.find(entity => entity.id === id)
+    }
+
     update(){
         /** this function does an update, adding entities and removing them.
          * */
