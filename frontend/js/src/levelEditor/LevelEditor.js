@@ -78,6 +78,12 @@ class LevelEditor {
     handleMouseWheel(event){
         //Stub: Map scroll wheel movement to level editor functions (likely changing
         //the animation of the selected entity)
+        if(event.type === 'wheel'){
+            socketClient.emit('onScroll',{
+                event:event,
+                sessionID:this.sessionId
+            })
+        }
     }
 
     handleKeyPress(event){

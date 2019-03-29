@@ -21,9 +21,9 @@ class GameEngine {
         this.lastInput[config.controls.right] = false;
         this.lastInput[config.controls.shoot] = false;
         this.lastInput[config.controls.new]= false;
-        this.lastInput[config.controls.mouseclick] = false;
         this.lastInput[config.controls.bounding] = false;
         this.lastInput[config.controls.ray] = false;
+        this.lastInput[config.controls.scroll]=false;
     }
 
     loadSerializedEntities(entities){
@@ -291,6 +291,10 @@ class GameEngine {
             let size = new Vector(64, 64);
             let half_size = new Vector(32, 32);
             tile.addComponent(components.CBoundingBox(size, half_size));
+        }
+
+        if(this.lastInput[config.controls.scroll] === true){
+            console.log("wheel scrolled!!!")
         }
 
 
