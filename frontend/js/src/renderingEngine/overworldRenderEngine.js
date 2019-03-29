@@ -12,12 +12,8 @@ const engine = (menuItems, selectedItemIndex) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(bg_img, 0, 0, bg_img.width, bg_img.height, 0, 0, canvas.width, canvas.height);
 
-    const menuVerticalPadding = 100
-    const menuItemHeight = (canvas.height-2*menuVerticalPadding)/menuItems.length
-
     for(let i = 0; i < menuItems.length; i++){
-        const x = canvas.width/2
-        const y = (i+0.5)*menuItemHeight + menuVerticalPadding
+
         const color = (i === selectedItemIndex) ? "#fff" : "#ff0000"
 
         if (menuItems[i] === "George Street") {
