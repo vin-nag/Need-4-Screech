@@ -60,10 +60,10 @@ class GameEngine {
             this.entity_manager.addModel.tile_grey_center(x, 625);
         }
 
-        this.entity_manager.addModel.powerup_shield(400,590);
-        this.entity_manager.addModel.powerup_invincible(600, 590);
-        this.entity_manager.addModel.powerup_speed(800, 590);
-        this.entity_manager.addModel.powerup_health(1200, 590);
+        this.entity_manager.addModel.powerup_shield(400,552);
+        this.entity_manager.addModel.powerup_invincible(600, 552);
+        this.entity_manager.addModel.powerup_speed(800, 552);
+        this.entity_manager.addModel.powerup_health(1200, 552);
 
         for (let x = 1000; x < 2500; x+=300){
             this.entity_manager.addModel.checkpoints(x, 475);

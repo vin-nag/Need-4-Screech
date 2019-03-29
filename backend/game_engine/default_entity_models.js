@@ -139,8 +139,6 @@ class EntityModels {
     };
 
 
-
-
     enemy_melee_moose(x=0, y=0) {
         const enemy_entity = this.entity_manager.addEntity("enemy");
         enemy_entity.addComponent(components.CLifeSpan(config.enemy.melee.lifeSpan));
@@ -222,7 +220,7 @@ class EntityModels {
     powerup_speed(x=0, y=0) {
         const powerup_entity = this.entity_manager.addEntity("powerup");
         powerup_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        powerup_entity.addComponent(components.CAnimation('SuperSpeed', 4, 0, .50));
+        powerup_entity.addComponent(components.CAnimation('SuperSpeed', 1, 0, 0));
         powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 10), new Vector(10, 5)));
         return powerup_entity
     };
@@ -230,14 +228,14 @@ class EntityModels {
     powerup_invincible(x=0, y=0) {
         const powerup_entity = this.entity_manager.addEntity("powerup");
         powerup_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        powerup_entity.addComponent(components.CAnimation('Invincibility', 4, 0, .50));
+        powerup_entity.addComponent(components.CAnimation('Invincibility', 1, 0, 0));
         powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 10), new Vector(10, 5)));
     };
 
     powerup_shield(x=0, y=0) {
         const powerup_entity = this.entity_manager.addEntity("powerup");
         powerup_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        powerup_entity.addComponent(components.CAnimation('Shield', 4, 0, .50));
+        powerup_entity.addComponent(components.CAnimation('Shield', 1, 0, 0));
         powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 10), new Vector(10, 5)));
     };
 
