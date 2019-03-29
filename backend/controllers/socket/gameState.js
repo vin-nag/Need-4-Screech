@@ -97,10 +97,33 @@ const onLoadLevel = (socket, data) => {
     })
 }
 
+const updateEntityPosition = (socket, data) => {
+    //still needs to account for viewport
+    let newXpos = data.event.x
+    let newYpos = data.event.y
+    const gameEngine = gameSessionService.getSession(data.sessionId)
+    gameEngine.setMousePosition(newXpos, newYpos)
+}
+
+const updateSelectedEntity = (socket, data) => {
+    let entity = data.selectedEntity
+    const gameEngine = gameSessionService.getSession(data.sessionId)
+    gameEngine.setSelectedEntity(entity)
+}
+
+const onUpdateEditorEntityType = (socket, data) => {
+    const gameEngine = gameSessionService.getSession(data.sessionId)
+    gameEngine.setEditorEntityType(data.entityType)
+}
+
 module.exports = {
     onRequestGameStateUpdate,
     onRemoveSession,
     onSaveLevel,
     onListLevels,
-    onLoadLevel
+    onLoadLevel,
+    updateEntityPosition,
+    updateSelectedEntity,
+    onLoadLevel,
+    onUpdateEditorEntityType
 }

@@ -18,7 +18,7 @@ export const listen = () => {
         socketClient.emit("listLevels", {})
     })
     document.getElementById("levelEditorSaveLevel").addEventListener("click", ()=> domService.showElement("saveLevelModal"))
-    document.getElementById("levelEditorSetActive").addEventListener("click", () => levelEditor.setActive())
+    document.getElementById("levelEditorSetActive").addEventListener("click", () => levelEditor.changeEntityType())
 
     document.getElementById("levelEditorCanvas").addEventListener("click", (e) => levelEditor.handleClick(e))
     document.getElementById("levelEditorCanvas").addEventListener("mousemove", (e) => levelEditor.handleMouseMove(e))

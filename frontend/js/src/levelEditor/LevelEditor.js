@@ -6,8 +6,12 @@ class LevelEditor {
         this.paused = false
         this.sessionId = null
         this.entities = []
-        this.selectedEntity = null
         this.updateStateInterval = null
+
+        this.entityType = {
+            options: ["tile", "decoration", "player", "enemy", "powerup", "checkpoint"],
+            selectedIndex: 0
+        }
     }
 
     newSessionId() {
@@ -45,8 +49,6 @@ class LevelEditor {
     }
 
     saveLevel(levelName){
-        //Stub: Sends the entities array to the backend, in order to
-        //save the level, and awaits confirmation
         socketClient.emit("saveLevel", {
             "levelName": levelName,
             "sessionId": this.sessionId
@@ -54,9 +56,6 @@ class LevelEditor {
     }
 
     loadLevel(levelId){
-        //Stub: Calls the backend to request the entities stored for
-        //the given level. On success, updates the local gameState
-        //accordingly. On failure, displays the corresponding error message
         socketClient.emit('loadLevel', {
             levelId,
             sessionId: this.sessionId
@@ -64,15 +63,50 @@ class LevelEditor {
 
     }
 
+    changeEntityType(){
+        //Increment with wrap around the set of available entity type options
+        this.entityType.selectedIndex = (this.entityType.selectedIndex + 1) % this.entityType.options.length
+        const entityType = this.entityType.options[this.entityType.selectedIndex]
+        
+        socketClient.emit("updateEditorEntityType", {
+            sessionId: this.sessionId,
+            entityType: this.entityType.options[this.entityType.selectedIndex]
+        })
+
+        alert(`Switched editor entity type to: ${entityType}`)
+    }
+
     handleClick(event){
-        //Stub: Figures out whether an entity as already selected or not.
-        //If yes, deselects the entity. If not, checks if an entity is located
-        //at the click pos, and if so sets it as selected
+        if(this.selectedEntity != null){
+            this.selectedEntity = null
+        }
+        else{
+            let xClick = event.x
+            let yClick = event.y
+            for (let entity of this.entities){
+                let boundingBox = entity.componentMap["CBoundingBox"]
+                let xRange = entity.componentMap["CTransform"].position.x + boundingBox.size.x
+                let yRange = entity.componentMap["CTransform"].position.y + boundingBox.size.y
+                let inXrange = xClick >= entity.componentMap.size.position.x && xClick <= xRange
+                let inYrange = yClick >= entity.componentMap.size.position.y && yClick <= yRange
+                if (inXrange && inYrange){
+                    socket.emit("setSelectedEntity", {
+                        "selectedEntity": entity,
+                        "sessionId": this.sessionId
+                    })
+                    break
+                }
+            }
+        }
     }
 
     handleMouseMove(event){
-        //Stub: If there is an entity selected, updates its position to that of
-        //the cursor
+        if (this.selectedEntity != null){
+            socket.emit("updateEntityPosition", {
+                "event": event,
+                "sessionId": this.sessionId
+            })
+        }
     }
 
     handleMouseWheel(event){
@@ -100,10 +134,6 @@ class LevelEditor {
                 sessionID: this.sessionId
             })
         }
-    }
-
-    setEntities(loadedEntites){
-        this.entities = loadedEntites
     }
 
 }
