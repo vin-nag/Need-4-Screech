@@ -121,6 +121,17 @@ class GameEngine {
         checkpoint_success.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
     }
 
+    spawnShield() {
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+        let playerTransform = player.getComponent('CTransform');
+        let position = playerTransform.position;
+        let previous_position = playerTransform.previous_position;
+        let velocity = playerTransform.velocity;
+        let shield_on = this.entity_manager.addEntity("shield_on");
+        shield_on.addComponent(components.CTransform(new Vector(position.x, position.y - 20), previous_position, 1, velocity, 0));
+        shield_on.addComponent(components.CAnimation('shieldOn', 6, 0, .5));
+    }
+
 
     update(){
         // this function handles the update function, starting a game if it hasn't been already
@@ -436,6 +447,13 @@ class GameEngine {
 
         }
 
+        // powerup movements
+        for (let shield of this.entity_manager.getEntitiesByTag("shield_on")) {
+            let sTransform = shield.getComponent('CTransform');
+            sTransform.position.x = playerTransform.position.x - 23;
+            sTransform.position.y = playerTransform.position.y - 20;
+        }
+
     }
 
     sGravity(){
@@ -519,6 +537,7 @@ class GameEngine {
             let playerHealth = player.getComponent('CHealth');
             let playerPowerup = player.getComponent('CPowerup');
             let game_running = player.getComponent("CGameRunning");
+            let shield_on = this.entity_manager.getEntitiesByTag("shield_on")[0];
 
             if (overlap.x > 0 && overlap.y > 0){
                 if (playerPowerup.invincibility) {
@@ -528,6 +547,7 @@ class GameEngine {
                     if (playerPowerup.shield) {
                         playerPowerup.shield = false;
                         playerHealth.invincible = true;
+                        shield_on.destroy();
                         setTimeout(() => playerHealth.invincible = false, 800);
                         return;
                     }
@@ -585,6 +605,7 @@ class GameEngine {
                     console.log("shield")
                     player.getComponent('CPowerup').shield = true;
                     powerup.destroy();
+                    this.spawnShield();
                 }
 
                 if (powerup.getComponent('CAnimation').animName === 'health_pack') {

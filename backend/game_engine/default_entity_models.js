@@ -283,6 +283,7 @@ class EntityModels {
         game_bar.addComponent(components.CAnimation('ice_bar', 1, 0, 0));
     }
 
+
 }
 
 module.exports = EntityModels;
