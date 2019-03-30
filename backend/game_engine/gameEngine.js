@@ -132,6 +132,18 @@ class GameEngine {
         shield_on.addComponent(components.CAnimation('shieldOn', 6, 0, .5));
     }
 
+    spawnInvincibility() {
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+        let playerTransform = player.getComponent('CTransform');
+        let position = playerTransform.position;
+        let previous_position = playerTransform.previous_position;
+        let velocity = playerTransform.velocity;
+        let invincibility_on = this.entity_manager.addEntity("invincibility_on");
+        invincibility_on.addComponent(components.CTransform(new Vector(position.x, position.y - 20), previous_position, 1, velocity, 0));
+        invincibility_on.addComponent(components.CAnimation('invincibility_on', 5, 0, .5));
+        setTimeout(() => invincibility_on.destroy(), 10000)
+    }
+
 
     update(){
         // this function handles the update function, starting a game if it hasn't been already
@@ -447,11 +459,16 @@ class GameEngine {
 
         }
 
-        // powerup movements
+        // powerup animation movements
         for (let shield of this.entity_manager.getEntitiesByTag("shield_on")) {
             let sTransform = shield.getComponent('CTransform');
             sTransform.position.x = playerTransform.position.x - 23;
             sTransform.position.y = playerTransform.position.y - 20;
+        }
+        for (let invincibility_on of this.entity_manager.getEntitiesByTag("invincibility_on")) {
+            let sTransform = invincibility_on.getComponent('CTransform');
+            sTransform.position.x = playerTransform.position.x - 11;
+            sTransform.position.y = playerTransform.position.y - 10;
         }
 
     }
@@ -601,6 +618,7 @@ class GameEngine {
                     console.log("inv")
                     player.getComponent('CPowerup').invincibility = true;
                     powerup.destroy();
+                    this.spawnInvincibility();
                     setTimeout(() => player.getComponent('CPowerup').invincibility = false, 10000)
                 }
                 if (powerup.getComponent('CAnimation').animName === 'Shield') {
@@ -681,8 +699,12 @@ class GameEngine {
             if (attacker === "player"){continue};
             let overlap = physics.getOverLap(player, bullet);
             let playerHealth = player.getComponent('CHealth');
+            let shield_on = this.entity_manager.getEntitiesByTag("shield_on")[0];
             if (overlap.x > 0 && overlap.y > 0){
                 bullet.destroy();
+                if (shield_on !== undefined) {
+                    shield_on.destroy();
+                }
                 if (!playerHealth.invincible) {
                     playerHealth.invincible = true;
                     playerHealth.health -= 20;
