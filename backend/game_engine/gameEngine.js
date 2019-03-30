@@ -231,22 +231,28 @@ class GameEngine {
         //Level Editor Input
 
         if (this.lastInput[config.controls.new] === true){
-
-            let tile = this.entity_manager.addEntity(this.editorEntityType);
-
-            // animation
-            tile.addComponent(components.CAnimation('GreyTile',1,0,0))
-
-            // transform
-            let position = new Vector(250,125);
-            let previous_position = new Vector(250, 125);
-            let velocity = new Vector(0, 0);
-            tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
-
-            //bounding box
-            let size = new Vector(64, 64);
-            let half_size = new Vector(32, 32);
-            tile.addComponent(components.CBoundingBox(size, half_size));
+            
+            if(!this.selectedEntity){
+                let tile = this.entity_manager.addEntity(this.editorEntityType);
+                this.selectedEntity = tile
+    
+                // animation
+                tile.addComponent(components.CAnimation('GreyTile',1,0,0))
+    
+                // transform
+                let position = new Vector(this.mousePosition.x, this.mousePosition.y);
+                let previous_position = new Vector(position.x, position.y);
+                let velocity = new Vector(0, 0);
+                tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
+    
+                //bounding box
+                if(this.editorEntityType !== "decoration"){
+                    let size = new Vector(64, 64);
+                    let half_size = new Vector(32, 32);
+                    tile.addComponent(components.CBoundingBox(size, half_size));
+                }
+            }
+           
         }
 
         if(this.lastInput[config.controls.delete] === true){
