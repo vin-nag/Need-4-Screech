@@ -674,10 +674,7 @@ class GameEngine {
                     player.getComponent('CPowerup').shield = true;
                     powerup.destroy();
                     this.spawnShield();
-<<<<<<< HEAD
                     this.spawnPowerupTitle(powerup);
-=======
->>>>>>> setup shield animations
                 }
 
                 if (powerup.getComponent('CAnimation').animName === 'health_pack') {
