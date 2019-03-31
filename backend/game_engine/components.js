@@ -72,6 +72,8 @@ const CScreech = (screechCount) => ({name: "CScreech", screechCount});
 
 const CScore = (score) => ({name: "CScore", score});
 
-const CGameRunning = (running) => ({name: "CGameRunning", running})
+const CGameRunning = (running) => ({name: "CGameRunning", running});
 
-module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup, CEnemyAI, CScreech, CScore, CGameRunning, CEnemyAnim};
+const CAttacker = (entityTag) => ({name: "CAttacker", entityTag});
+
+module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup, CEnemyAI, CScreech, CScore, CGameRunning, CEnemyAnim, CAttacker};

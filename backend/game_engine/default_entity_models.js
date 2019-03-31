@@ -48,7 +48,7 @@ class EntityModels {
         screech_entity.addComponent(components.CState("drunk"));
     };
 
-    bullet_bottle(x=0, y=0, scale) {
+    bullet_bottle(x=0, y=0, scale, tag) {
         const bullet_entity = this.entity_manager.addEntity("bullet");
         let offsetX = scale === -1? x-58: x+5;
         bullet_entity.addComponent(components.CTransform(new Vector(offsetX, y), new Vector(offsetX, y), scale, new Vector(scale*20, 0), 0));
@@ -56,9 +56,10 @@ class EntityModels {
         bullet_entity.addComponent(components.CAnimation('screech', 1, 0, 0));
         bullet_entity.addComponent(components.CState('shooting'));
         bullet_entity.addComponent(components.CLifeSpan(1000));
+        bullet_entity.addComponent(components.CAttacker(tag));
     };
 
-    screech(x=0, y=0, velocity, scale){
+    screech(x=0, y=0, velocity, scale, tag){
         const screech_entity = this.entity_manager.addEntity("screech");
         let offsetX = scale === -1? x-58: x+5;
         screech_entity.addComponent(components.CTransform(new Vector(offsetX, y), new Vector(offsetX, y), scale, new Vector(scale*10 + velocity.x, -15), 0));
@@ -66,9 +67,10 @@ class EntityModels {
         screech_entity.addComponent(components.CAnimation('screech', 1, 0, 0));
         screech_entity.addComponent(components.CState('shooting'));
         screech_entity.addComponent(components.CGravity(config.game_engine.gravity));
+        screech_entity.addComponent(components.CAttacker(tag));
     }
 
-    bullet_knife(x=0, y=0, scale) {
+    bullet_knife(x=0, y=0, scale, tag) {
         const bullet_entity = this.entity_manager.addEntity("bullet");
         let offsetX = scale === -1? x-58: x+5;
         bullet_entity.addComponent(components.CTransform(new Vector(offsetX, y), new Vector(offsetX, y), scale, new Vector(scale*20, 0), 0));
@@ -76,9 +78,10 @@ class EntityModels {
         bullet_entity.addComponent(components.CAnimation('knife', 1, 0, 0));
         bullet_entity.addComponent(components.CState('shooting'));
         bullet_entity.addComponent(components.CLifeSpan(1000));
+        bullet_entity.addComponent(components.CAttacker(tag));
     };
 
-    bullet_dropping(x=0, y=0, scale, velocity) {
+    bullet_dropping(x=0, y=0, scale, velocity, tag) {
         const bullet_entity = this.entity_manager.addEntity("bullet");
         bullet_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), scale, new Vector(velocity.x*0.15, 15), 0));
         bullet_entity.addComponent(components.CGravity(config.game_engine.gravity));
@@ -86,6 +89,7 @@ class EntityModels {
         bullet_entity.addComponent(components.CAnimation('bullet_dropping', 1, 0, 0));
         bullet_entity.addComponent(components.CState('shooting'));
         bullet_entity.addComponent(components.CLifeSpan(1000));
+        bullet_entity.addComponent(components.CAttacker(tag));
     };
 
     decorator_pole_1(x=0, y=0) {

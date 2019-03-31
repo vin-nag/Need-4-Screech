@@ -208,7 +208,7 @@ class GameEngine {
         if (CInput.shoot) {
             if (CInput.canShoot) {
                 let offsetX = playerTransform.scale === -1? playerTransform.position.x - 5: playerTransform.position.x + playerBounding.size.x + 5;
-                this.entity_manager.addModel.bullet_knife(offsetX, playerTransform.position.y + 15, playerTransform.scale);
+                this.entity_manager.addModel.bullet_knife(offsetX, playerTransform.position.y + 15, playerTransform.scale, player.tag);
                 CInput.canShoot = false;
                 setTimeout(() => CInput.canShoot = true, 400)
             }
@@ -285,7 +285,7 @@ class GameEngine {
                     const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
                     let screech_count = screech_remaining.getComponent('CScreech').screechCount;
                     let deliveries = deliveries_left.getComponent('CScore').score;
-                    this.entity_manager.addModel.screech(playerTransform.position.x, playerTransform.position.y + 15, playerTransform.velocity, playerTransform.scale);
+                    this.entity_manager.addModel.screech(playerTransform.position.x, playerTransform.position.y + 15, playerTransform.velocity, playerTransform.scale, player.tag);
                     screech_remaining.getComponent('CScreech').screechCount -= 1;
                     CInput.canScreech = false;
                     if (screech_count === 0 && deliveries > 0) {
@@ -812,7 +812,7 @@ class GameEngine {
                         enemyTransform.velocity = direction;
 
                         if (enemyAI.canAttack){
-                            this.entity_manager.addModel.bullet_knife(offsetX, offsetY, enemyTransform.scale);
+                            this.entity_manager.addModel.bullet_knife(offsetX, offsetY, enemyTransform.scale, enemy.tag);
                             enemyAI.canAttack = false;
                             setTimeout( () => {enemyAI.canAttack = true}, 1000)
                         }
@@ -832,7 +832,7 @@ class GameEngine {
                         offsetY = enemyTransform.position.y + bounds.size.y + 5;
 
                         if (enemyAI.canAttack){
-                            this.entity_manager.addModel.bullet_dropping(offsetX, offsetY, enemyTransform.scale, enemyTransform.velocity);
+                            this.entity_manager.addModel.bullet_dropping(offsetX, offsetY, enemyTransform.scale, enemyTransform.velocity, enemy.tag);
                             enemyAI.canAttack = false;
                             setTimeout( () => {enemyAI.canAttack = true}, 2000)
                         }
