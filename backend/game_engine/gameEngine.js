@@ -83,6 +83,7 @@ class GameEngine {
         console.log('game started');
     }
 
+
     spawnFire(e) {
         let fire = this.entity_manager.addEntity("fire");
         let size = new Vector(50, 50);
@@ -142,6 +143,35 @@ class GameEngine {
         invincibility_on.addComponent(components.CTransform(new Vector(position.x, position.y - 20), previous_position, 1, velocity, 0));
         invincibility_on.addComponent(components.CAnimation('invincibility_on', 5, 0, .5));
         setTimeout(() => invincibility_on.destroy(), 10000)
+    }
+
+    spawnPowerupTitle(powerup) {
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+        let playerTransform = player.getComponent('CTransform');
+        let position = playerTransform.position;
+        let previous_position = playerTransform.previous_position;
+        let velocity = playerTransform.velocity;
+        let player_powerup = powerup.getComponent('CAnimation').animName;
+
+        if (player_powerup === "Speed") {
+            let speed_text = this.entity_manager.addEntity("speed_text");
+            speed_text.addComponent(components.CTransform(new Vector(600, 250), new Vector(0, 0), 1, velocity, 0));
+            speed_text.addComponent(components.CAnimation('transparent', 1, 0, 0));
+            setTimeout(() => speed_text.destroy(), 1200)
+
+        }
+        else if (player_powerup === "Invincibility") {
+            let invincibility_text = this.entity_manager.addEntity("invincibility_text");
+            invincibility_text.addComponent(components.CTransform(new Vector(600, 250), new Vector(0, 0), 1, velocity, 0));
+            invincibility_text.addComponent(components.CAnimation('transparent', 1, 0, 0));
+            setTimeout(() => invincibility_text.destroy(), 1200)
+        }
+        else if (player_powerup === "Shield") {
+            let shield_text = this.entity_manager.addEntity("shield_text");
+            shield_text.addComponent(components.CTransform(new Vector(600, 250), new Vector(0, 0), 1, velocity, 0));
+            shield_text.addComponent(components.CAnimation('transparent', 1, 0, 0));
+            setTimeout(() => shield_text.destroy(), 1200)
+        }
     }
 
 
@@ -564,7 +594,9 @@ class GameEngine {
                     if (playerPowerup.shield) {
                         playerPowerup.shield = false;
                         playerHealth.invincible = true;
-                        shield_on.destroy();
+                        if (shield_on !== undefined) {
+                            shield_on.destroy();
+                        }
                         setTimeout(() => playerHealth.invincible = false, 800);
                         return;
                     }
@@ -609,6 +641,7 @@ class GameEngine {
                     player.getComponent('CPowerup').superSpeed = true;
                     powerup.destroy();
                     setTimeout(() => player.getComponent('CPowerup').superSpeed = false, 10000)
+                    this.spawnPowerupTitle(powerup);
                 }
                 if (powerup.getComponent('CAnimation').animName === 'Invincibility') {
                     // temporary invincibility
@@ -617,6 +650,7 @@ class GameEngine {
                     powerup.destroy();
                     this.spawnInvincibility();
                     setTimeout(() => player.getComponent('CPowerup').invincibility = false, 10000)
+                    this.spawnPowerupTitle(powerup);
                 }
                 if (powerup.getComponent('CAnimation').animName === 'Shield') {
                     // shield
@@ -624,6 +658,7 @@ class GameEngine {
                     player.getComponent('CPowerup').shield = true;
                     powerup.destroy();
                     this.spawnShield();
+                    this.spawnPowerupTitle(powerup);
                 }
 
                 if (powerup.getComponent('CAnimation').animName === 'health_pack') {
@@ -633,6 +668,7 @@ class GameEngine {
                         player.getComponent('CHealth').health += 20;
                     }
                     powerup.destroy();
+                    this.spawnPowerupTitle(powerup);
                 }
             }
         }
