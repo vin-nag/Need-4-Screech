@@ -5,36 +5,30 @@ const engine = (entities, canvasID) => {
     const canvas = document.getElementById(canvasID)
     const ctx = canvas.getContext("2d")
 
-    let bg_name = ""
-    for (let entity of entities){
-        if (entity.tag === "bg-img"){
-            bg_name = entity.componentMap["CAnimation"].animName;
-        }
-    }
-
-    let bg_img = assetManager.getAnimationImage(bg_name);
+    const bg_name = entities.find(entity => entity.tag === "bg-img").componentMap["CAnimation"].animName;
+    const bg_img = assetManager.getAnimationImage(bg_name);
 
     ctx.setTransform(1,0,0,1,0,0); //reset the transform matrix as it is cumulative
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(bg_img, 0, 0, bg_img.width, bg_img.height, 0, 0, canvas.width, canvas.height);
 
+    const player = entities.find(entity => entity.tag === "player")
+
     let camX = 0;
     let camY = 0;
+
+    let playerPos = player.componentMap['CTransform'].position;
+    //Clamp the camera position to the world bounds while centering the camera around the player
+    camX = canvasService.clamp(-playerPos.x + canvas.width/2, -5000, 5000 - canvas.width);
+    camY = canvasService.clamp(-playerPos.y + canvas.height/2, 0, 720 - canvas.height);
+
+    // set boundary for camera movement (need to add level end boundary also)
+    if (-playerPos.x < -canvas.width/2) {
+        ctx.translate( camX, camY ); 
+    }
+
     for (let entity of entities) {
-        if (entity.tag === "bg-img"){continue}
-        if (entity.tag === "player") {
-
-            let playerPos = entity.componentMap['CTransform'].position;
-            //Clamp the camera position to the world bounds while centering the camera around the player
-            camX = canvasService.clamp(-playerPos.x + canvas.width/2, -5000, 5000 - canvas.width);
-            camY = canvasService.clamp(-playerPos.y + canvas.height/2, 0, 720 - canvas.height);
-
-            // set boundary for camera movement (need to add level end boundary also)
-            if (-playerPos.x < -canvas.width/2) {
-                ctx.translate( camX, camY ); 
-            }
-        }
-        
+        if (entity.tag === "bg-img"){continue}     
         drawEntity(ctx, entity, camX, camY)
     }  
                                          
