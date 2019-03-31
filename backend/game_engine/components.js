@@ -74,6 +74,6 @@ const CScore = (score) => ({name: "CScore", score});
 
 const CGameRunning = (running) => ({name: "CGameRunning", running});
 
-const CAttacker = (entityTag) => ({name: "CAttacker", entityTag});
+const CAttacker = (attacker) => ({name: "CAttacker", attacker});
 
 module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup, CEnemyAI, CScreech, CScore, CGameRunning, CEnemyAnim, CAttacker};

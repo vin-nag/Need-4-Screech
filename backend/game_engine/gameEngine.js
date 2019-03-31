@@ -545,6 +545,9 @@ class GameEngine {
 
             for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
                 const score = this.entity_manager.getEntitiesByTag("score")[0];
+                let attacker = bullet.getComponent("CAttacker").attacker;
+                console.log('attacker', attacker);
+                if (attacker === "enemy"){continue}
                 let overlap = physics.getOverLap(enemy, bullet);
                 if (overlap.x > 0 && overlap.y > 0){
                     score.getComponent('CScore').score += 10;
@@ -653,6 +656,8 @@ class GameEngine {
 
         // bullet-player collision
         for (let bullet of this.entity_manager.getEntitiesByTag("bullet")){
+            let attacker = bullet.getComponent("CAttacker").attacker;
+            if (attacker === "player"){continue};
             let overlap = physics.getOverLap(player, bullet);
             let playerHealth = player.getComponent('CHealth');
             if (overlap.x > 0 && overlap.y > 0){
