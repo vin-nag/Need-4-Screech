@@ -186,15 +186,15 @@ class GameEngine {
         }
         else if (player_powerup === "health_pack") {
             let health_text = this.entity_manager.addEntity("health_text");
-            health_text.addComponent(components.CTransform(new Vector(600, 250), new Vector(0, 0), 1, velocity, 0));
-            health_text.addComponent(components.CAnimation('transparent', 1, 0, 0));
-            setTimeout(() => health_text.destroy(), 1200)
+            health_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(0, 0), 1, velocity, 0));
+            health_text.addComponent(components.CAnimation('+health', 1, 0, 0));
+            setTimeout(() => health_text.destroy(), 1300)
         }
         else if (player_powerup === "transparent") {
             let drunk_text = this.entity_manager.addEntity("drunk_text");
-            drunk_text.addComponent(components.CTransform(new Vector(600, 250), new Vector(0, 0), 1, velocity, 0));
-            drunk_text.addComponent(components.CAnimation('transparent', 1, 0, 0));
-            setTimeout(() => drunk_text.destroy(), 1200)
+            drunk_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(0, 0), 1, velocity, 0));
+            drunk_text.addComponent(components.CAnimation('drunk_mode', 1, 0, 0));
+            setTimeout(() => drunk_text.destroy(), 1300)
         }
     }
 
