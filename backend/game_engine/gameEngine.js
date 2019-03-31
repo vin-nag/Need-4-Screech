@@ -155,32 +155,32 @@ class GameEngine {
 
         if (player_powerup === "SuperSpeed") {
             let speed_text = this.entity_manager.addEntity("speed_text");
-            speed_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(0, 0), 1, velocity, 0));
+            speed_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(480, 200), 1, velocity, 0));
             speed_text.addComponent(components.CAnimation('speed++', 1, 0, 0));
             setTimeout(() => speed_text.destroy(), 1200)
 
         }
         else if (player_powerup === "Invincibility") {
             let invincibility_text = this.entity_manager.addEntity("invincibility_text");
-            invincibility_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(0, 0), 1, velocity, 0));
+            invincibility_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(480, 200), 1, velocity, 0));
             invincibility_text.addComponent(components.CAnimation('inv_anim', 1, 0, 0));
             setTimeout(() => invincibility_text.destroy(), 1350)
         }
         else if (player_powerup === "Shield") {
             let shield_text = this.entity_manager.addEntity("shield_text");
-            shield_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(0, 0), 1, velocity, 0));
+            shield_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(480, 200), 1, velocity, 0));
             shield_text.addComponent(components.CAnimation('plusShield', 1, 0, 0));
             setTimeout(() => shield_text.destroy(), 1350)
         }
         else if (player_powerup === "health_pack") {
             let health_text = this.entity_manager.addEntity("health_text");
-            health_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(0, 0), 1, velocity, 0));
+            health_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(480, 200), 1, velocity, 0));
             health_text.addComponent(components.CAnimation('+health', 1, 0, 0));
             setTimeout(() => health_text.destroy(), 1350)
         }
         else if (player_powerup === "transparent") {
             let drunk_text = this.entity_manager.addEntity("drunk_text");
-            drunk_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(0, 0), 1, velocity, 0));
+            drunk_text.addComponent(components.CTransform(new Vector(470, 200), new Vector(0, 0), 1, velocity, 0));
             drunk_text.addComponent(components.CAnimation('drunk_mode', 1, 0, 0));
             setTimeout(() => drunk_text.destroy(), 1350)
         }
