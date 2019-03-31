@@ -88,22 +88,27 @@ const drawEntity = (ctx, entity, camX=0, camY=0) => {
 
         if (entity.tag === "speed_text") {
             canvasService.draw.text(ctx, "Speed++", Math.max(transform.position.x, transform.position.x - camX), transform.position.y, "45px", "#00e640", "Permanent Marker")
-            canvasService.draw.rectangle(ctx, Math.max(transform.position.x, transform.position.x - camX), transform.position.y, 235, 50, "rgba(0, 0, 0, 0.3)")
+            canvasService.draw.rectangle(ctx, Math.max(transform.position.x, transform.position.x - camX), transform.position.y, 235, 50, "rgba(0, 0, 0, 0.8)")
         }
 
         if (entity.tag === "invincibility_text") {
             canvasService.draw.text(ctx, "Invincibility Mode", Math.max(transform.position.x, transform.position.x - camX), transform.position.y, "45px", "#a537fd", "Permanent Marker")
-            canvasService.draw.rectangle(ctx, Math.max(transform.position.x, transform.position.x - camX), transform.position.y, 235, 50, "rgba(0, 0, 0, 0.3)")
+            canvasService.draw.rectangle(ctx, Math.max(transform.position.x, transform.position.x - camX), transform.position.y, 235, 50, "rgba(0, 0, 0, 0.8)")
         }
 
         if (entity.tag === "shield_text") {
             canvasService.draw.text(ctx, "Shield Powerup", Math.max(transform.position.x, transform.position.x - camX), transform.position.y, "45px", "#22a7f0", "Permanent Marker")
-            canvasService.draw.rectangle(ctx, Math.max(transform.position.x, transform.position.x - camX), transform.position.y, 235, 50, "rgba(0, 0, 0, 0.3)")
+            canvasService.draw.rectangle(ctx, Math.max(transform.position.x, transform.position.x - camX), transform.position.y, 235, 50, "rgba(0, 0, 0, 0.8)")
         }
 
         if (entity.tag === "drunk_text") {
             canvasService.draw.text(ctx, "DrUnK MoDe", Math.max(transform.position.x, transform.position.x - camX), transform.position.y, "45px", "#f39c12", "Permanent Marker")
-            canvasService.draw.rectangle(ctx, Math.max(transform.position.x, transform.position.x - camX), transform.position.y, 235, 50, "rgba(0, 0, 0, 0.3)")
+            canvasService.draw.rectangle(ctx, Math.max(transform.position.x, transform.position.x - camX), transform.position.y, 235, 50, "rgba(0, 0, 0, 0.9)")
+        }
+
+        if (entity.tag === "health_text") {
+            canvasService.draw.text(ctx, "+20 Health", Math.max(transform.position.x, transform.position.x - camX), transform.position.y, "45px", "#cf000f", "Permanent Marker")
+            canvasService.draw.rectangle(ctx, Math.max(transform.position.x, transform.position.x - camX), transform.position.y, 235, 50, "rgba(0, 0, 0, 0.8)")
         }
         
         if (entity.tag === "bar") {

@@ -153,7 +153,7 @@ class GameEngine {
         let velocity = playerTransform.velocity;
         let player_powerup = powerup.getComponent('CAnimation').animName;
 
-        if (player_powerup === "Speed") {
+        if (player_powerup === "SuperSpeed") {
             let speed_text = this.entity_manager.addEntity("speed_text");
             speed_text.addComponent(components.CTransform(new Vector(600, 250), new Vector(0, 0), 1, velocity, 0));
             speed_text.addComponent(components.CAnimation('transparent', 1, 0, 0));
@@ -171,6 +171,18 @@ class GameEngine {
             shield_text.addComponent(components.CTransform(new Vector(600, 250), new Vector(0, 0), 1, velocity, 0));
             shield_text.addComponent(components.CAnimation('transparent', 1, 0, 0));
             setTimeout(() => shield_text.destroy(), 1200)
+        }
+        else if (player_powerup === "health_pack") {
+            let health_text = this.entity_manager.addEntity("health_text");
+            health_text.addComponent(components.CTransform(new Vector(600, 250), new Vector(0, 0), 1, velocity, 0));
+            health_text.addComponent(components.CAnimation('transparent', 1, 0, 0));
+            setTimeout(() => health_text.destroy(), 1200)
+        }
+        else if (player_powerup === "transparent") {
+            let drunk_text = this.entity_manager.addEntity("drunk_text");
+            drunk_text.addComponent(components.CTransform(new Vector(600, 250), new Vector(0, 0), 1, velocity, 0));
+            drunk_text.addComponent(components.CAnimation('transparent', 1, 0, 0));
+            setTimeout(() => drunk_text.destroy(), 1200)
         }
     }
 
@@ -358,6 +370,7 @@ class GameEngine {
                         entity.getComponent('CBar').value = entity.getComponent('CBar').maxValue;
                     }
                 }
+                this.spawnPowerupTitle(screech_remaining);
                 setTimeout(() => CInput.canDrink = true, config.time.drunk_duration)
             }
         }
