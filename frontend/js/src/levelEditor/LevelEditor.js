@@ -1,5 +1,6 @@
 import socketClient from "../socketClient";
 import { levelEditor as config } from "../../../../config"
+import { controls } from "../../../../config-template"
 import assetManager from "../services/assetManager"
 
 class LevelEditor {
@@ -93,6 +94,7 @@ class LevelEditor {
             let xClick = event.x - offsetLeft
             let yClick = event.y - offsetTop
             for (let entity of this.entities){
+                if(entity.tag === "bg-img"){ continue }
                 const animation = entity.componentMap["CAnimation"]
                 const animationImg = assetManager.getAnimationImage(animation.animName)
 
@@ -135,7 +137,8 @@ class LevelEditor {
 
     handleKeyPress(event){
         if (event.type === 'keydown') {
-            if(event.keyCode === 46){ this.inSelection = false } //delete key
+            if(event.keyCode === parseInt(controls.delete)){ this.inSelection = false }
+            else if(event.keyCode === parseInt(controls.new)){ this.inSelection = true }
             socketClient.emit('onKeyDown', {
                 keyCode: event.keyCode,
                 sessionID: this.sessionId
