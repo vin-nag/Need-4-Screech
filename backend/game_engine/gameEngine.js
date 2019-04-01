@@ -13,9 +13,9 @@ class GameEngine {
         this.entity_manager = new EntityManager();
         this.gameStarted = false;
         this.selectedEntity = null
-        this.mousePositiion = new Vector(0,0)
+        this.mousePosition = new Vector(0,0)
         this.editorEntityType = "tile"
-        this.animations
+        this.allAnimations =  onGetAnimationsList();
 
         // last input
         this.lastInput = {event: "initialized"} ;
@@ -27,6 +27,7 @@ class GameEngine {
         this.lastInput[config.controls.new]= false;
         this.lastInput[config.controls.bounding] = false;
         this.lastInput[config.controls.ray] = false;
+        this.lastInput[config.controls.delete] = false;
         this.lastInput[config.controls.lastAni]=false;
         this.lastInput[config.controls.nextAni] = false;
     }
@@ -62,10 +63,10 @@ class GameEngine {
             this.entity_manager.addModel.tile_grey_center(x, 625);
         }
 
-        this.entity_manager.addModel.powerup_shield(400,590);
-        this.entity_manager.addModel.powerup_invincible(600, 590);
-        this.entity_manager.addModel.powerup_speed(800, 590);
-        this.entity_manager.addModel.powerup_health(1200, 590);
+        this.entity_manager.addModel.powerup_shield(400,552);
+        this.entity_manager.addModel.powerup_invincible(600, 552);
+        this.entity_manager.addModel.powerup_speed(800, 552);
+        this.entity_manager.addModel.powerup_health(1200, 552);
 
         for (let x = 1000; x < 2500; x+=300){
             this.entity_manager.addModel.checkpoints(x, 475);
@@ -83,6 +84,7 @@ class GameEngine {
         this.init();
         console.log('game started');
     }
+
 
     spawnFire(e) {
         let fire = this.entity_manager.addEntity("fire");
@@ -122,6 +124,82 @@ class GameEngine {
         checkpoint_success.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
     }
 
+    spawnShield() {
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+        let playerTransform = player.getComponent('CTransform');
+        let position = playerTransform.position;
+        let previous_position = playerTransform.previous_position;
+        let velocity = playerTransform.velocity;
+        let shield_on = this.entity_manager.addEntity("shield_on");
+        shield_on.addComponent(components.CTransform(new Vector(position.x, position.y - 20), previous_position, 1, velocity, 0));
+        shield_on.addComponent(components.CAnimation('shieldOn', 6, 0, .5));
+    }
+
+    spawnInvincibility() {
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+        let playerTransform = player.getComponent('CTransform');
+        let position = playerTransform.position;
+        let previous_position = playerTransform.previous_position;
+        let velocity = playerTransform.velocity;
+        let invincibility_on = this.entity_manager.addEntity("invincibility_on");
+        invincibility_on.addComponent(components.CTransform(new Vector(position.x, position.y - 20), previous_position, 1, velocity, 0));
+        invincibility_on.addComponent(components.CAnimation('invincibility_on', 5, 0, .5));
+        setTimeout(() => invincibility_on.destroy(), 10000)
+    }
+
+    spawnPowerupTitle(powerup) {
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+        let playerTransform = player.getComponent('CTransform');
+        let position = playerTransform.position;
+        let previous_position = playerTransform.previous_position;
+        let velocity = playerTransform.velocity;
+        let player_powerup = powerup.getComponent('CAnimation').animName;
+
+        if (player_powerup === "SuperSpeed") {
+            let speed_text = this.entity_manager.addEntity("speed_text");
+            speed_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(480, 200), 1, velocity, 0));
+            speed_text.addComponent(components.CAnimation('speed++', 1, 0, 0));
+            setTimeout(() => speed_text.destroy(), 1200)
+
+        }
+        else if (player_powerup === "Invincibility") {
+            let invincibility_text = this.entity_manager.addEntity("invincibility_text");
+            invincibility_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(480, 200), 1, velocity, 0));
+            invincibility_text.addComponent(components.CAnimation('inv_anim', 1, 0, 0));
+            setTimeout(() => invincibility_text.destroy(), 1350)
+        }
+        else if (player_powerup === "Shield") {
+            let shield_text = this.entity_manager.addEntity("shield_text");
+            shield_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(480, 200), 1, velocity, 0));
+            shield_text.addComponent(components.CAnimation('plusShield', 1, 0, 0));
+            setTimeout(() => shield_text.destroy(), 1350)
+        }
+        else if (player_powerup === "health_pack") {
+            let health_text = this.entity_manager.addEntity("health_text");
+            health_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(480, 200), 1, velocity, 0));
+            health_text.addComponent(components.CAnimation('+health', 1, 0, 0));
+            setTimeout(() => health_text.destroy(), 1350)
+        }
+        else if (player_powerup === "transparent") {
+            let drunk_text = this.entity_manager.addEntity("drunk_text");
+            drunk_text.addComponent(components.CTransform(new Vector(470, 200), new Vector(0, 0), 1, velocity, 0));
+            drunk_text.addComponent(components.CAnimation('drunk_mode', 1, 0, 0));
+            setTimeout(() => drunk_text.destroy(), 1350)
+        }
+        else if (player_powerup === "health_pack") {
+            let health_text = this.entity_manager.addEntity("health_text");
+            health_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(0, 0), 1, velocity, 0));
+            health_text.addComponent(components.CAnimation('+health', 1, 0, 0));
+            setTimeout(() => health_text.destroy(), 1350)
+        }
+        else if (player_powerup === "transparent") {
+            let drunk_text = this.entity_manager.addEntity("drunk_text");
+            drunk_text.addComponent(components.CTransform(new Vector(470, 200), new Vector(0, 0), 1, velocity, 0));
+            drunk_text.addComponent(components.CAnimation('drunk_mode', 1, 0, 0));
+            setTimeout(() => drunk_text.destroy(), 1350)
+        }
+    }
+
 
     update(){
         // this function handles the update function, starting a game if it hasn't been already
@@ -142,7 +220,7 @@ class GameEngine {
             this.sEnemyAI();
             this.sCollision();
             this.sGameState();
-           // this.sEditor()
+            this.sEditor();
             this.entity_manager.update();
         }
     }
@@ -209,7 +287,7 @@ class GameEngine {
         if (CInput.shoot) {
             if (CInput.canShoot) {
                 let offsetX = playerTransform.scale === -1? playerTransform.position.x - 5: playerTransform.position.x + playerBounding.size.x + 5;
-                this.entity_manager.addModel.bullet_knife(offsetX, playerTransform.position.y + 15, playerTransform.scale);
+                this.entity_manager.addModel.bullet_knife(offsetX, playerTransform.position.y + 15, playerTransform.scale, player.tag);
                 CInput.canShoot = false;
                 setTimeout(() => CInput.canShoot = true, 400)
             }
@@ -233,23 +311,35 @@ class GameEngine {
 
         if (this.lastInput[config.controls.new] === true){
 
-            let tile = this.entity_manager.addEntity(this.editorEntityType);
+            if(!this.selectedEntity){
+                let tile = this.entity_manager.addEntity(this.editorEntityType);
+                this.selectedEntity = tile
 
-            // animation
-            tile.addComponent(components.CAnimation('GreyTile',1,0,0))
+                // animation
+                tile.addComponent(components.CAnimation('GreyTile',1,0,0))
 
-            // transform
-            let position = new Vector(250,125);
-            let previous_position = new Vector(250, 125);
-            let velocity = new Vector(0, 0);
-            tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
+                // transform
+                let position = new Vector(this.mousePosition.x, this.mousePosition.y);
+                let previous_position = new Vector(position.x, position.y);
+                let velocity = new Vector(0, 0);
+                tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
 
-            //bounding box
-            let size = new Vector(64, 64);
-            let half_size = new Vector(32, 32);
-            tile.addComponent(components.CBoundingBox(size, half_size));
+                //bounding box
+                if(this.editorEntityType !== "decoration"){
+                    let size = new Vector(64, 64);
+                    let half_size = new Vector(32, 32);
+                    tile.addComponent(components.CBoundingBox(size, half_size));
+                }
+            }
+
         }
 
+        if(this.lastInput[config.controls.delete] === true){
+            if(this.selectedEntity){
+                this.selectedEntity.destroy()
+                this.selectedEntity = null
+            }
+        }
 
 
         if (CInput.interact){
@@ -267,7 +357,7 @@ class GameEngine {
                     const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
                     let screech_count = screech_remaining.getComponent('CScreech').screechCount;
                     let deliveries = deliveries_left.getComponent('CScore').score;
-                    this.entity_manager.addModel.screech(playerTransform.position.x, playerTransform.position.y + 15, playerTransform.velocity, playerTransform.scale);
+                    this.entity_manager.addModel.screech(playerTransform.position.x, playerTransform.position.y + 15, playerTransform.velocity, playerTransform.scale, player.tag);
                     screech_remaining.getComponent('CScreech').screechCount -= 1;
                     CInput.canScreech = false;
                     if (screech_count === 0 && deliveries > 0) {
@@ -293,6 +383,7 @@ class GameEngine {
                         entity.getComponent('CBar').value = entity.getComponent('CBar').maxValue;
                     }
                 }
+                this.spawnPowerupTitle(screech_remaining);
                 setTimeout(() => CInput.canDrink = true, config.time.drunk_duration)
             }
         }
@@ -418,6 +509,18 @@ class GameEngine {
 
         }
 
+        // powerup animation movements
+        for (let shield of this.entity_manager.getEntitiesByTag("shield_on")) {
+            let sTransform = shield.getComponent('CTransform');
+            sTransform.position.x = playerTransform.position.x - 23;
+            sTransform.position.y = playerTransform.position.y - 20;
+        }
+        for (let invincibility_on of this.entity_manager.getEntitiesByTag("invincibility_on")) {
+            let sTransform = invincibility_on.getComponent('CTransform');
+            sTransform.position.x = playerTransform.position.x - 11;
+            sTransform.position.y = playerTransform.position.y - 10;
+        }
+
     }
 
     sGravity(){
@@ -501,6 +604,7 @@ class GameEngine {
             let playerHealth = player.getComponent('CHealth');
             let playerPowerup = player.getComponent('CPowerup');
             let game_running = player.getComponent("CGameRunning");
+            let shield_on = this.entity_manager.getEntitiesByTag("shield_on")[0];
 
             if (overlap.x > 0 && overlap.y > 0){
                 if (playerPowerup.invincibility) {
@@ -510,6 +614,9 @@ class GameEngine {
                     if (playerPowerup.shield) {
                         playerPowerup.shield = false;
                         playerHealth.invincible = true;
+                        if (shield_on !== undefined) {
+                            shield_on.destroy();
+                        }
                         setTimeout(() => playerHealth.invincible = false, 800);
                         return;
                     }
@@ -527,6 +634,9 @@ class GameEngine {
 
             for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
                 const score = this.entity_manager.getEntitiesByTag("score")[0];
+                let attacker = bullet.getComponent("CAttacker").attacker;
+                console.log('attacker', attacker);
+                if (attacker === "enemy"){continue}
                 let overlap = physics.getOverLap(enemy, bullet);
                 if (overlap.x > 0 && overlap.y > 0){
                     score.getComponent('CScore').score += 10;
@@ -554,19 +664,24 @@ class GameEngine {
                     player.getComponent('CPowerup').superSpeed = true;
                     powerup.destroy();
                     setTimeout(() => player.getComponent('CPowerup').superSpeed = false, 10000)
+                    this.spawnPowerupTitle(powerup);
                 }
                 if (powerup.getComponent('CAnimation').animName === 'Invincibility') {
                     // temporary invincibility
                     console.log("inv")
                     player.getComponent('CPowerup').invincibility = true;
                     powerup.destroy();
+                    this.spawnInvincibility();
                     setTimeout(() => player.getComponent('CPowerup').invincibility = false, 10000)
+                    this.spawnPowerupTitle(powerup);
                 }
                 if (powerup.getComponent('CAnimation').animName === 'Shield') {
                     // shield
                     console.log("shield")
                     player.getComponent('CPowerup').shield = true;
                     powerup.destroy();
+                    this.spawnShield();
+                    this.spawnPowerupTitle(powerup);
                 }
 
                 if (powerup.getComponent('CAnimation').animName === 'health_pack') {
@@ -576,6 +691,7 @@ class GameEngine {
                         player.getComponent('CHealth').health += 20;
                     }
                     powerup.destroy();
+                    this.spawnPowerupTitle(powerup);
                 }
             }
         }
@@ -635,10 +751,16 @@ class GameEngine {
 
         // bullet-player collision
         for (let bullet of this.entity_manager.getEntitiesByTag("bullet")){
+            let attacker = bullet.getComponent("CAttacker").attacker;
+            if (attacker === "player"){continue};
             let overlap = physics.getOverLap(player, bullet);
             let playerHealth = player.getComponent('CHealth');
+            let shield_on = this.entity_manager.getEntitiesByTag("shield_on")[0];
             if (overlap.x > 0 && overlap.y > 0){
                 bullet.destroy();
+                if (shield_on !== undefined) {
+                    shield_on.destroy();
+                }
                 if (!playerHealth.invincible) {
                     playerHealth.invincible = true;
                     playerHealth.health -= 20;
@@ -794,7 +916,7 @@ class GameEngine {
                         enemyTransform.velocity = direction;
 
                         if (enemyAI.canAttack){
-                            this.entity_manager.addModel.bullet_knife(offsetX, offsetY, enemyTransform.scale);
+                            this.entity_manager.addModel.bullet_knife(offsetX, offsetY, enemyTransform.scale, enemy.tag);
                             enemyAI.canAttack = false;
                             setTimeout( () => {enemyAI.canAttack = true}, 1000)
                         }
@@ -814,7 +936,7 @@ class GameEngine {
                         offsetY = enemyTransform.position.y + bounds.size.y + 5;
 
                         if (enemyAI.canAttack){
-                            this.entity_manager.addModel.bullet_dropping(offsetX, offsetY, enemyTransform.scale, enemyTransform.velocity);
+                            this.entity_manager.addModel.bullet_dropping(offsetX, offsetY, enemyTransform.scale, enemyTransform.velocity, enemy.tag);
                             enemyAI.canAttack = false;
                             setTimeout( () => {enemyAI.canAttack = true}, 2000)
                         }
@@ -907,18 +1029,14 @@ class GameEngine {
         if(this.selectedEntity){
             let entity = this.selectedEntity
             let eTransform = entity.getComponent('CTransform')
-            eTransform.position.x = this.mousePositiion.x
-            eTransform.position.y = this.mousePositiion.y
+            eTransform.position.x = this.mousePosition.x
+            eTransform.position.y = this.mousePosition.y
         }
 
 
-    }
-
-    updateAnimation(){
         while (this.selectedEntity === true) {
             if (this.lastInput[config.controls.nextAni] === true) {
                 console.log("Next animation")
-                animation = onGetAnimations
 
             }
             if (this.lastInput[config.controls.lastAni] === true) {
@@ -926,17 +1044,15 @@ class GameEngine {
             }
 
         }
-
-        }
-
+    }
 
     setSelectedEntity(entity){
         this.selectedEntity = entity
     }
 
     setMousePosition(x, y){
-        this.mousePositiion.x = x
-        this.mousePositiion.y = y
+        this.mousePosition.x = x
+        this.mousePosition.y = y
     }
 
     // check if player completed level successfully

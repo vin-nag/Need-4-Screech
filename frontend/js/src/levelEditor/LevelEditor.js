@@ -1,12 +1,14 @@
 import socketClient from "../socketClient";
-import  assetManager from "../services/assetManager";
 import { levelEditor as config } from "../../../../config"
+import { controls } from "../../../../config-template"
+import assetManager from "../services/assetManager"
 
 class LevelEditor {
     constructor(){
         this.paused = false
         this.sessionId = null
         this.entities = []
+        this.inSelection = false
         this.updateStateInterval = null
         this.next = 0
 
@@ -82,23 +84,39 @@ class LevelEditor {
 
 
     handleClick(event){
-        if(this.selectedEntity != null){
-            this.selectedEntity = null
+        if(this.inSelection){
+            socketClient.emit("setSelectedEntity", {
+                "selectedEntity": null,
+                "sessionId": this.sessionId
+            })
+            this.inSelection = false
         }
         else{
-            let xClick = event.x
-            let yClick = event.y
+            const canvasRect = document.getElementById("levelEditorCanvas").getBoundingClientRect()
+            const { left: offsetLeft, top: offsetTop } = canvasRect
+
+            let xClick = event.x - offsetLeft
+            let yClick = event.y - offsetTop
             for (let entity of this.entities){
-                let boundingBox = entity.componentMap["CBoundingBox"]
-                let xRange = entity.componentMap["CTransform"].position.x + boundingBox.size.x
-                let yRange = entity.componentMap["CTransform"].position.y + boundingBox.size.y
-                let inXrange = xClick >= entity.componentMap.size.position.x && xClick <= xRange
-                let inYrange = yClick >= entity.componentMap.size.position.y && yClick <= yRange
+                if(entity.tag === "bg-img"){ continue }
+                const animation = entity.componentMap["CAnimation"]
+                const animationImg = assetManager.getAnimationImage(animation.animName)
+
+                const height = animationImg.height
+                const width = animationImg.width / animation.numOfFrames
+
+                let xRange = entity.componentMap["CTransform"].position.x + width
+                let yRange = entity.componentMap["CTransform"].position.y + height
+                let inXrange = xClick >= entity.componentMap["CTransform"].position.x && xClick <= xRange
+                let inYrange = yClick >= entity.componentMap["CTransform"].position.y && yClick <= yRange
+
                 if (inXrange && inYrange){
-                    socket.emit("setSelectedEntity", {
-                        "selectedEntity": entity,
+                    socketClient.emit("setSelectedEntity", {
+                        "selectedEntity": entity.id,
                         "sessionId": this.sessionId
                     })
+                    
+                    this.inSelection = true
                     break
                 }
             }
@@ -106,12 +124,14 @@ class LevelEditor {
     }
 
     handleMouseMove(event){
-        if (this.selectedEntity != null){
-            socket.emit("updateEntityPosition", {
-                "event": event,
-                "sessionId": this.sessionId
-            })
-        }
+        const canvasRect = document.getElementById("levelEditorCanvas").getBoundingClientRect()
+        const { left, top } = canvasRect
+
+        socketClient.emit("updateEntityPosition", {
+            x: event.x - left,
+            y: event.y - top,
+            "sessionId": this.sessionId
+        })
     }
 
     handleMouseWheel(event){
@@ -122,6 +142,8 @@ class LevelEditor {
 
     handleKeyPress(event){
         if (event.type === 'keydown') {
+            if(event.keyCode === parseInt(controls.delete)){ this.inSelection = false }
+            else if(event.keyCode === parseInt(controls.new)){ this.inSelection = true }
             socketClient.emit('onKeyDown', {
                 keyCode: event.keyCode,
                 sessionID: this.sessionId
