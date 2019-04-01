@@ -3,6 +3,7 @@ import gameRenderEngine from "./gameRenderEngine"
 import menuRenderEngine from "./menuRenderEngine"
 import editorRenderEngine from "./editorRenderEngine"
 import overworldRenderEngine from "./overworldRenderEngine";
+import domService from "../services/dom"
 
 import levelEditor from "../levelEditor"
 import gamePlay from '../gamePlay'
@@ -39,6 +40,17 @@ const delegateRendering = (activeWindow) => {
     }
     else if(activeWindow === APP_WINDOWS.GAME_PLAY){
         gameRenderEngine(gamePlay.entities, "gamePlayCanvas")
+        for (let entity of gamePlay.entities) {
+            if (entity.tag === "player") {
+                let level_state = entity.componentMap['CLevelState']
+                if (level_state.level_state === "complete") {
+                    domService.showElement("completeLevelModal")
+                }
+                else if (level_state.level_state === "failed") {
+                    domService.showElement("failedLevelModal")
+                }
+            }
+        }
     }
     else if(activeWindow === APP_WINDOWS.MENU){
         menuRenderEngine(menuService.getActiveMenuItems(), menuService.getSelectedItemIndex())

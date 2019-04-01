@@ -1059,20 +1059,24 @@ class GameEngine {
         let level_score = score.getComponent('CScore').score; // will use this later to write score to db after each level
         let screech = screech_remaining.getComponent('CScreech').screechCount;
         let game_running = player.getComponent("CGameRunning");
+        let level_state = player.getComponent("CLevelState");
 
         if (deliveries > 0) {
             console.log("You missed one or more deliveries, game over!")
             game_running.running = false;
+            level_state.level_state = "failed"
             // show level restart screen
         }
 
         if (screech === 0 && deliveries > 0) {
             console.log("You ran out of screech, game over!");
             game_running.running = false;
+            level_state.level_state = "failed"
             // show level restart screen
         }
         if (deliveries === 0){
             console.log("level complete");
+            level_state.level_state = "complete"
             // segue player back to overworld with next level unlocked
             // store level score in player collection in database
         }
@@ -1083,10 +1087,11 @@ class GameEngine {
     sGameState() {
         const player = this.entity_manager.getEntitiesByTag("player")[0];
         let game_running = player.getComponent("CGameRunning").running;
+        let level_state = player.getComponent("CLevelState");
 
         if (!game_running) {
             console.log("level failed");
-            // show level restart screen
+            level_state.level_state = "failed"
         }
     }
 
