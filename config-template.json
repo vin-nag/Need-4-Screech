@@ -37,13 +37,15 @@
         "left": "65",
         "right": "68",
         "shoot": "32",
-        "new": "78",
         "bounding": "66",
         "ray": "86",
         "interact": "69",
         "screech": "79",
-        "drink": "70"
-     },
+        "drink": "70",
+        "new": "78",
+        "lastAni": "37",
+        "nextAni": "39"
+    },
     "canvas": {
         "x": 1125,
         "y": 35

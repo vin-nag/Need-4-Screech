@@ -15,6 +15,7 @@ class GameEngine {
         this.selectedEntity = null
         this.mousePositiion = new Vector(0,0)
         this.editorEntityType = "tile"
+        this.animations
 
         // last input
         this.lastInput = {event: "initialized"} ;
@@ -26,7 +27,8 @@ class GameEngine {
         this.lastInput[config.controls.new]= false;
         this.lastInput[config.controls.bounding] = false;
         this.lastInput[config.controls.ray] = false;
-        this.lastInput[config.controls.scroll]=false;
+        this.lastInput[config.controls.lastAni]=false;
+        this.lastInput[config.controls.nextAni] = false;
     }
 
     loadSerializedEntities(entities){
@@ -140,6 +142,7 @@ class GameEngine {
             this.sEnemyAI();
             this.sCollision();
             this.sGameState();
+           // this.sEditor()
             this.entity_manager.update();
         }
     }
@@ -247,18 +250,7 @@ class GameEngine {
             tile.addComponent(components.CBoundingBox(size, half_size));
         }
 
-        if(this.lastInput[config.controls.scroll] === true){
-            console.log("wheel scrolled!!!")
-        }
 
-
-        //Not working currently
-        if (this.lastInput[config.controls.mouseclick] === true){
-            console.log("Mouse Clicked")
-
-
-
-        }
 
         if (CInput.interact){
             // open door logic
@@ -912,11 +904,31 @@ class GameEngine {
 
     sEditor(){
         // Updating entity position according to mouse position
-        let entity = this.selectedEntity
-        let eTransform = entity.getComponent('CTransform')
-        eTransform.position.x = this.mousePositiion.x
-        eTransform.position.y = this.mousePositiion.y
+        if(this.selectedEntity){
+            let entity = this.selectedEntity
+            let eTransform = entity.getComponent('CTransform')
+            eTransform.position.x = this.mousePositiion.x
+            eTransform.position.y = this.mousePositiion.y
+        }
+
+
     }
+
+    updateAnimation(){
+        while (this.selectedEntity === true) {
+            if (this.lastInput[config.controls.nextAni] === true) {
+                console.log("Next animation")
+                animation = onGetAnimations
+
+            }
+            if (this.lastInput[config.controls.lastAni] === true) {
+                console.log("Last animation")
+            }
+
+        }
+
+        }
+
 
     setSelectedEntity(entity){
         this.selectedEntity = entity

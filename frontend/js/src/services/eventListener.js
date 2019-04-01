@@ -19,6 +19,7 @@ export const listen = () => {
     })
     document.getElementById("levelEditorSaveLevel").addEventListener("click", ()=> domService.showElement("saveLevelModal"))
     document.getElementById("levelEditorSetActive").addEventListener("click", () => levelEditor.changeEntityType())
+    //document.getElementById("levelEditorSetAnimation").addEventListener("keydown",()=>levelEditor.changeEntityAnimation())
 
     document.getElementById("levelEditorCanvas").addEventListener("click", (e) => levelEditor.handleClick(e))
     document.getElementById("levelEditorCanvas").addEventListener("mousemove", (e) => levelEditor.handleMouseMove(e))

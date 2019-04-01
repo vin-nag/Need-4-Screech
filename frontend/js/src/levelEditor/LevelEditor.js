@@ -1,4 +1,5 @@
 import socketClient from "../socketClient";
+import  assetManager from "../services/assetManager";
 import { levelEditor as config } from "../../../../config"
 
 class LevelEditor {
@@ -7,6 +8,8 @@ class LevelEditor {
         this.sessionId = null
         this.entities = []
         this.updateStateInterval = null
+        this.next = 0
+
 
         this.entityType = {
             options: ["tile", "decoration", "player", "enemy", "powerup", "checkpoint"],
@@ -76,6 +79,8 @@ class LevelEditor {
         alert(`Switched editor entity type to: ${entityType}`)
     }
 
+
+
     handleClick(event){
         if(this.selectedEntity != null){
             this.selectedEntity = null
@@ -112,12 +117,7 @@ class LevelEditor {
     handleMouseWheel(event){
         //Stub: Map scroll wheel movement to level editor functions (likely changing
         //the animation of the selected entity)
-        if(event.type === 'wheel'){
-            socketClient.emit('onScroll',{
-                event:event,
-                sessionID:this.sessionId
-            })
-        }
+
     }
 
     handleKeyPress(event){
