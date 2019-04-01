@@ -1,7 +1,6 @@
 import APP_WINDOWS from "../../enums/app_windows"
 import gameRenderEngine from "./gameRenderEngine"
 import menuRenderEngine from "./menuRenderEngine"
-import editorRenderEngine from "./editorRenderEngine"
 import overworldRenderEngine from "./overworldRenderEngine";
 
 import levelEditor from "../levelEditor"
@@ -39,7 +38,6 @@ const delegateRendering = (activeWindow) => {
 
     if(activeWindow === APP_WINDOWS.LEVEL_EDITOR){
         gameRenderEngine(levelEditor.entities, "levelEditorCanvas")
-        editorRenderEngine()
     }
     else if(activeWindow === APP_WINDOWS.GAME_PLAY){
         gameRenderEngine(gamePlay.entities, "gamePlayCanvas")
