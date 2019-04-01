@@ -48,6 +48,7 @@ class App {
         socketClient.listen()
         eventListener.listen()
         socketClient.emit("getAnimationsList", {})
+        socketClient.emit("getMusicList", {})
         setInterval(() => mainRenderingEngine(this.state.activeWindow), this.updateRate)
     }
 }

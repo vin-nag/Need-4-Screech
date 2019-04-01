@@ -225,9 +225,7 @@ class GameEngine {
 
             if(!this.isEditor){
                 this.sInput();
-                this.sMovement();
                 this.sGravity();
-                this.sAnimation();
                 this.sLifespan();
                 this.sBars();
                 this.sEnemyRayCasting();
@@ -239,7 +237,8 @@ class GameEngine {
                 this.sEditorInput();
                 this.sEditor();
             }
-
+this.sAnimation();
+            this.sMovement();
             this.entity_manager.update();
         }
     }
@@ -375,6 +374,14 @@ class GameEngine {
 
     sEditorInput(){
         //Level Editor Input
+        const player = this.entity_manager.getEntitiesByTag("player")[0];
+        let CInput = player.getComponent('CInput');
+
+        CInput.up = this.lastInput[config.controls.up];
+        CInput.down = this.lastInput[config.controls.down];
+        CInput.left = this.lastInput[config.controls.left];
+        CInput.right = this.lastInput[config.controls.right];
+
         if (this.lastInput[config.controls.new] === true){
 
             if(!this.selectedEntity){

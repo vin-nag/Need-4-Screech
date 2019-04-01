@@ -7,6 +7,13 @@ const onGetAnimationsList = (socket, data) => {
     })
 }
 
+const onGetMusicList = (socket, data) => {
+    const music = _getMusic()
+    socket.emit("musicList", {
+        payload: music
+    })
+}
+
 const _getAnimations = () => {
     const animationDirFiles = FileService.listdir("frontend/static/assets/animations")
     let animations = animationDirFiles.filter(file => file.endsWith(".png"))
@@ -14,7 +21,15 @@ const _getAnimations = () => {
     return animations
 }
 
+const _getMusic = () => {
+    const musicDirFiles = FileService.listdir("frontend/static/assets/music")
+    let music = musicDirFiles.filter(file => file.endsWith(".mp3"))
+    music = music.map(music => music.substring(0, music.length-4))
+    return music
+}
+
 module.exports = {
-    onGetAnimationsList
+    onGetAnimationsList,
+    onGetMusicList
 }
 
