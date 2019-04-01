@@ -15,6 +15,7 @@ class GameEngine {
         this.selectedEntity = null
         this.mousePosition = new Vector(0,0)
         this.editorEntityType = "tile"
+        this.isEditor = false
 
         // last input
         this.lastInput = {event: "initialized"} ;
@@ -39,6 +40,8 @@ class GameEngine {
     init(){
         this.entity_manager.addModel.background_img_george();
         this.entity_manager.addModel.player(100,435);
+        if(this.isEditor){ return } //No more entities need to be created in editor mode
+
         this.entity_manager.addModel.enemy_ranged_chef(1000, 550);
         this.entity_manager.addModel.enemy_flying_blackbird(700, 100);
         this.entity_manager.addModel.enemy_melee_moose(750, 500);
@@ -207,18 +210,24 @@ class GameEngine {
             this.gameStarted = true;
         }
         else {
-            // console.log('game continuing', this.entity_manager.getEntities());
-            this.sInput();
-            this.sMovement();
-            this.sGravity();
-            this.sAnimation();
-            this.sLifespan();
-            this.sBars();
-            this.sEnemyRayCasting();
-            this.sEnemyAI();
-            this.sCollision();
-            this.sGameState();
-            this.sEditor();
+
+            if(!this.isEditor){
+                this.sInput();
+                this.sMovement();
+                this.sGravity();
+                this.sAnimation();
+                this.sLifespan();
+                this.sBars();
+                this.sEnemyRayCasting();
+                this.sEnemyAI();
+                this.sCollision();
+                this.sGameState();
+            }
+            else{
+                this.sEditorInput();
+                this.sEditor();
+            }
+            
             this.entity_manager.update();
         }
     }
@@ -265,7 +274,7 @@ class GameEngine {
     }
 
     sInput(){
-        // Input system
+        //Gameplay Input system
         const player = this.entity_manager.getEntitiesByTag("player")[0];
         let CInput = player.getComponent('CInput');
         let playerTransform = player.getComponent('CTransform');
@@ -303,48 +312,6 @@ class GameEngine {
             for (let entity of this.entity_manager.getEntitiesByTag("enemy")){
                 entity.getComponent("CEnemyAI").show = !entity.getComponent("CEnemyAI").show;
             }
-        }
-
-        //Level Editor Input
-
-        if (this.lastInput[config.controls.new] === true){
-            
-            if(!this.selectedEntity){
-                let tile = this.entity_manager.addEntity(this.editorEntityType);
-                this.selectedEntity = tile
-    
-                // animation
-                tile.addComponent(components.CAnimation('GreyTile',1,0,0))
-    
-                // transform
-                let position = new Vector(this.mousePosition.x, this.mousePosition.y);
-                let previous_position = new Vector(position.x, position.y);
-                let velocity = new Vector(0, 0);
-                tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
-    
-                //bounding box
-                if(this.editorEntityType !== "decoration"){
-                    let size = new Vector(64, 64);
-                    let half_size = new Vector(32, 32);
-                    tile.addComponent(components.CBoundingBox(size, half_size));
-                }
-            }
-           
-        }
-
-        if(this.lastInput[config.controls.delete] === true){
-            if(this.selectedEntity){
-                this.selectedEntity.destroy()
-                this.selectedEntity = null
-            }
-        }
-
-        //Not working currently
-        if (this.lastInput[config.controls.mouseclick] === true){
-            console.log("Mouse Clicked")
-
-
-
         }
 
         if (CInput.interact){
@@ -391,6 +358,50 @@ class GameEngine {
                 this.spawnPowerupTitle(screech_remaining);
                 setTimeout(() => CInput.canDrink = true, config.time.drunk_duration)
             }
+        }
+    }
+
+    sEditorInput(){
+        //Level Editor Input
+
+        if (this.lastInput[config.controls.new] === true){
+            
+            if(!this.selectedEntity){
+                let tile = this.entity_manager.addEntity(this.editorEntityType);
+                this.selectedEntity = tile
+    
+                // animation
+                tile.addComponent(components.CAnimation('GreyTile',1,0,0))
+    
+                // transform
+                let position = new Vector(this.mousePosition.x, this.mousePosition.y);
+                let previous_position = new Vector(position.x, position.y);
+                let velocity = new Vector(0, 0);
+                tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
+    
+                //bounding box
+                if(this.editorEntityType !== "decoration"){
+                    let size = new Vector(64, 64);
+                    let half_size = new Vector(32, 32);
+                    tile.addComponent(components.CBoundingBox(size, half_size));
+                }
+            }
+           
+        }
+
+        if(this.lastInput[config.controls.delete] === true){
+            if(this.selectedEntity){
+                this.selectedEntity.destroy()
+                this.selectedEntity = null
+            }
+        }
+
+        //Not working currently
+        if (this.lastInput[config.controls.mouseclick] === true){
+            console.log("Mouse Clicked")
+
+
+
         }
     }
 
@@ -1098,6 +1109,10 @@ class GameEngine {
         this.editorEntityType = entityType
     }
 
+    setEditorMode(isEditor){
+        this.isEditor = isEditor
+    }
+
 }
 
-module.exports = new GameEngine;
+module.exports = GameEngine;
