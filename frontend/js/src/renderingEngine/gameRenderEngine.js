@@ -7,10 +7,11 @@ const engine = (entities, canvasID) => {
 
     const bg_name = entities.find(entity => entity.tag === "bg-img").componentMap["CAnimation"].animName;
     const bg_img = assetManager.getAnimationImage(bg_name);
+    const levelWidth = bg_img.width/2;
+    const levelHeight = bg_img.height;
 
     ctx.setTransform(1,0,0,1,0,0); //reset the transform matrix as it is cumulative
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(bg_img, 0, 0, bg_img.width, bg_img.height, 0, 0, canvas.width, canvas.height);
 
     const player = entities.find(entity => entity.tag === "player")
     const {camX, camY} = canvasService.calc.viewportOffset(player, canvas)
@@ -21,6 +22,9 @@ const engine = (entities, canvasID) => {
     if (-playerPos.x < -canvas.width/2) {
         ctx.translate( camX, camY ); 
     }
+
+    let offsetX = Math.max(0, -camX);
+    ctx.drawImage(bg_img, offsetX, 0, levelWidth , levelHeight, offsetX, 0, canvas.width, canvas.height);
 
     for (let entity of entities) {
         if (entity.tag === "bg-img"){continue}     
