@@ -32,9 +32,29 @@ const engine = (activeWindow) => {
     }
 
     delegateRendering(activeWindow)
+    delegateMusic(activeWindow)
 }
 
 const delegateRendering = (activeWindow) => {
+
+    if(activeWindow === APP_WINDOWS.LEVEL_EDITOR){
+        gameRenderEngine(levelEditor.entities, "levelEditorCanvas")
+        editorRenderEngine()
+    }
+    else if(activeWindow === APP_WINDOWS.GAME_PLAY){
+        gameRenderEngine(gamePlay.entities, "gamePlayCanvas")
+    }
+    else if(activeWindow === APP_WINDOWS.MENU){
+        menuRenderEngine(menuService.getActiveMenuItems(), menuService.getSelectedItemIndex())
+    }
+    else if(activeWindow === APP_WINDOWS.OVERWORLD){
+        overworldRenderEngine(overworldService.getActiveMenuItems(), overworldService.getSelectedItemIndex())
+    }
+    
+}
+
+const delegateMusic = (activeWindow) => {
+
     const levelEditorMusic = assetManager.getMusic("celtic")
     const gamePlayMusic = assetManager.getMusic("shamroc");
     const menuMusic = assetManager.getMusic("heave");
@@ -56,23 +76,16 @@ const delegateRendering = (activeWindow) => {
 
     if(activeWindow === APP_WINDOWS.LEVEL_EDITOR){
         _playMusic(levelEditorMusic);
-        gameRenderEngine(levelEditor.entities, "levelEditorCanvas")
-        editorRenderEngine()
     }
     else if(activeWindow === APP_WINDOWS.GAME_PLAY){
         _playMusic(gamePlayMusic);
-        gameRenderEngine(gamePlay.entities, "gamePlayCanvas")
     }
     else if(activeWindow === APP_WINDOWS.MENU){
         _playMusic(menuMusic);
-        menuRenderEngine(menuService.getActiveMenuItems(), menuService.getSelectedItemIndex())
     }
     else if(activeWindow === APP_WINDOWS.OVERWORLD){
         _playMusic(overworldMusic);
-        overworldRenderEngine(overworldService.getActiveMenuItems(), overworldService.getSelectedItemIndex())
-
     }
-    
 }
 
 export default engine
