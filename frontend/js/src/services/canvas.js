@@ -16,6 +16,18 @@ const button = (ctx, icon, x, y, width, height, iconSize=null, fill="rgba(0, 0, 
     text(ctx, icon, (2*x+width)/2, (2*y+height)/2 + 0.33*parseInt(iconSize), iconSize, color, "FontAwesome")
 }
 
+const viewportOffset = (player, canvas) => {
+    let camX = 0;
+    let camY = 0;
+
+    let playerPos = player.componentMap['CTransform'].position;
+    //Clamp the camera position to the world bounds while centering the camera around the player
+    camX = clamp(-playerPos.x + canvas.width/2, -5000, 5000 - canvas.width);
+    camY = clamp(-playerPos.y + canvas.height/2, 0, 720 - canvas.height);
+
+    return {camX , camY}
+}
+
 
 const clamp = (value, min, max) => {
     if(value < min) return min;
@@ -28,6 +40,9 @@ export default {
         rectangle,
         text,
         button
+    },
+    calc: {
+        viewportOffset
     },
     clamp
 }
