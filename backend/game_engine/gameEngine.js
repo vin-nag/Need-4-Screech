@@ -1,4 +1,6 @@
 // imports
+const FileService = require("../services/FileService");
+
 const components = require("./components");
 const entity_models = require("./default_entity_models");
 const EntityManager = require("./entity_manager");
@@ -15,7 +17,9 @@ class GameEngine {
         this.selectedEntity = null
         this.mousePosition = new Vector(0,0)
         this.editorEntityType = "tile"
-        this.allAnimations =  onGetAnimationsList();
+        this.isEditor = false
+        this.aniCount =0;
+        this.allAnimations = this._getAnimations()
 
         // last input
         this.lastInput = {event: "initialized"} ;
@@ -37,10 +41,19 @@ class GameEngine {
         this.entity_manager.loadSerializedEntities(entities);
     }
 
+     _getAnimations() {
+        const animationDirFiles = FileService.listdir("frontend/static/assets/animations")
+        let animations = animationDirFiles.filter(file => file.endsWith(".png"))
+        animations = animations.map(animation => animation.substring(0, animation.length-4))
+        return animations
+    }
+
 
     init(){
         this.entity_manager.addModel.background_img_george();
         this.entity_manager.addModel.player(100,435);
+        if(this.isEditor){ return } //No more entities need to be created in editor mode
+
         this.entity_manager.addModel.enemy_ranged_chef(1000, 550);
         this.entity_manager.addModel.enemy_flying_blackbird(700, 100);
         this.entity_manager.addModel.enemy_melee_moose(750, 500);
@@ -209,18 +222,24 @@ class GameEngine {
             this.gameStarted = true;
         }
         else {
-            // console.log('game continuing', this.entity_manager.getEntities());
-            this.sInput();
-            this.sMovement();
-            this.sGravity();
-            this.sAnimation();
-            this.sLifespan();
-            this.sBars();
-            this.sEnemyRayCasting();
-            this.sEnemyAI();
-            this.sCollision();
-            this.sGameState();
-            this.sEditor();
+
+            if(!this.isEditor){
+                this.sInput();
+                this.sMovement();
+                this.sGravity();
+                this.sAnimation();
+                this.sLifespan();
+                this.sBars();
+                this.sEnemyRayCasting();
+                this.sEnemyAI();
+                this.sCollision();
+                this.sGameState();
+            }
+            else{
+                this.sEditorInput();
+                this.sEditor();
+            }
+
             this.entity_manager.update();
         }
     }
@@ -267,7 +286,7 @@ class GameEngine {
     }
 
     sInput(){
-        // Input system
+        //Gameplay Input system
         const player = this.entity_manager.getEntitiesByTag("player")[0];
         let CInput = player.getComponent('CInput');
         let playerTransform = player.getComponent('CTransform');
@@ -306,41 +325,6 @@ class GameEngine {
                 entity.getComponent("CEnemyAI").show = !entity.getComponent("CEnemyAI").show;
             }
         }
-
-        //Level Editor Input
-
-        if (this.lastInput[config.controls.new] === true){
-
-            if(!this.selectedEntity){
-                let tile = this.entity_manager.addEntity(this.editorEntityType);
-                this.selectedEntity = tile
-
-                // animation
-                tile.addComponent(components.CAnimation('GreyTile',1,0,0))
-
-                // transform
-                let position = new Vector(this.mousePosition.x, this.mousePosition.y);
-                let previous_position = new Vector(position.x, position.y);
-                let velocity = new Vector(0, 0);
-                tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
-
-                //bounding box
-                if(this.editorEntityType !== "decoration"){
-                    let size = new Vector(64, 64);
-                    let half_size = new Vector(32, 32);
-                    tile.addComponent(components.CBoundingBox(size, half_size));
-                }
-            }
-
-        }
-
-        if(this.lastInput[config.controls.delete] === true){
-            if(this.selectedEntity){
-                this.selectedEntity.destroy()
-                this.selectedEntity = null
-            }
-        }
-
 
         if (CInput.interact){
             // open door logic
@@ -387,6 +371,68 @@ class GameEngine {
                 setTimeout(() => CInput.canDrink = true, config.time.drunk_duration)
             }
         }
+    }
+
+    sEditorInput(){
+        //Level Editor Input
+        if (this.lastInput[config.controls.new] === true){
+
+            if(!this.selectedEntity){
+                let tile = this.entity_manager.addEntity(this.editorEntityType);
+                this.selectedEntity = tile
+
+                // animation
+                tile.addComponent(components.CAnimation('GreyTile',1,0,0))
+
+                // transform
+                let position = new Vector(this.mousePosition.x, this.mousePosition.y);
+                let previous_position = new Vector(position.x, position.y);
+                let velocity = new Vector(0, 0);
+                tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
+
+                //bounding box
+                if(this.editorEntityType !== "decoration"){
+                    let size = new Vector(64, 64);
+                    let half_size = new Vector(32, 32);
+                    tile.addComponent(components.CBoundingBox(size, half_size));
+                }
+            }
+
+        }
+
+        if(this.lastInput[config.controls.delete] === true){
+            if(this.selectedEntity){
+                this.selectedEntity.destroy()
+                this.selectedEntity = null
+            }
+        }
+
+        if(this.selectedEntity) {
+            if (this.lastInput[config.controls.nextAni] === true) {
+                //console.log(this.allAnimations)
+
+                this.selectedEntity.getComponent('CAnimation').animName = this.allAnimations[this.aniCount]
+                if(this.aniCount > this.allAnimations.length){
+                    this.aniCount = 0;
+                }else{
+                    this.aniCount ++;
+
+                }
+
+            }
+            if (this.lastInput[config.controls.lastAni] === true) {
+                //console.log("Last animation")
+                this.selectedEntity.getComponent('CAnimation').animName = this.allAnimations[this.aniCount]
+                if(this.aniCount === 0){
+                    this.aniCount = 0;
+                }else{
+                    this.aniCount = this.aniCount - 1;
+                }
+
+            }
+
+        }
+
     }
 
     sMovement() {
@@ -1033,17 +1079,6 @@ class GameEngine {
             eTransform.position.y = this.mousePosition.y
         }
 
-
-        while (this.selectedEntity === true) {
-            if (this.lastInput[config.controls.nextAni] === true) {
-                console.log("Next animation")
-
-            }
-            if (this.lastInput[config.controls.lastAni] === true) {
-                console.log("Last animation")
-            }
-
-        }
     }
 
     setSelectedEntity(entity){
@@ -1105,6 +1140,10 @@ class GameEngine {
         this.editorEntityType = entityType
     }
 
+    setEditorMode(isEditor){
+        this.isEditor = isEditor
+    }
+
 }
 
-module.exports = new GameEngine;
+module.exports = GameEngine;

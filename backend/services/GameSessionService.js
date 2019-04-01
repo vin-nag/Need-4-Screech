@@ -16,7 +16,7 @@ class GameSessionService {
 
     addSession(){
         const sessionId = uuid.v4()
-        const sessionEngine = new GameEngine.constructor(sessionId)
+        const sessionEngine = new GameEngine(sessionId)
         this.sessions[sessionId] = sessionEngine
         this.updateIntervals[sessionId] = setInterval(() => this._updateGame(sessionEngine), 1000/tickRate)
 

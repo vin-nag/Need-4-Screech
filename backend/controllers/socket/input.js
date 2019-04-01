@@ -15,6 +15,11 @@ const onKeyUp = (socket, data) => {
 
 const onNewSession = (socket, data) => {
     let sessionID = gameSessionService.addSession()
+
+    const asEditor = data.issuer === "LEVEL_EDITOR"
+    const gameEngine = gameSessionService.getSession(sessionID)
+    gameEngine.setEditorMode(asEditor)
+
     socket.emit('newSessionID', {
         session: sessionID,
         issuer: data.issuer
