@@ -12,6 +12,7 @@ export const socket = io()
 
 export const listen = () => {
     socket.on("animationsList", (data) => assetsListener.onAnimationsList(socket, data))
+    socket.on("musicList", (data) => assetsListener.onMusicList(socket, data))
     socket.on('connect', () => connectListener(socket))
     socket.on('disconnect', () => disconnectListener(socket))
     socket.on('serverMsg',(data) => {
