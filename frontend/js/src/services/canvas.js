@@ -22,9 +22,14 @@ const viewportOffset = (player, canvas) => {
 
     let playerPos = player.componentMap['CTransform'].position;
     //Clamp the camera position to the world bounds while centering the camera around the player
-    camX = clamp(-playerPos.x + canvas.width/2, -5000, 5000 - canvas.width);
-    camY = clamp(-playerPos.y + canvas.height/2, 0, 720 - canvas.height);
-
+    if (-playerPos.x < -canvas.width/2) {
+        camX = clamp(-playerPos.x + canvas.width/2, -5000, 5000 - canvas.width);
+        camY = clamp(-playerPos.y + canvas.height/2, 0, 720 - canvas.height); 
+    }
+    else{
+        camX = 0
+        camY = 0
+    }
     return {camX , camY}
 }
 
