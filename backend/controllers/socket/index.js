@@ -36,6 +36,7 @@ const connectControllers = (socket) => {
     socket.on('loadLevel', (data)=> gameStateController.onLoadLevel(socket, data))
     socket.on("updateEditorEntityType", data => gameStateController.onUpdateEditorEntityType(socket, data))
     socket.on("getAnimationsList", data => assetsController.onGetAnimationsList(socket, data))
+    socket.on("getMusicList", data => assetsController.onGetMusicList(socket, data))
     socket.on("updateEntityPosition", data => gameStateController.updateEntityPosition(socket, data))
     socket.on("setSelectedEntity", data => gameStateController.updateSelectedEntity(socket, data))
 }

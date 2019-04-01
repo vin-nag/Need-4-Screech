@@ -5,6 +5,12 @@ const onAnimationsList = (socket, data) => {
     assetManager.loadAnimationImages(animationsList)
 }
 
+const onMusicList = (socket, data) => {
+    const musicList = data.payload
+    assetManager.loadMusic(musicList)
+}
+
 export default {
-    onAnimationsList
+    onAnimationsList,
+    onMusicList
 }
