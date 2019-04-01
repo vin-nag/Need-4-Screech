@@ -2,6 +2,7 @@ import socketClient from "../socketClient";
 import { levelEditor as config } from "../../../../config"
 import { controls } from "../../../../config-template"
 import assetManager from "../services/assetManager"
+import canvasService from "../services/canvas"
 
 class LevelEditor {
     constructor(){
@@ -120,12 +121,18 @@ class LevelEditor {
     }
 
     handleMouseMove(event){
-        const canvasRect = document.getElementById("levelEditorCanvas").getBoundingClientRect()
+        const canvas = document.getElementById("levelEditorCanvas")
+        const canvasRect = canvas.getBoundingClientRect()
         const { left, top } = canvasRect
 
+        const player = this.entities.find(entity => entity.tag === "player")
+        const {camX, camY} = canvasService.calc.viewportOffset(player, canvas)
+
+        console.log("CamX: ", camX, "CamY:",camY, "Player Pos:", player.componentMap['CTransform'].position)
+
         socketClient.emit("updateEntityPosition", {
-            x: event.x - left,
-            y: event.y - top,
+            x: event.x - left - camX,
+            y: event.y - top - camY,
             "sessionId": this.sessionId
         })
     }
