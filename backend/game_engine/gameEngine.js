@@ -1006,7 +1006,7 @@ class GameEngine {
             }
             enemyAI.playerPosition = playerOffSet;
             enemyAI.player_detected = playerDetected;
-            enemyAI.show = playerDetected;
+            //enemyAI.show = playerDetected;
 
             if (playerDetected !== oldState){
                 this.updateEnemyAnimation(enemy);
