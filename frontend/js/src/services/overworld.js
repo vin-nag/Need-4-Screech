@@ -85,19 +85,19 @@ const _menuOptions = {
     "George Street": {
         handler: () => {
             app.switchToWindow(APP_WINDOWS.GAME_PLAY)
-            gamePlay.setCurrenLevel("George Street")
+            gamePlay.setCurrentLevel("George Street")
         }
     },
     "Memorial University": {
         handler: () => {
             app.switchToWindow(APP_WINDOWS.GAME_PLAY)
-            gamePlay.setCurrenLevel("Memorial University")
+            gamePlay.setCurrentLevel("Memorial University")
         }
     },
     "Cape Spear": {
         handler: () => {
             app.switchToWindow(APP_WINDOWS.GAME_PLAY)
-            gamePlay.setCurrenLevel("Cape Spear")
+            gamePlay.setCurrentLevel("Cape Spear")
         }
     }
 }
