@@ -137,12 +137,12 @@
     <div id="gamePlay" class="centeredCanvas">
             <div id="completeLevelModal" class="centeredModal">
                 <h1>LEVEL COMPLETE</h1>
-                <button type="button" class="nes-btn is-primary">Next</button>
+                <button type="button" class="nes-btn is-primary" id="completeNext">Next</button>
             </div>
             <div id="failedLevelModal" class="centeredModal">
                 <h1>LEVEL FAILED</h1>
-                <button type="button" class="nes-btn is-primary">Restart</button>
-                <button type="button" class="nes-btn is-primary">Quit</button>
+                <button type="button" class="nes-btn is-warning" id="restartLevel">Restart</button>
+                <button type="button" class="nes-btn" id="quitLevel">Quit</button>
             </div>
         <canvas id="gamePlayCanvas" width="1280" height="720"></canvas>
     </div>

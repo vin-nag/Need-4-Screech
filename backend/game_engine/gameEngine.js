@@ -1050,6 +1050,7 @@ class GameEngine {
 
     // check if player completed level successfully
     sLevelEnd() {
+
         const player = this.entity_manager.getEntitiesByTag("player")[0];
         const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
         const score = this.entity_manager.getEntitiesByTag("score")[0];
@@ -1061,16 +1062,16 @@ class GameEngine {
         let game_running = player.getComponent("CGameRunning");
         let level_state = player.getComponent("CLevelState");
 
+        game_running.running = false;
+
         if (deliveries > 0) {
             console.log("You missed one or more deliveries, game over!")
-            game_running.running = false;
             level_state.level_state = "failed"
             // show level restart screen
         }
 
         if (screech === 0 && deliveries > 0) {
             console.log("You ran out of screech, game over!");
-            game_running.running = false;
             level_state.level_state = "failed"
             // show level restart screen
         }
@@ -1085,13 +1086,31 @@ class GameEngine {
 
     // check if game running is false, if so stop game
     sGameState() {
+
         const player = this.entity_manager.getEntitiesByTag("player")[0];
+        const score = this.entity_manager.getEntitiesByTag("score")[0];
+        const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
+        const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
+
         let game_running = player.getComponent("CGameRunning").running;
+        let level_score = score.getComponent('CScore').score; // will use this later to write score to db after each level
+        let screech = screech_remaining.getComponent('CScreech').screechCount;
+        let health = player.getComponent('CHealth').health;
         let level_state = player.getComponent("CLevelState");
+        let deliveries = deliveries_left.getComponent('CScore').score;
 
         if (!game_running) {
-            console.log("level failed");
-            level_state.level_state = "failed"
+
+            if (screech <= 0 && deliveries > 0) {
+                console.log("Ran out of screech!")
+                level_state.level_state = "failed"
+            }
+
+            if (health <= 0) {
+                console.log("You ran out of health!")
+                level_state.level_state = "failed"
+            }
+
         }
     }
 

@@ -42,12 +42,12 @@ const delegateRendering = (activeWindow) => {
         gameRenderEngine(gamePlay.entities, "gamePlayCanvas")
         for (let entity of gamePlay.entities) {
             if (entity.tag === "player") {
-                let level_state = entity.componentMap['CLevelState']
-                if (level_state.level_state === "complete") {
-                    domService.showElement("completeLevelModal")
+                let level_state = entity.componentMap['CLevelState'].level_state;
+                if (level_state === "complete") {
+                    gamePlay.showModal(level_state)
                 }
-                else if (level_state.level_state === "failed") {
-                    domService.showElement("failedLevelModal")
+                else if (level_state === "failed") {
+                    gamePlay.showModal(level_state)
                 }
             }
         }
