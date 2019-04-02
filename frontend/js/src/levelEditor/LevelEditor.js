@@ -128,8 +128,6 @@ class LevelEditor {
         const player = this.entities.find(entity => entity.tag === "player")
         const {camX, camY} = canvasService.calc.viewportOffset(player, canvas)
 
-        console.log("CamX: ", camX, "CamY:",camY, "Player Pos:", player.componentMap['CTransform'].position)
-
         socketClient.emit("updateEntityPosition", {
             x: event.x - left - camX,
             y: event.y - top - camY,
