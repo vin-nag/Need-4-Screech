@@ -1,5 +1,4 @@
 // imports
-const FileService = require("../services/FileService");
 
 const components = require("./components");
 const entity_models = require("./default_entity_models");
@@ -18,8 +17,8 @@ class GameEngine {
         this.mousePosition = new Vector(0,0)
         this.editorEntityType = "tile"
         this.isEditor = false
-        this.aniCount =0;
-        this.allAnimations = this._getAnimations()
+        this.editorModelIndex = 0
+        this.editorModels = this._getEditorModels()
 
         // last input
         this.lastInput = {event: "initialized"} ;
@@ -41,11 +40,31 @@ class GameEngine {
         this.entity_manager.loadSerializedEntities(entities);
     }
 
-     _getAnimations() {
-        const animationDirFiles = FileService.listdir("frontend/static/assets/animations")
-        let animations = animationDirFiles.filter(file => file.endsWith(".png"))
-        animations = animations.map(animation => animation.substring(0, animation.length-4))
-        return animations
+     _getEditorModels() {
+        const { addModel: models } = this.entity_manager
+        const entityModels = [
+            models.decorator_pole_1,
+            models.decorator_pole_2,
+            models.decorator_pole_3,
+            models.decorator_lantern,
+            models.decorator_van,
+            models.level_end_taxi,
+            models.enemy_melee_snake,
+            models.enemy_melee_moose,
+            models.enemy_ranged_chef,
+            models.enemy_flying_blackbird,
+            models.tile_brick,
+            models.tile_grey_left,
+            models.tile_grey_right,
+            models.tile_grey_center,
+            models.powerup_speed,
+            models.powerup_invincible,
+            models.powerup_shield,
+            models.powerup_health,
+            models.checkpoints
+        ]
+
+        return entityModels.map(model => model.bind(this.entity_manager.addModel))
     }
 
 
@@ -373,24 +392,11 @@ class GameEngine {
         if (this.lastInput[config.controls.new] === true){
 
             if(!this.selectedEntity){
-                let tile = this.entity_manager.addEntity(this.editorEntityType);
-                this.selectedEntity = tile
+                const position = this.mousePosition
+                this.editorModels[this.editorModelIndex](position.x, position.y) //add new entity
 
-                // animation
-                tile.addComponent(components.CAnimation('GreyTile',1,0,0))
-
-                // transform
-                let position = new Vector(this.mousePosition.x, this.mousePosition.y);
-                let previous_position = new Vector(position.x, position.y);
-                let velocity = new Vector(0, 0);
-                tile.addComponent(components.CTransform(position, previous_position,1, velocity,0));
-
-                //bounding box
-                if(this.editorEntityType !== "decoration"){
-                    let size = new Vector(64, 64);
-                    let half_size = new Vector(32, 32);
-                    tile.addComponent(components.CBoundingBox(size, half_size));
-                }
+                const entitiesToAdd = this.entity_manager.entitiesToAdd
+                this.selectedEntity = entitiesToAdd[entitiesToAdd.length - 1] //the last added entity
             }
 
         }
@@ -403,25 +409,20 @@ class GameEngine {
         }
 
         if(this.selectedEntity) {
-            if (this.lastInput[config.controls.nextAni] === true) {
-                //console.log(this.allAnimations)
+            const getNextModel = this.lastInput[config.controls.nextAni] === true
+            const getLastModel = this.lastInput[config.controls.lastAni] === true
 
-
-                this.aniCount = (this.aniCount + 1) % this.allAnimations.length
-                this.selectedEntity.getComponent('CAnimation').animName = this.allAnimations[this.aniCount]
-
-
-
-
-            }
-            if (this.lastInput[config.controls.lastAni] === true) {
-                //console.log("Last animation")
-
-                    this.aniCount = (this.aniCount - 1) % this.allAnimations.length
-                    this.selectedEntity.getComponent('CAnimation').animName = this.allAnimations[this.aniCount]
-
-
-
+            if (getNextModel || getLastModel) {
+                const offset = getNextModel ? 1 : -1
+                const mod = (m,n) => ((m%n)+n)%n //JS is stupid; % can return -ve numbers
+                this.editorModelIndex = mod(this.editorModelIndex + offset, this.editorModels.length)
+                
+                const oldPosition = this.selectedEntity.getComponent("CTransform").position
+                this.editorModels[this.editorModelIndex](oldPosition.x, oldPosition.y) //create a new model
+                this.selectedEntity.destroy()
+                
+                const entitiesToAdd = this.entity_manager.entitiesToAdd
+                this.selectedEntity = entitiesToAdd[entitiesToAdd.length - 1] //the last added entity
             }
 
         }
