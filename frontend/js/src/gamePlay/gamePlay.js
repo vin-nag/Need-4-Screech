@@ -83,13 +83,13 @@ class GamePlay {
         if (state === "complete") {
             domService.showElement("completeLevelModal")
             if (this.currentLevel === "George Street") {
-                this.levelsCompleted[0] = true
+                this.levelsCompleted = [true, false, false]
             }
             else if (this.currentLevel === "Memorial University") {
-                this.levelsCompleted[1] = true
+                this.levelsCompleted = [true, true, false]
             }
             else if (this.currentLevel === "Cape Spear") {
-                this.levelsCompleted[2] = true
+                this.levelsCompleted = [true, true, true]
             }
 
             console.log(this.levelsCompleted)
