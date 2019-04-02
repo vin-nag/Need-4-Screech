@@ -55,7 +55,7 @@ class EntityManager {
             if(!(obj instanceof Object)){ return } //base case
 
             for(let i in obj){
-                if(obj[i]._isVector === true){ obj[i] = new Vector(obj[i].x, obj[i].y) }
+                if(obj[i] instanceof Object && obj[i]._isVector === true){ obj[i] = new Vector(obj[i].x, obj[i].y) }
                 else { deserialize(obj[i]) }
             }
         }
