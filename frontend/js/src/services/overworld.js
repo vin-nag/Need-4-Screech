@@ -1,5 +1,6 @@
 import app from "../app"
 import APP_WINDOWS from "../../enums/app_windows"
+import gamePlay from "../gamePlay"
 
 /**
  * Shows the overworld levels
@@ -11,6 +12,7 @@ const goToMenu = (menu) => {
     _menuState.selectedItemIndex = 0
 }
 
+
 /**
  * Gets the children items for the active menu
  */
@@ -19,7 +21,25 @@ const getActiveMenuItems = () => {
     
     if(activeMenu === "Main"){
         //Return the overworld levels
-        return ["George Street", "Memorial University", "Cape Spear"];
+
+        let levelArray = []
+
+        if (gamePlay.levelsCompleted[0] && !gamePlay.levelsCompleted[1] && !gamePlay.levelsCompleted[2]) {
+            levelArray = ["George Street", "Memorial University"];
+        }
+        else if (gamePlay.levelsCompleted[0] && gamePlay.levelsCompleted[1] && !gamePlay.levelsCompleted[2]) {
+            levelArray = ["George Street", "Memorial University", "Cape Spear"];
+        }
+        else if (gamePlay.levelsCompleted[0] && gamePlay.levelsCompleted[1] && gamePlay.levelsCompleted[2]) {
+            levelArray = ["George Street", "Memorial University", "Cape Spear"];
+            // show boss level
+        }
+        else {
+            levelArray = ["George Street"];
+        }
+        
+        return levelArray
+    
     }
 
     //Return the children of the active menu
@@ -62,15 +82,31 @@ const _triggerSelectedItem = () => {
 }
 
 const _menuOptions = {
-    "George Street": {handler: () => app.switchToWindow(APP_WINDOWS.GAME_PLAY), children: []},
-    "Memorial University": {handler: () => app.switchToWindow(APP_WINDOWS.GAME_PLAY), children: []},
-    "Cape Spear": {handler: () => app.switchToWindow(APP_WINDOWS.GAME_PLAY), children: []},
+    "George Street": {
+        handler: () => {
+            app.switchToWindow(APP_WINDOWS.GAME_PLAY)
+            gamePlay.setCurrenLevel("George Street")
+        }
+    },
+    "Memorial University": {
+        handler: () => {
+            app.switchToWindow(APP_WINDOWS.GAME_PLAY)
+            gamePlay.setCurrenLevel("Memorial University")
+        }
+    },
+    "Cape Spear": {
+        handler: () => {
+            app.switchToWindow(APP_WINDOWS.GAME_PLAY)
+            gamePlay.setCurrenLevel("Cape Spear")
+        }
+    }
 }
 
 const _menuState = {
     activeMenu: "Main",
     selectedItemIndex: 0
 }
+
 
 export default {
     goToMenu,

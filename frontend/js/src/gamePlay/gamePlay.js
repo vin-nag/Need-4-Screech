@@ -9,6 +9,8 @@ class GamePlay {
         this.entities = []
         this.sessionID = null
         this.updateStateInterval = null
+        this.currentLevel = ""
+        this.levelsCompleted = [false, false, false]
     }
 
     run(){
@@ -80,6 +82,17 @@ class GamePlay {
     showModal(state) {
         if (state === "complete") {
             domService.showElement("completeLevelModal")
+            if (this.currentLevel === "George Street") {
+                this.levelsCompleted[0] = true
+            }
+            else if (this.currentLevel === "Memorial University") {
+                this.levelsCompleted[1] = true
+            }
+            else if (this.currentLevel === "Cape Spear") {
+                this.levelsCompleted[2] = true
+            }
+
+            console.log(this.levelsCompleted)
         }
         else if (state === "failed") {
             domService.showElement("failedLevelModal")
@@ -90,6 +103,10 @@ class GamePlay {
         socketClient.emit('newSessionID', {
             issuer: "GAME_PLAY"
         })
+    }
+
+    setCurrenLevel(level) {
+        this.currentLevel = level
     }
 }
 
