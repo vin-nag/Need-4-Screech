@@ -199,6 +199,8 @@ class GameEngine {
         }
         else {
 
+            this.sAnimation();
+            this.sMovement();
             if(!this.isEditor){
                 this.sInput();
                 this.sGravity();
@@ -214,8 +216,6 @@ class GameEngine {
                 this.sEditor();
             }
             
-            this.sAnimation();
-            this.sMovement();
             this.entity_manager.update();
         }
     }
