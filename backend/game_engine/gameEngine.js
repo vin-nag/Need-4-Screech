@@ -406,23 +406,21 @@ class GameEngine {
             if (this.lastInput[config.controls.nextAni] === true) {
                 //console.log(this.allAnimations)
 
-                this.selectedEntity.getComponent('CAnimation').animName = this.allAnimations[this.aniCount]
-                if(this.aniCount > this.allAnimations.length){
-                    this.aniCount = 0;
-                }else{
-                    this.aniCount ++;
 
-                }
+                this.aniCount = (this.aniCount + 1) % this.allAnimations.length
+                this.selectedEntity.getComponent('CAnimation').animName = this.allAnimations[this.aniCount]
+
+
+
 
             }
             if (this.lastInput[config.controls.lastAni] === true) {
                 //console.log("Last animation")
-                this.selectedEntity.getComponent('CAnimation').animName = this.allAnimations[this.aniCount]
-                if(this.aniCount === 0){
-                    this.aniCount = 0;
-                }else{
-                    this.aniCount = this.aniCount - 1;
-                }
+
+                    this.aniCount = (this.aniCount - 1) % this.allAnimations.length
+                    this.selectedEntity.getComponent('CAnimation').animName = this.allAnimations[this.aniCount]
+
+
 
             }
 

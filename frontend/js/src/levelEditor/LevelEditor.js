@@ -11,7 +11,6 @@ class LevelEditor {
         this.entities = []
         this.inSelection = false
         this.updateStateInterval = null
-        this.next = 0
 
 
         this.entityType = {
