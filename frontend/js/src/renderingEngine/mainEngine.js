@@ -44,14 +44,7 @@ const delegateRendering = (activeWindow) => {
         gameRenderEngine(gamePlay.entities, "gamePlayCanvas")
         const player = gamePlay.entities.find(entity => entity.tag === "player")
         let level_state = player.componentMap['CLevelState'].level_state;
-        if (level_state === "complete") {
-            gamePlay.showModal(level_state)
-        }
-        else if (level_state === "failed") {
-            gamePlay.showModal(level_state)
-        }
-            
-        
+        gamePlay.showModal(level_state);
     }
     else if(activeWindow === APP_WINDOWS.MENU){
         menuRenderEngine(menuService.getActiveMenuItems(), menuService.getSelectedItemIndex())
