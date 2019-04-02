@@ -21,3 +21,37 @@ body {
     border-radius: 5px;
     z-index: 100;
 }
+
+#completeLevelModal {
+    background: rgba(42, 221, 7, 0.85);
+    padding: 50px 25px;
+    display: none;
+}
+
+#completeLevelModal h3 {
+    text-align: center;
+    color: #fff;
+}
+
+#completeLevelModal form {
+    margin-top: 50px;
+}
+
+#failedLevelModal {
+    background: rgba(218, 13, 13, 0.85);
+    padding: 50px 25px;
+    display: none;
+}
+
+#failedLevelModal h3 {
+    text-align: center;
+    color: #fff;
+}
+
+#failedLevelModal form {
+    margin-top: 50px;
+}
+
+#failedLevelModal select {
+    min-width: 500px;
+}

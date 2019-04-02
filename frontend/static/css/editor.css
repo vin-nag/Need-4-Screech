@@ -14,10 +14,14 @@
 #editor-buttons div{
     height: 50px;
     width: 50px;
+    background: rgba(255, 136, 0, 0.85);
+    color: #fff;
+    font-size: 30px;
+    border-radius: 5px;
 }
 
 #editor-buttons div:hover{
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 136, 0, 0.95);
 }
 
 #saveLevelModal {

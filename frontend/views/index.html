@@ -122,9 +122,9 @@
             </div>
         <table id="editor-buttons">
             <tbody>
-                <tr><td><div id="levelEditorSaveLevel"></div></td></tr>
-                <tr><td><div id="levelEditorLoadLevel"></div></td></tr>
-                <tr><td><div id="levelEditorSetActive"></div></td></tr>
+                <tr><td><div id="levelEditorSaveLevel"><i class="fa fa-download"></i></div></td></tr>
+                <tr><td><div id="levelEditorLoadLevel"><i class="fa fa-upload"></i></div></td></tr>
+                <tr><td><div id="levelEditorSetActive"><i class="fa fa-exchange"></i></div></td></tr>
             </tbody>
         </table>
         <canvas id="levelEditorCanvas" width="1280" height="720"></canvas>
@@ -135,6 +135,15 @@
     </div>
 
     <div id="gamePlay" class="centeredCanvas">
+            <div id="completeLevelModal" class="centeredModal">
+                <h1>LEVEL COMPLETE</h1>
+                <button type="button" class="nes-btn is-primary" id="completeNext">Next</button>
+            </div>
+            <div id="failedLevelModal" class="centeredModal">
+                <h1>LEVEL FAILED</h1>
+                <button type="button" class="nes-btn is-warning" id="restartLevel">Restart</button>
+                <button type="button" class="nes-btn" id="quitLevel">Quit</button>
+            </div>
         <canvas id="gamePlayCanvas" width="1280" height="720"></canvas>
     </div>
 

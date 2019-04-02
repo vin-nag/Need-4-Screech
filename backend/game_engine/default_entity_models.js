@@ -22,6 +22,7 @@ class EntityModels {
         player_entity.addComponent(components.CPowerup(false, false, false, false))
         player_entity.addComponent(components.CScreech(25))
         player_entity.addComponent(components.CGameRunning(true));
+        player_entity.addComponent(components.CLevelState("ongoing"))
     };
 
     bar_timer(x=10, y=10) {

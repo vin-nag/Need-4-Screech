@@ -199,18 +199,6 @@ class GameEngine {
             drunk_text.addComponent(components.CAnimation('drunk_mode', 1, 0, 0));
             setTimeout(() => drunk_text.destroy(), 1350)
         }
-        else if (player_powerup === "health_pack") {
-            let health_text = this.entity_manager.addEntity("health_text");
-            health_text.addComponent(components.CTransform(new Vector(480, 200), new Vector(0, 0), 1, velocity, 0));
-            health_text.addComponent(components.CAnimation('+health', 1, 0, 0));
-            setTimeout(() => health_text.destroy(), 1350)
-        }
-        else if (player_powerup === "transparent") {
-            let drunk_text = this.entity_manager.addEntity("drunk_text");
-            drunk_text.addComponent(components.CTransform(new Vector(470, 200), new Vector(0, 0), 1, velocity, 0));
-            drunk_text.addComponent(components.CAnimation('drunk_mode', 1, 0, 0));
-            setTimeout(() => drunk_text.destroy(), 1350)
-        }
     }
 
 
@@ -223,6 +211,8 @@ class GameEngine {
         }
         else {
 
+            this.sAnimation();
+            this.sMovement();
             if(!this.isEditor){
                 this.sInput();
                 this.sGravity();
@@ -237,8 +227,6 @@ class GameEngine {
                 this.sEditorInput();
                 this.sEditor();
             }
-this.sAnimation();
-            this.sMovement();
             this.entity_manager.update();
         }
     }
@@ -1099,6 +1087,7 @@ this.sAnimation();
 
     // check if player completed level successfully
     sLevelEnd() {
+
         const player = this.entity_manager.getEntitiesByTag("player")[0];
         const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
         const score = this.entity_manager.getEntitiesByTag("score")[0];
@@ -1108,20 +1097,24 @@ this.sAnimation();
         let level_score = score.getComponent('CScore').score; // will use this later to write score to db after each level
         let screech = screech_remaining.getComponent('CScreech').screechCount;
         let game_running = player.getComponent("CGameRunning");
+        let level_state = player.getComponent("CLevelState");
+
+        game_running.running = false;
 
         if (deliveries > 0) {
             console.log("You missed one or more deliveries, game over!")
-            game_running.running = false;
+            level_state.level_state = "failed"
             // show level restart screen
         }
 
         if (screech === 0 && deliveries > 0) {
             console.log("You ran out of screech, game over!");
-            game_running.running = false;
+            level_state.level_state = "failed"
             // show level restart screen
         }
         if (deliveries === 0){
             console.log("level complete");
+            level_state.level_state = "complete"
             // segue player back to overworld with next level unlocked
             // store level score in player collection in database
         }
@@ -1130,12 +1123,31 @@ this.sAnimation();
 
     // check if game running is false, if so stop game
     sGameState() {
+
         const player = this.entity_manager.getEntitiesByTag("player")[0];
+        const score = this.entity_manager.getEntitiesByTag("score")[0];
+        const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
+        const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
+
         let game_running = player.getComponent("CGameRunning").running;
+        let level_score = score.getComponent('CScore').score; // will use this later to write score to db after each level
+        let screech = screech_remaining.getComponent('CScreech').screechCount;
+        let health = player.getComponent('CHealth').health;
+        let level_state = player.getComponent("CLevelState");
+        let deliveries = deliveries_left.getComponent('CScore').score;
 
         if (!game_running) {
-            console.log("level failed");
-            // show level restart screen
+
+            if (screech <= 0 && deliveries > 0) {
+                console.log("Ran out of screech!")
+                level_state.level_state = "failed"
+            }
+
+            if (health <= 0) {
+                console.log("You ran out of health!")
+                level_state.level_state = "failed"
+            }
+
         }
     }
 

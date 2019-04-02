@@ -76,4 +76,6 @@ const CGameRunning = (running) => ({name: "CGameRunning", running});
 
 const CAttacker = (attacker) => ({name: "CAttacker", attacker});
 
-module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup, CEnemyAI, CScreech, CScore, CGameRunning, CEnemyAnim, CAttacker};
+const CLevelState = (level_state) => ({name: "CLevelState", level_state})
+
+module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup, CEnemyAI, CScreech, CScore, CGameRunning, CEnemyAnim, CAttacker, CLevelState};
