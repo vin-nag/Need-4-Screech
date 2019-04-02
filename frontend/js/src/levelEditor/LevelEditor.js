@@ -12,6 +12,7 @@ class LevelEditor {
         this.inSelection = false
         this.updateStateInterval = null
 
+
         this.entityType = {
             options: ["tile", "decoration", "player", "enemy", "powerup", "checkpoint"],
             selectedIndex: 0
@@ -80,6 +81,8 @@ class LevelEditor {
         alert(`Switched editor entity type to: ${entityType}`)
     }
 
+
+
     handleClick(event){
         if(this.inSelection){
             socketClient.emit("setSelectedEntity", {
@@ -138,6 +141,7 @@ class LevelEditor {
     handleMouseWheel(event){
         //Stub: Map scroll wheel movement to level editor functions (likely changing
         //the animation of the selected entity)
+
     }
 
     handleKeyPress(event){
