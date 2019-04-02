@@ -16,7 +16,7 @@
         "updateRate": 30
     },
     "player": {
-        "jump": -75,
+        "jump": -90,
         "speed": 10,
         "angle": 0,
         "lifeSpan": 10,

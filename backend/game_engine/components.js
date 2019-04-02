@@ -66,7 +66,7 @@ const CBar = (value, maxValue, color) => ({name: "CBar", value, maxValue, color}
 
 const CEnemyAI = (enemy_type, currentRoam, roamDistance, aggro_time=5000, detection_distance=1000, player_detected=false, show=false, playerPosition, canAttack=true) => ({name: "CEnemyAI", enemy_type, currentRoam, roamDistance, aggro_time, detection_distance, player_detected, show, playerPosition, canAttack});
 
-const CEnemyAnim = (idleAnim, idleAnimFrames, attackAnim, attackAnimFrames) => ({name: "CEnemyAnim", idleAnim, idleAnimFrames, attackAnim, attackAnimFrames})
+const CEnemyAnim = (idleAnim, idleAnimFrames, attackAnim, attackAnimFrames, deadAnim, deadAnimFrames) => ({name: "CEnemyAnim", idleAnim, idleAnimFrames, attackAnim, attackAnimFrames, deadAnim, deadAnimFrames})
 
 const CScreech = (screechCount) => ({name: "CScreech", screechCount});
 
