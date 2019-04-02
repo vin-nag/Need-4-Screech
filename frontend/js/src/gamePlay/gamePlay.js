@@ -1,4 +1,7 @@
 import socketClient from "../socketClient"
+import app from "../app"
+import APP_WINDOWS from "../../enums/app_windows"
+import domService from "../services/dom"
 
 class GamePlay {
     constructor(){
@@ -48,6 +51,40 @@ class GamePlay {
                 keyCode: event.keyCode,
                 sessionID: this.sessionID
             })
+        }
+    }
+
+    handleButtonClick(e) {
+        for(let entity of this.entities) {
+            if (entity.tag === "player") {
+                let level_state = entity.componentMap['CLevelState']
+                if (e.srcElement.id === "completeNext") {
+                    level_state.level_state = "ongoing"
+                    domService.hideElement("completeLevelModal")
+                    app.switchToWindow(APP_WINDOWS.OVERWORLD)
+                }
+                else if (e.srcElement.id === "restartLevel") {
+                    level_state.level_state = "ongoing"
+                    domService.hideElement("failedLevelModal")
+                    this.stop();
+                    this.newSessionId();
+                    this.run();
+                }
+                else if (e.srcElement.id === "quitLevel") {
+                    level_state.level_state = "ongoing"
+                    domService.hideElement("failedLevelModal")
+                    app.switchToWindow(APP_WINDOWS.OVERWORLD)
+                }
+            }
+        } 
+    }
+
+    showModal(state) {
+        if (state === "complete") {
+            domService.showElement("completeLevelModal")
+        }
+        else if (state === "failed") {
+            domService.showElement("failedLevelModal")
         }
     }
 

@@ -23,7 +23,7 @@ body {
 }
 
 #completeLevelModal {
-    background: rgba(125, 125, 125, 0.85);
+    background: rgba(42, 221, 7, 0.85);
     padding: 50px 25px;
     display: none;
 }
@@ -38,7 +38,7 @@ body {
 }
 
 #failedLevelModal {
-    background: rgba(125, 125, 125, 0.85);
+    background: rgba(218, 13, 13, 0.85);
     padding: 50px 25px;
     display: none;
 }

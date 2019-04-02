@@ -24,6 +24,10 @@ export const listen = () => {
     document.getElementById("levelEditorCanvas").addEventListener("click", (e) => levelEditor.handleClick(e))
     document.getElementById("levelEditorCanvas").addEventListener("mousemove", (e) => levelEditor.handleMouseMove(e))
 
+    document.getElementById("completeNext").addEventListener("click", (e) => gamePlay.handleButtonClick(e))
+    document.getElementById("restartLevel").addEventListener("click", (e) => gamePlay.handleButtonClick(e))
+    document.getElementById("quitLevel").addEventListener("click", (e) => gamePlay.handleButtonClick(e))
+
     document.getElementById("saveLevelButton").addEventListener("click", () => {
         const levelName = document.getElementById("saveLevelName").value
         levelEditor.saveLevel(levelName)
