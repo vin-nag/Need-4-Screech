@@ -42,17 +42,16 @@ const delegateRendering = (activeWindow) => {
     }
     else if(activeWindow === APP_WINDOWS.GAME_PLAY){
         gameRenderEngine(gamePlay.entities, "gamePlayCanvas")
-        for (let entity of gamePlay.entities) {
-            if (entity.tag === "player") {
-                let level_state = entity.componentMap['CLevelState'].level_state;
-                if (level_state === "complete") {
-                    gamePlay.showModal(level_state)
-                }
-                else if (level_state === "failed") {
-                    gamePlay.showModal(level_state)
-                }
-            }
+        const player = gamePlay.entities.find(entity => entity.tag === "player")
+        let level_state = player.componentMap['CLevelState'].level_state;
+        if (level_state === "complete") {
+            gamePlay.showModal(level_state)
         }
+        else if (level_state === "failed") {
+            gamePlay.showModal(level_state)
+        }
+            
+        
     }
     else if(activeWindow === APP_WINDOWS.MENU){
         menuRenderEngine(menuService.getActiveMenuItems(), menuService.getSelectedItemIndex())
