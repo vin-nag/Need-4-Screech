@@ -49,7 +49,6 @@ class GameEngine {
             models.decorator_lantern,
             models.decorator_van,
             models.level_end_taxi,
-            models.enemy_melee_snake,
             models.enemy_melee_moose,
             models.enemy_ranged_chef,
             models.enemy_flying_blackbird,
