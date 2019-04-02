@@ -55,28 +55,26 @@ class GamePlay {
     }
 
     handleButtonClick(e) {
-        for(let entity of this.entities) {
-            if (entity.tag === "player") {
-                let level_state = entity.componentMap['CLevelState']
-                if (e.srcElement.id === "completeNext") {
-                    level_state.level_state = "ongoing"
-                    domService.hideElement("completeLevelModal")
-                    app.switchToWindow(APP_WINDOWS.OVERWORLD)
-                }
-                else if (e.srcElement.id === "restartLevel") {
-                    level_state.level_state = "ongoing"
-                    domService.hideElement("failedLevelModal")
-                    this.stop();
-                    this.newSessionId();
-                    this.run();
-                }
-                else if (e.srcElement.id === "quitLevel") {
-                    level_state.level_state = "ongoing"
-                    domService.hideElement("failedLevelModal")
-                    app.switchToWindow(APP_WINDOWS.OVERWORLD)
-                }
-            }
-        } 
+        const player = this.entities.find(entity => entity.tag === "player")
+        let level_state = player.componentMap['CLevelState']
+        if (e.srcElement.id === "completeNext") {
+            level_state.level_state = "ongoing"
+            domService.hideElement("completeLevelModal")
+            app.switchToWindow(APP_WINDOWS.OVERWORLD)
+        }
+        else if (e.srcElement.id === "restartLevel") {
+            level_state.level_state = "ongoing"
+            domService.hideElement("failedLevelModal")
+            this.stop();
+            this.newSessionId();
+            this.run();
+        }
+        else if (e.srcElement.id === "quitLevel") {
+            level_state.level_state = "ongoing"
+            domService.hideElement("failedLevelModal")
+            app.switchToWindow(APP_WINDOWS.OVERWORLD)
+        }
+
     }
 
     showModal(state) {
