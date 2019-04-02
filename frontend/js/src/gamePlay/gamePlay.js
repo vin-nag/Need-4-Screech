@@ -105,7 +105,7 @@ class GamePlay {
         })
     }
 
-    setCurrenLevel(level) {
+    setCurrentLevel(level) {
         this.currentLevel = level
     }
 }
