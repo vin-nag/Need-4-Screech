@@ -7,6 +7,11 @@ class DomService {
         document.getElementById(elementId).style.display = "none"
     }
 
+    isHidden(elementId){
+        const element = document.getElementById(elementId)
+        return window.getComputedStyle(element).display === "none"
+    }
+
     fillSelect(elementId, values, labels){
         const selectMenu = document.getElementById(elementId)
         selectMenu.options.length = 0 //clear select menu

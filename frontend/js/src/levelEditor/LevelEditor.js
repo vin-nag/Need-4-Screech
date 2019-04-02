@@ -3,6 +3,7 @@ import { levelEditor as config } from "../../../../config"
 import { controls } from "../../../../config-template"
 import assetManager from "../services/assetManager"
 import canvasService from "../services/canvas"
+import domService from "../services/dom"
 
 class LevelEditor {
     constructor(){
@@ -145,6 +146,10 @@ class LevelEditor {
     }
 
     handleKeyPress(event){
+        if(!domService.isHidden("loadLevelModal") || !domService.isHidden("saveLevelModal")){
+            return
+        }
+
         if (event.type === 'keydown') {
             if(event.keyCode === parseInt(controls.delete)){ this.inSelection = false }
             else if(event.keyCode === parseInt(controls.new)){ this.inSelection = true }
