@@ -221,6 +221,7 @@ class GameEngine {
         this.entity_manager.addModel.powerup_invincible(1800, 175);
         this.entity_manager.addModel.powerup_speed(800, 595);
         this.entity_manager.addModel.powerup_health(3300, 595);
+        this.entity_manager.addModel.powerup_shield(1500, 595);
 
     }
 
@@ -240,7 +241,7 @@ class GameEngine {
         let position = e.getComponent('CTransform').position;
         let previous_position = e.getComponent('CTransform').previous_position;
         let velocity = new Vector(0,0)
-        fire.addComponent(components.CTransform(position, previous_position, 1, velocity, 0));
+        fire.addComponent(components.CTransform(new Vector(position.x, position.y - 20), previous_position, 1, velocity, 0));
         fire.addComponent(components.CBoundingBox(size, half_size));
         fire.addComponent(components.CAnimation('fire_small', 24, 0, .7));
         fire.addComponent(components.CLifeSpan(2000))
@@ -907,25 +908,34 @@ class GameEngine {
         // bullet-player collision
         for (let bullet of this.entity_manager.getEntitiesByTag("bullet")){
             let attacker = bullet.getComponent("CAttacker").attacker;
+            let playerPowerup = player.getComponent('CPowerup');
             if (attacker === "player"){continue};
             let overlap = physics.getOverLap(player, bullet);
             let playerHealth = player.getComponent('CHealth');
             let shield_on = this.entity_manager.getEntitiesByTag("shield_on")[0];
             if (overlap.x > 0 && overlap.y > 0){
-                bullet.destroy();
-                if (shield_on !== undefined) {
-                    shield_on.destroy();
+                if (playerPowerup.invincibility) {
+                    return;
                 }
-                if (!playerHealth.invincible) {
-                    playerHealth.invincible = true;
-                    playerHealth.health -= 20;
-                    // Invincibility frames
-                    setTimeout(() => playerHealth.invincible = false, 800)
-                }
-
-                if (playerHealth.health === 0) {
-                    //player.destroy();
-                    bullet.destroy();
+                else {
+                    if (playerPowerup.shield) {
+                        playerPowerup.shield = false;
+                        playerHealth.invincible = true;
+                        if (shield_on !== undefined) {
+                            shield_on.destroy();
+                        }
+                        setTimeout(() => playerHealth.invincible = false, 800);
+                        return;
+                    }
+                    if (!playerHealth.invincible) {
+                        playerHealth.invincible = true;
+                        playerHealth.health -= 20;
+                        // Invincibility frames
+                        setTimeout(() => playerHealth.invincible = false, 800)
+                    }
+                    if (playerHealth.health === 0) {
+                        console.log('player dead');
+                    }
                 }
             }
         }

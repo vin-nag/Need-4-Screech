@@ -16,7 +16,7 @@
         "updateRate": 30
     },
     "player": {
-        "jump": -90,
+        "jump": -110,
         "speed": 10,
         "angle": 0,
         "lifeSpan": 10,
@@ -25,7 +25,7 @@
         "inertia": 0.9,
         "minSpeed": 2.75,
         "drunk": 100,
-        "drunk_jump": -150
+        "drunk_jump": -160
     },
     "game_engine": {
         "drunk_gravity": 1,
