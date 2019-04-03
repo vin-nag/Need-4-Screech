@@ -37,7 +37,7 @@ const onSaveLevel = (socket, data ) => {
     db.levels.findOne({levelName: data.levelName}, function(err, res){
         if(err || res != null){
             errors.push(err || "This level name already exists")
-            socekt.emit('saveLevelResponse', {success: false, errors})
+            socket.emit('saveLevelResponse', {success: false, errors})
         }
         else{
             //TODO: Change the owner to the user id once auth is working fully
