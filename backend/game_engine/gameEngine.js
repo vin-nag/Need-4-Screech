@@ -15,10 +15,12 @@ class GameEngine {
         this.gameStarted = false;
         this.selectedEntity = null
         this.mousePosition = new Vector(0,0)
+
         this.editorEntityType = "tile"
         this.isEditor = false
         this.editorModelIndex = 0
         this.editorModels = this._getEditorModels()
+        this.showGrid = false
 
         // last input
         this.lastInput = {event: "initialized"} ;
@@ -522,6 +524,10 @@ class GameEngine {
                 this.selectedEntity.destroy()
                 this.selectedEntity = null
             }
+        }
+
+        if(this.lastInput[config.controls.grid] === true){
+            this.showGrid = !this.showGrid
         }
 
         if(this.selectedEntity) {
@@ -1279,7 +1285,10 @@ class GameEngine {
     }
 
     returnGameState(){
-        return this.entity_manager.getEntities();
+        return {
+            showGrid: this.showGrid,
+            entities: this.entity_manager.getEntities()
+        }
     }
 
     setEditorEntityType(entityType){
