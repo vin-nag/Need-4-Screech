@@ -12,6 +12,7 @@ class LevelEditor {
         this.entities = []
         this.inSelection = false
         this.updateStateInterval = null
+        this.showGrid = false
 
 
         this.entityType = {
@@ -52,6 +53,18 @@ class LevelEditor {
 
     setSession(sessionId) {
         this.sessionId = sessionId
+    }
+
+    setGrid(showGrid){
+        //Limit calls to the DOM by only calling the DOM
+        //when showGrid changes
+        if(showGrid !== this.showGrid){
+            this.showGrid = showGrid
+
+            const element = "gameGrid"
+            if(showGrid){ domService.showElement(element) }
+            else { domService.hideElement(element) }
+        }
     }
 
     saveLevel(levelName){
