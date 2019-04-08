@@ -1203,8 +1203,14 @@ class GameEngine {
         if(this.selectedEntity){
             let entity = this.selectedEntity
             let eTransform = entity.getComponent('CTransform')
-            eTransform.position.x = this.mousePosition.x
-            eTransform.position.y = this.mousePosition.y
+            if(this.showGrid){
+                eTransform.position.x = 64 * Math.floor(this.mousePosition.x / 64)
+                eTransform.position.y = 64 * Math.floor((this.mousePosition.y - 720%64) / 64) + 720%64
+            }
+            else{
+                eTransform.position.x = this.mousePosition.x
+                eTransform.position.y = this.mousePosition.y
+            }
         }
 
     }

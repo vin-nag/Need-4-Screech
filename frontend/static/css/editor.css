@@ -67,4 +67,5 @@
     background-image: repeating-linear-gradient(0deg,transparent,transparent 48px,#FFF 48px,#FFF 50px),repeating-linear-gradient(-90deg,transparent,transparent 62px,#FFF 62px,#FFF 64px);
     background-size: 64px 64px;
     display: none;
+    pointer-events: none;
 }
