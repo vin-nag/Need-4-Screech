@@ -262,6 +262,7 @@ class GameEngine {
         boom.addComponent(components.CBoundingBox(size, half_size));
         boom.addComponent(components.CAnimation('boom', 13, 0, .8));
         boom.addComponent(components.CLifeSpan(2000))
+        this.loadSfx("explosion")
     }
 
     spawnCheckpointSuccess(checkpoint) {
@@ -273,6 +274,7 @@ class GameEngine {
         checkpoint_success.addComponent(components.CTransform(position, prevPos, 1, velocity, 0));
         checkpoint_success.addComponent(components.CAnimation('checkpoint_success', 1, 0, 0));
         checkpoint_success.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+        this.loadSfx("collect_key")
     }
 
     spawnShield() {
@@ -348,7 +350,7 @@ class GameEngine {
             this.gameStarted = true;
         }
         else {
-            this.sfx = ["explosion"]
+            this.sfx = []
             this.sAnimation();
             this.sMovement();
             if(!this.isEditor){
@@ -367,6 +369,10 @@ class GameEngine {
             }
             this.entity_manager.update();
         }
+    }
+
+    loadSfx(soundfile){
+        this.sfx.push(soundfile);
     }
 
     sBars(){
@@ -433,6 +439,7 @@ class GameEngine {
                 let offsetX = playerTransform.scale === -1? playerTransform.position.x - 5: playerTransform.position.x + playerBounding.size.x + 5;
                 this.entity_manager.addModel.bullet_knife(offsetX, playerTransform.position.y + 15, playerTransform.scale, player.tag);
                 CInput.canShoot = false;
+                this.loadSfx("laser");
                 setTimeout(() => CInput.canShoot = true, 400)
             }
         }
@@ -467,6 +474,7 @@ class GameEngine {
                     let screech_count = screech_remaining.getComponent('CScreech').screechCount;
                     let deliveries = deliveries_left.getComponent('CScore').score;
                     this.entity_manager.addModel.screech(playerTransform.position.x, playerTransform.position.y + 15, playerTransform.velocity, playerTransform.scale, player.tag);
+                    this.loadSfx("RiftToGo");
                     screech_remaining.getComponent('CScreech').screechCount -= 1;
                     CInput.canScreech = false;
                     if (screech_count === 0 && deliveries > 0) {
@@ -486,6 +494,7 @@ class GameEngine {
                 let player_powerup = player.getComponent('CPowerup');
                 player_powerup.drunk = true
                 screech_remaining.getComponent('CScreech').screechCount -= 1;
+                this.loadSfx("special");
                 CInput.canDrink = false;
                 for (let entity of this.entity_manager.getEntitiesByTag("bar")) {
                     if (entity.getComponent('CState').state === "drunk") {
@@ -790,6 +799,7 @@ class GameEngine {
                         setTimeout(() => playerHealth.invincible = false, 800)
                     }
                     if (playerHealth.health === 0) {
+                        this.loadSfx("playerhit");
                         console.log('player dead');
                     }
                 }
@@ -907,6 +917,7 @@ class GameEngine {
             if (overlap.x > 0 && overlap.y > 0) {
                 // level end, check if player delivered all screech
                 // if so, go to next level, if not, show level failed screen.
+                this.loadSfx("doorOpen");
                 this.sLevelEnd();
 
             }
@@ -941,6 +952,7 @@ class GameEngine {
                         setTimeout(() => playerHealth.invincible = false, 800)
                     }
                     if (playerHealth.health === 0) {
+                        this.loadSfx("playerhit")
                         console.log('player dead');
                     }
                 }
@@ -1089,6 +1101,7 @@ class GameEngine {
 
                         if (enemyAI.canAttack){
                             this.entity_manager.addModel.bullet_knife(offsetX, offsetY, enemyTransform.scale, enemy.tag);
+                            this.loadSfx("laser");
                             enemyAI.canAttack = false;
                             setTimeout( () => {enemyAI.canAttack = true}, 1000)
                         }
@@ -1109,6 +1122,7 @@ class GameEngine {
 
                         if (enemyAI.canAttack){
                             this.entity_manager.addModel.bullet_dropping(offsetX, offsetY, enemyTransform.scale, enemyTransform.velocity, enemy.tag);
+                            this.loadSfx("laser");
                             enemyAI.canAttack = false;
                             setTimeout( () => {enemyAI.canAttack = true}, 2000)
                         }
