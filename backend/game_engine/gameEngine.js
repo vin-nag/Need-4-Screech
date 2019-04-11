@@ -348,7 +348,7 @@ class GameEngine {
             this.gameStarted = true;
         }
         else {
-            this.sfx = []
+            this.sfx = ["explosion"]
             this.sAnimation();
             this.sMovement();
             if(!this.isEditor){

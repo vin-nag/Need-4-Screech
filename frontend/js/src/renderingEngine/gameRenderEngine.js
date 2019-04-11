@@ -28,7 +28,9 @@ const engine = (entities, sfx, canvasID) => {
     }
 
     for (let soundfile of sfx){
-        const sound = assetManager.getMusic(soundfile);
+        console.log(soundfile);
+        const sound = assetManager.getSound(soundfile);
+        sound.volume = 0.75;
         sound.play();
     }
 }

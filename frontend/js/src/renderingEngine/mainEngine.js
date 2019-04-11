@@ -70,6 +70,7 @@ const delegateMusic = (activeWindow) => {
             }
             else {
                 music.loop = true;
+                music.volume = 0.5;
                 music.play();
             }
         }
