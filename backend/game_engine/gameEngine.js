@@ -40,6 +40,7 @@ class GameEngine {
     loadSerializedEntities(entities){
         this.entity_manager = new EntityManager()
         this.entity_manager.loadSerializedEntities(entities);
+        this.init()
     }
 
      _getEditorModels() {
@@ -70,168 +71,33 @@ class GameEngine {
 
 
     init(){
-        this.entity_manager.addModel.background_img_george();
-        this.entity_manager.addModel.player(100,435);
+        if(!this.entity_manager.getEntitiesByTag("bg-img").length){
+            this.entity_manager.addModel.background_img_george();
+        } 
+
+        if(!this.entity_manager.getEntitiesByTag("player").length){
+            this.entity_manager.addModel.player(100,435);
+        }
+        
         if(this.isEditor){ return } //No more entities need to be created in editor mode
 
-        this.entity_manager.addModel.enemy_ranged_chef(1000, 550);
-        this.entity_manager.addModel.enemy_flying_blackbird(1200, 100);
-        this.entity_manager.addModel.enemy_flying_pinkbird(2200, 100);
-        this.entity_manager.addModel.enemy_flying_pinkbird(4200, 100);
-        this.entity_manager.addModel.enemy_flying_greenbird(3500, 100);
-        this.entity_manager.addModel.enemy_melee_thug(1000, 500);
-        this.entity_manager.addModel.enemy_melee_thug(4000, 500);
-
-        this.entity_manager.addModel.decorator_lantern(1800, 500);
-        this.entity_manager.addModel.decorator_pole_1(500, 325);
-        this.entity_manager.addModel.decorator_pole_2(1325, 320);
-        this.entity_manager.addModel.decorator_pole_3(2050, 320);
-        this.entity_manager.addModel.decorator_van(-100, 320);
-        this.entity_manager.addModel.level_end_taxi(5000, 495);
-
+        this.entity_manager.addModel.score();
+        this.entity_manager.addModel.screech_remaining(15);
         this.entity_manager.addModel.bar_timer();
         this.entity_manager.addModel.bar_health();
         this.entity_manager.addModel.bar_screech();
 
-        this.entity_manager.addModel.tile_grey_left(0, 625);
-        for (let x = 64; x < 5120; x+=64){
-            this.entity_manager.addModel.tile_grey_center(x, 625);
-        }
-        this.entity_manager.addModel.tile_grey_right(5120, 625);
-
-        this.entity_manager.addModel.tile_grey_left(1000, 575);
-        this.entity_manager.addModel.tile_grey_center(1064, 575);
-        this.entity_manager.addModel.tile_grey_right(1128, 575);
-
-        this.entity_manager.addModel.powerup_shield(400,552);
-        this.entity_manager.addModel.powerup_invincible(600, 552);
-        this.entity_manager.addModel.powerup_speed(800, 552);
-        this.entity_manager.addModel.powerup_health(1200, 552);
-
-        this.entity_manager.addModel.checkpoints(10, 475);
-
-        for (let x = 1000; x < 2500; x+=300){
-            this.entity_manager.addModel.checkpoints(x, 475);
-        }
-
-        this.entity_manager.addModel.score();
-        this.entity_manager.addModel.screech_remaining(15);
-        this.entity_manager.addModel.deliveries_left(5);
-    }
-
-    georgeStreetLevel(){
-        this.entity_manager.addModel.background_img_george();
-        this.entity_manager.addModel.player(150,500);
-        if(this.isEditor){ return } //No more entities need to be created in editor mode
-
+        const numOfDeliviers = this.entity_manager.getEntitiesByTag("checkpoint").length
+        this.entity_manager.addModel.deliveries_left(numOfDeliviers);
+        
         this.entity_manager.addModel.level_end_taxi(5000, 550);
-
-        this.entity_manager.addModel.bar_timer();
-        this.entity_manager.addModel.bar_health();
-        this.entity_manager.addModel.bar_screech();
-
-        this.entity_manager.addModel.score();
-        this.entity_manager.addModel.screech_remaining(15);
-        this.entity_manager.addModel.deliveries_left(5);
-
-        // ground
-        this.entity_manager.addModel.tile_grey_left(0, 664);
-        for (let x = 64; x < 5120; x+=64){
-            this.entity_manager.addModel.tile_grey_center(x, 664);
-        }
-        this.entity_manager.addModel.tile_grey_right(5120, 664);
-
-        // first fort
-        this.entity_manager.addModel.tile_grey_left(300, 600);
-        this.entity_manager.addModel.tile_grey_center(364, 600);
-        this.entity_manager.addModel.tile_grey_center(428, 600);
-        this.entity_manager.addModel.tile_grey_right(492, 600);
-        this.entity_manager.addModel.tile_grey_left(364, 536);
-        this.entity_manager.addModel.tile_grey_center(428, 536);
-        this.entity_manager.addModel.tile_grey_right(492, 536);
-        this.entity_manager.addModel.tile_grey_left(428, 472);
-        this.entity_manager.addModel.tile_grey_right(492, 472);
-
-        this.entity_manager.addModel.checkpoints(560, 514);
-
-        this.entity_manager.addModel.tile_grey_left(1200, 600);
-        this.entity_manager.addModel.tile_grey_right(1264, 600);
-        this.entity_manager.addModel.tile_grey_left(1300, 525);
-        this.entity_manager.addModel.tile_grey_right(1364, 525);
-        this.entity_manager.addModel.tile_grey_left(1400, 450);
-        this.entity_manager.addModel.tile_grey_right(1464, 450);
-        this.entity_manager.addModel.tile_grey_left(1500, 375);
-        this.entity_manager.addModel.tile_grey_right(1564, 375);
-
-        this.entity_manager.addModel.tile_grey_left(1700, 250);
-        this.entity_manager.addModel.tile_grey_center(1764, 250);
-        this.entity_manager.addModel.tile_grey_center(1828, 250);
-        this.entity_manager.addModel.tile_grey_center(1892, 250);
-        this.entity_manager.addModel.tile_grey_center(1956, 250);
-        this.entity_manager.addModel.tile_grey_right(2020, 250);
-        this.entity_manager.addModel.checkpoints(1870, 98);
-
-        // second fort
-        this.entity_manager.addModel.tile_grey_left(2300, 600);
-        this.entity_manager.addModel.tile_grey_center(2364, 600);
-        this.entity_manager.addModel.tile_grey_center(2428, 600);
-        this.entity_manager.addModel.tile_grey_right(2492, 600);
-        this.entity_manager.addModel.tile_grey_left(2364, 536);
-        this.entity_manager.addModel.tile_grey_center(2428, 536);
-        this.entity_manager.addModel.tile_grey_right(2492, 536);
-        this.entity_manager.addModel.tile_grey_left(2428, 472);
-        this.entity_manager.addModel.tile_grey_right(2492, 472);
-        this.entity_manager.addModel.tile_grey_left(2492, 408);
-        for (let x = 2556; x < 3197; x+=64){
-            this.entity_manager.addModel.tile_grey_center(x, 408);
-        }
-        this.entity_manager.addModel.tile_grey_right(3260, 408);
-
-        this.entity_manager.addModel.checkpoints(2600, 514);
-
-        this.entity_manager.addModel.tile_grey_left(3500, 600);
-        this.entity_manager.addModel.tile_grey_center(3564, 600);
-        this.entity_manager.addModel.tile_grey_center(3628, 600);
-        this.entity_manager.addModel.tile_grey_center(3692, 600);
-        this.entity_manager.addModel.tile_grey_right(3756, 600);
-        this.entity_manager.addModel.tile_grey_left(3564, 536);
-        this.entity_manager.addModel.tile_grey_center(3628, 536);
-        this.entity_manager.addModel.tile_grey_right(3692, 536);
-        this.entity_manager.addModel.tile_grey_center(3628, 472);
-
-        this.entity_manager.addModel.tile_grey_left(4000, 300);
-        this.entity_manager.addModel.tile_grey_right(4064, 300);
-
-        this.entity_manager.addModel.checkpoints(4050, 150);
-        this.entity_manager.addModel.checkpoints(4550, 514);
-
-        this.entity_manager.addModel.enemy_flying_blackbird(1200, 200);
-        this.entity_manager.addModel.enemy_flying_pinkbird(2200, 200);
-        this.entity_manager.addModel.enemy_flying_greenbird(3500, 200);
-        this.entity_manager.addModel.enemy_melee_thug(1000, 550);
-        this.entity_manager.addModel.enemy_melee_thug(2000, 550);
-        this.entity_manager.addModel.enemy_melee_thug(2900, 550);
-        this.entity_manager.addModel.enemy_melee_thug(3400, 400);
-        this.entity_manager.addModel.enemy_ranged_chef(2000, 150);
-        this.entity_manager.addModel.enemy_ranged_chef(4700, 550);
-
-        this.entity_manager.addModel.decorator_pole_1(700, 355);
-        this.entity_manager.addModel.decorator_pole_2(1900, 350);
-        this.entity_manager.addModel.decorator_pole_3(4000, 350);
-        this.entity_manager.addModel.decorator_van(-300, 350);
-
-        this.entity_manager.addModel.powerup_invincible(1800, 175);
-        this.entity_manager.addModel.powerup_speed(800, 595);
-        this.entity_manager.addModel.powerup_health(3300, 595);
-        this.entity_manager.addModel.powerup_shield(1500, 595);
-
+        this.entity_manager.update()
     }
 
     startGame() {
         // this function starts the game, spawning the player and other necessary things
         console.log('starting game');
-        //this.init();
-        this.georgeStreetLevel();
+        this.init();
         console.log('game started');
     }
 

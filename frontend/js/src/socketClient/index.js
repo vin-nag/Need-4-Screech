@@ -81,8 +81,10 @@ export const listen = () => {
 
     socket.on('loadLevelResponse', function(data){
         if(data.success){
-            alert("Level Loaded Successfully.")
-            domService.hideElement("loadLevelModal")
+            if(data.sessionId === levelEditor.sessionId){
+                alert("Level Loaded Successfully.")
+                domService.hideElement("loadLevelModal")
+            }
         }
         else{
             alert(data.errors[0])
