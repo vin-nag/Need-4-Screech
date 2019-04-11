@@ -1,7 +1,7 @@
 import canvasService from "../services/canvas"
 import assetManager from "../services/assetManager"
 
-const engine = (entities, canvasID) => {
+const engine = (entities, sfx, canvasID) => {
     const canvas = document.getElementById(canvasID)
     const ctx = canvas.getContext("2d")
 
@@ -25,8 +25,12 @@ const engine = (entities, canvasID) => {
     for (let entity of entities) {
         if (entity.tag === "bg-img"){continue}     
         drawEntity(ctx, entity, camX, camY)
-    }  
-                                         
+    }
+
+    for (let soundfile of sfx){
+        const sound = assetManager.getMusic(soundfile);
+        sound.play();
+    }
 }
 
 const drawEntity = (ctx, entity, camX=0, camY=0) => {
