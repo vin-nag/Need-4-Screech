@@ -21,6 +21,7 @@ class GameEngine {
         this.editorModelIndex = 0
         this.editorModels = this._getEditorModels()
         this.showGrid = false
+        this.sfx = []
 
         // last input
         this.lastInput = {event: "initialized"} ;
@@ -347,7 +348,7 @@ class GameEngine {
             this.gameStarted = true;
         }
         else {
-
+            this.sfx = []
             this.sAnimation();
             this.sMovement();
             if(!this.isEditor){
@@ -1293,7 +1294,9 @@ class GameEngine {
     returnGameState(){
         return {
             showGrid: this.showGrid,
-            entities: this.entity_manager.getEntities()
+            entities: this.entity_manager.getEntities(),
+            sfx: this.sfx
+
         }
     }
 
