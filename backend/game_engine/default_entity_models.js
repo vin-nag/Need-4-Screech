@@ -233,6 +233,27 @@ class EntityModels {
         tile_brick_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
     };
 
+    tile_ice_left(x=0, y=0) {
+        const tile_brick_entity = this.entity_manager.addEntity("tile");
+        tile_brick_entity.addComponent(components.CAnimation('ice_tile_left', 1, 0, 0));
+        tile_brick_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        tile_brick_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+    };
+
+    tile_ice_right(x=0, y=0) {
+        const tile_brick_entity = this.entity_manager.addEntity("tile");
+        tile_brick_entity.addComponent(components.CAnimation('ice_tile_right', 1, 0, 0));
+        tile_brick_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        tile_brick_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+    };
+
+    tile_ice_center(x=0, y=0) {
+        const tile_brick_entity = this.entity_manager.addEntity("tile");
+        tile_brick_entity.addComponent(components.CAnimation('ice_tile_center', 1, 0, 0));
+        tile_brick_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        tile_brick_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+    };
+
     tile_red_left(x=0, y=0) {
         const tile_brick_entity = this.entity_manager.addEntity("tile");
         tile_brick_entity.addComponent(components.CAnimation('red_tile_left', 1, 0, 0));
