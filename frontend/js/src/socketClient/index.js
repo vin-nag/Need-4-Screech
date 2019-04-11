@@ -104,6 +104,10 @@ export const listen = () => {
         }
         else{
             gamePlay.setSession(data.session)
+            socket.emit('loadLevel', {
+                levelId: gamePlay.currentLevel,
+                sessionId: gamePlay.sessionID
+            })
         }
     }) 
     
