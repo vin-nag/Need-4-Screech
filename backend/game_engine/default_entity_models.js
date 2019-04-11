@@ -163,7 +163,7 @@ class EntityModels {
         enemy_entity.addComponent(components.CHealth(2, 2, false, false));
         enemy_entity.addComponent(components.CAnimation('mini_seal_walk', 5, 0, 0.25));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        enemy_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+        enemy_entity.addComponent(components.CBoundingBox(new Vector(64, 60), new Vector(32, 30)));
         enemy_entity.addComponent(components.CEnemyAI("melee",  5, config.enemy.melee.roamDistance, 5000, config.enemy.melee.sight, false, false, new Vector(0, 0), true));
         enemy_entity.addComponent(components.CEnemyAnim("mini_seal_walk", 5, "mini_seal_attack", 9, "mini_seal_die", 6));
         enemy_entity.addComponent(components.CState("grounded"));
