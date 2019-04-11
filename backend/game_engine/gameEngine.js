@@ -120,6 +120,31 @@ class GameEngine {
         this.entity_manager.addModel.deliveries_left(5);
     }
 
+    sealBoss(){
+
+        this.entity_manager.addModel.background_img_ice();
+        this.entity_manager.addModel.player(150,500);
+        if(this.isEditor){ return } //No more entities need to be created in editor mode
+
+        this.entity_manager.addModel.level_end_taxi(5000, 550);
+
+        this.entity_manager.addModel.bar_timer();
+        this.entity_manager.addModel.bar_health();
+        this.entity_manager.addModel.bar_screech();
+
+        this.entity_manager.addModel.score();
+        this.entity_manager.addModel.screech_remaining(15);
+        this.entity_manager.addModel.deliveries_left(5);
+
+        // ground
+        this.entity_manager.addModel.tile_ice_left(0, 664);
+        for (let x = 64; x < 2560; x+=64){
+            this.entity_manager.addModel.tile_ice_center(x, 664);
+        }
+        this.entity_manager.addModel.tile_ice_right(2560, 664);
+
+    }
+
     georgeStreetLevel(){
         this.entity_manager.addModel.background_img_george();
         this.entity_manager.addModel.player(150,500);
@@ -232,7 +257,7 @@ class GameEngine {
         // this function starts the game, spawning the player and other necessary things
         console.log('starting game');
         //this.init();
-        this.georgeStreetLevel();
+        this.sealBoss();
         console.log('game started');
     }
 
