@@ -40,7 +40,7 @@ const delegateRendering = (activeWindow) => {
         gameRenderEngine(levelEditor.entities, "levelEditorCanvas")
     }
     else if(activeWindow === APP_WINDOWS.GAME_PLAY){
-        gameRenderEngine(gamePlay.entities, "gamePlayCanvas")
+        gameRenderEngine(gamePlay.entities, gamePlay.sfx, "gamePlayCanvas")
         const player = gamePlay.entities.find(entity => entity.tag === "player")
         let level_state = player.componentMap['CLevelState'].level_state;
         gamePlay.showModal(level_state);
@@ -70,6 +70,7 @@ const delegateMusic = (activeWindow) => {
             }
             else {
                 music.loop = true;
+                music.volume = 0.5;
                 music.play();
             }
         }

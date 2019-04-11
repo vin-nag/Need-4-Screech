@@ -13,6 +13,7 @@ export const socket = io()
 export const listen = () => {
     socket.on("animationsList", (data) => assetsListener.onAnimationsList(socket, data))
     socket.on("musicList", (data) => assetsListener.onMusicList(socket, data))
+    socket.on("soundList", (data) => assetsListener.onSoundList(socket, data))
     socket.on('connect', () => connectListener(socket))
     socket.on('disconnect', () => disconnectListener(socket))
     socket.on('serverMsg',(data) => {
@@ -91,7 +92,10 @@ export const listen = () => {
     })
 
     socket.on('updateGameState', (data) => {
-        if(gamePlay.sessionID === data.sessionId) { gamePlay.setEntities(data.gameState.entities) }
+        if(gamePlay.sessionID === data.sessionId) {
+            gamePlay.setEntities(data.gameState.entities)
+            gamePlay.setSfx(data.gameState.sfx)
+        }
         else if(levelEditor.sessionId === data.sessionId) { 
             levelEditor.setEntities(data.gameState.entities) 
             levelEditor.setGrid(data.gameState.showGrid)

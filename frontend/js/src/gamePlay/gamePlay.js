@@ -7,6 +7,7 @@ class GamePlay {
     constructor(){
         this.paused = false
         this.entities = []
+        this.sfx = []
         this.sessionID = null
         this.updateStateInterval = null
         this.currentLevel = ""
@@ -35,6 +36,10 @@ class GamePlay {
 
     setEntities(entities) {
         this.entities = entities;
+    }
+
+    setSfx(sfx){
+        this.sfx = sfx;
     }
 
     setSession(sessionID) {

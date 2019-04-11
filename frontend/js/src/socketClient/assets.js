@@ -10,7 +10,13 @@ const onMusicList = (socket, data) => {
     assetManager.loadMusic(musicList)
 }
 
+const onSoundList = (socket, data) => {
+    const soundList = data.payload
+    assetManager.loadSfx(soundList)
+}
+
 export default {
     onAnimationsList,
-    onMusicList
+    onMusicList,
+    onSoundList
 }

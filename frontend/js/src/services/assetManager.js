@@ -2,6 +2,7 @@ class AssetManager{
     constructor(){
         this.animationImages = {}
         this.musicObjects = {}
+        this.soundObjects = {}
     }
 
     loadAnimationImages(animationNames){
@@ -24,8 +25,19 @@ class AssetManager{
         }
     }
 
+    loadSfx(soundNames){
+        for(let soundName of soundNames){
+            const sound = new Audio(`assets/sfx/${soundName}.wav`)
+            this.soundObjects[soundName] = sound;
+        }
+    }
+
     getMusic(musicName){
         return this.musicObjects[musicName]
+    }
+
+    getSound(soundName){
+        return this.soundObjects[soundName]
     }
 }
 
