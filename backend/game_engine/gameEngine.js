@@ -111,10 +111,6 @@ class GameEngine {
 
         const numOfDeliviers = this.entity_manager.getEntitiesByTag("checkpoint").length
         this.entity_manager.addModel.deliveries_left(numOfDeliviers);
-        
-        if(!this.entity_manager.getEntitiesByTag("taxi").length){
-            this.entity_manager.addModel.level_end_taxi(5000, 550);
-        }
 
         this.entity_manager.update()
     }

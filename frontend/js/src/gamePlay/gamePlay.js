@@ -2,6 +2,7 @@ import socketClient from "../socketClient"
 import app from "../app"
 import APP_WINDOWS from "../../enums/app_windows"
 import domService from "../services/dom"
+import CAMPAIGN_LEVELS from "../../enums/campaignLevels"
 
 class GamePlay {
     constructor(){
@@ -87,13 +88,13 @@ class GamePlay {
     showModal(state) {
         if (state === "complete") {
             domService.showElement("completeLevelModal")
-            if (this.currentLevel === "George Street") {
+            if (this.currentLevel === CAMPAIGN_LEVELS["George Street"]) {
                 this.levelsCompleted = [true, false, false]
             }
-            else if (this.currentLevel === "Memorial University") {
+            else if (this.currentLevel === CAMPAIGN_LEVELS["Memorial University"]) {
                 this.levelsCompleted = [true, true, false]
             }
-            else if (this.currentLevel === "Cape Spear") {
+            else if (this.currentLevel === CAMPAIGN_LEVELS["Cape Spear"]) {
                 this.levelsCompleted = [true, true, true]
             }
 
