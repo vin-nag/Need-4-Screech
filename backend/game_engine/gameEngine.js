@@ -1197,8 +1197,11 @@ class GameEngine {
                         enemyTransform.velocity = direction;
                         offsetY = enemyTransform.position.y + 55;
                         const bossEnemyAI = enemy.getComponent("CBoss")
+                        // Calculating the regeneration and teleportation factors
                         bossEnemyAI.currentTeleportTime -= 1;
                         bossEnemyAI.currentRegenTime -= 1;
+                        
+                        // Calling the teleportation and regeneration fucntions
                         if(bossEnemyAI.currentTeleportTime <= 0){
                             this.regenBoss(enemy)
                             bossEnemyAI.currentTeleportTime = bossEnemyAI.maxTeleportTime
