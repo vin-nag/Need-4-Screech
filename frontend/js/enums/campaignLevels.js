@@ -1,5 +1,5 @@
 const CAMPAIGN_LEVELS = {
-    "George Street": "5cafd2529c5a3023185f7ced",
+    "George Street": "5cafdca3436ef32f914b5551",
     "Memorial University": "",
     "Cape Spear": "",
     "Boss Level": ""
