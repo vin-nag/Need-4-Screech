@@ -136,6 +136,7 @@ class GameEngine {
         this.entity_manager.addModel.screech_remaining(15);
         this.entity_manager.addModel.deliveries_left(5);
 
+        this.entity_manager.addModel.enemy_boss_seal(500,525);
         // ground
         this.entity_manager.addModel.tile_ice_left(0, 664);
         for (let x = 64; x < 2560; x+=64){
@@ -1196,6 +1197,20 @@ class GameEngine {
                         direction.x += enemyTransform.velocity.x / 2;
                         enemyTransform.velocity = direction;
                         offsetY = enemyTransform.position.y + 55;
+                        let r = Math.floor(Math.random()*100);
+
+                        if( (r === 5 || r === 95) ){
+                            if(enemy.getComponent("CState").state === "grounded") {
+                                enemyTransform.position.y += -100
+                                enemy.getComponent("CState").state = "jumping"
+                                console.log(r)
+                            }
+                            else {
+                                if(enemy.getComponent("CState").state != "grounded"){
+                                    enemy.getComponent("CState").state = "grounded"
+                                }
+                            }
+                        }
 
                         if (enemyAI.canAttack){
                             if (Math.random() < 0.7){
