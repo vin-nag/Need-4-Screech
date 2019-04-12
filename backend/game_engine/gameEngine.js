@@ -174,6 +174,7 @@ class GameEngine {
         this.entity_manager.addModel.tile_grey_center(364, 600);
         this.entity_manager.addModel.tile_grey_center(428, 600);
         this.entity_manager.addModel.tile_grey_right(492, 600);
+
         this.entity_manager.addModel.tile_grey_left(364, 536);
         this.entity_manager.addModel.tile_grey_center(428, 536);
         this.entity_manager.addModel.tile_grey_right(492, 536);
@@ -1160,6 +1161,29 @@ class GameEngine {
                             enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.flying.maxSpeed * 0.25);
                         }
                         break;
+
+                    case "boss":
+                        direction.normalize();
+                        direction = direction.multiply(config.enemy.flying.maxSpeed * 0.75);
+                        direction.y = enemyTransform.velocity.y;
+                        direction.x += enemyTransform.velocity.x / 2;
+                        enemyTransform.velocity = direction;
+                        offsetY = enemyTransform.position.y + bounds.size.y + 5;
+
+                        if (enemyAI.canAttack){
+                            this.entity_manager.addModel.bullet_dropping(offsetX, offsetY, enemyTransform.scale, enemyTransform.velocity, enemy.tag);
+                            this.loadSfx("laser");
+                            enemyAI.canAttack = false;
+                            setTimeout( () => {enemyAI.canAttack = true}, 2000)
+                        }
+
+                        // truncate speed if above max
+                        if (enemyTransform.velocity.length() > config.enemy.flying.maxSpeed) {
+                            enemyTransform.velocity.normalize();
+                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.flying.maxSpeed * 0.25);
+                        }
+                        break;
+
                 }
             }
 
