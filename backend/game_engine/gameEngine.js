@@ -104,14 +104,14 @@ class GameEngine {
 
         this.entity_manager.addModel.score();
         this.entity_manager.addModel.screech_remaining(15);
+
         this.entity_manager.addModel.bar_timer();
         this.entity_manager.addModel.bar_health();
         this.entity_manager.addModel.bar_screech();
 
         const numOfDeliviers = this.entity_manager.getEntitiesByTag("checkpoint").length
         this.entity_manager.addModel.deliveries_left(numOfDeliviers);
-        
-        this.entity_manager.addModel.level_end_taxi(5000, 550);
+
         this.entity_manager.update()
     }
 
@@ -707,8 +707,9 @@ class GameEngine {
                 if (attacker === "enemy"){continue}
                 let overlap = physics.getOverLap(enemy, bullet);
                 if (overlap.x > 0 && overlap.y > 0){
-                    score.getComponent('CScore').score += 10;
                     bullet.destroy();
+                    if (enemy.getComponent("CEnemyAI").enemy_type === "boss"){continue}
+                    score.getComponent('CScore').score += 10;
                     enemy.getComponent('CHealth').show = true;
                     enemy.getComponent('CHealth').health--;
 
@@ -787,10 +788,29 @@ class GameEngine {
                 const score = this.entity_manager.getEntitiesByTag("score")[0];
                 let overlap = physics.getOverLap(bottle, enemy);
                 if (overlap.x > 0 && overlap.y > 0) {
+                    if (enemy.getComponent("CHealth").invincible === true){continue}
+                    if (enemy.getComponent("CEnemyAI").enemy_type === "boss"){
+                        enemy.getComponent('CHealth').health--;
+
+                        if (enemy.getComponent('CHealth').health === 0) {
+                            this.updateEnemyAnimation(enemy, true);
+                            setTimeout( () => {enemy.destroy();}, 50);
+                            const bossTransform = enemy.getComponent("CTransform").position
+                            this.entity_manager.addModel.level_end_taxi(bossTransform.x, bossTransform.y);
+                        }
+
+                        else {
+                            enemy.getComponent('CBoss').currentRegenTime = enemy.getComponent('CBoss').maxRegenTime;
+                            enemy.getComponent('CHealth').invincible = true;
+                            setTimeout(() => enemy.getComponent('CHealth').invincible = false, enemy.getComponent('CBoss').invincibilityTime);
+                        }
+                    }
+                    else {
+                        enemy.destroy();
+                    }
                     score.getComponent('CScore').score += 35;
                     this.spawnBoom(bottle);
                     bottle.destroy();
-                    enemy.destroy();
                 }
             }
         }
@@ -945,6 +965,9 @@ class GameEngine {
         for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
             const enemyTransform = enemy.getComponent('CTransform');
             const enemyAI = enemy.getComponent("CEnemyAI");
+            if(enemyAI.enemy_type == "boss"){
+                this.updateCounters(enemy)
+            }
 
             // if not aggro mode
             if (enemyAI.player_detected === false){
@@ -1028,6 +1051,46 @@ class GameEngine {
                             enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.flying.maxSpeed * 0.25);
                         }
                         break;
+
+                    case "boss":
+                        direction.normalize();
+                        direction = direction.multiply( 0.25);
+                        direction.y = enemyTransform.velocity.y;
+                        direction.x += enemyTransform.velocity.x / 2;
+                        enemyTransform.velocity = direction;
+                        offsetY = enemyTransform.position.y + 55;
+                        let r = Math.floor(Math.random()*100);
+
+                        if( (r === 95) ){
+                            if(enemy.getComponent("CState").state === "grounded") {
+                                enemyTransform.position.y += -100
+                                enemy.getComponent("CState").state = "jumping"
+                            }
+                            else {
+                                if(enemy.getComponent("CState").state != "grounded"){
+                                    enemy.getComponent("CState").state = "grounded"
+                                }
+                            }
+                        }
+
+                        if (enemyAI.canAttack){
+                            if (Math.random() < 0.7){
+                                this.entity_manager.addModel.bullet_knife(offsetX, offsetY, enemyTransform.scale, enemy.tag);
+                            }
+                            else {
+                                this.entity_manager.addModel.enemy_melee_mini_seal(offsetX, offsetY);
+                            }
+                            enemyAI.canAttack = false;
+                            setTimeout( () => {enemyAI.canAttack = true}, 2000)
+                        }
+
+                        // truncate speed if above max
+                        if (enemyTransform.velocity.length() > config.enemy.flying.maxSpeed) {
+                            enemyTransform.velocity.normalize();
+                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.flying.maxSpeed * 0.25);
+                        }
+                        break;
+
                 }
             }
 
@@ -1043,6 +1106,20 @@ class GameEngine {
                 enemyTransform.scale = 1;
             }
         }
+    }
+
+    regenBoss(boss){
+        const bossHealth = boss.getComponent('CHealth');
+        bossHealth.health = Math.min(bossHealth.health + 2, bossHealth.maxHealth)
+    }
+
+    teleportBoss(boss){
+        const bossTransform = boss.getComponent('CTransform');
+        const teleportPoints = [[700,525],[289,400],[700,100],[950,290]]
+        let location = teleportPoints[Math.floor(Math.random() * teleportPoints.length)];
+        console.log('teleport set to', location)
+        bossTransform.position.x = location[0];
+        bossTransform.position.y = location[1];
     }
 
     sLifespan() {
@@ -1215,6 +1292,22 @@ class GameEngine {
 
     setEditorMode(isEditor){
         this.isEditor = isEditor
+    }
+
+    updateCounters(enemy){
+        const bossEnemyAI = enemy.getComponent("CBoss")
+        // Calculating the regeneration and teleportation factors
+        bossEnemyAI.currentTeleportTime -= 30;
+        bossEnemyAI.currentRegenTime -= 50;
+        // Calling the teleportation and regeneration fucntions
+        if(bossEnemyAI.currentTeleportTime <= 0){
+            this.teleportBoss(enemy)
+            bossEnemyAI.currentTeleportTime = bossEnemyAI.maxTeleportTime
+        }
+        if(bossEnemyAI.currentRegenTime <= 0){
+            this.regenBoss(enemy)
+            bossEnemyAI.currentRegenTime = bossEnemyAI.maxRegenTime
+        }
     }
 
 }

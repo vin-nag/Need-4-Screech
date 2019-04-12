@@ -78,4 +78,6 @@ const CAttacker = (attacker) => ({name: "CAttacker", attacker});
 
 const CLevelState = (level_state) => ({name: "CLevelState", level_state})
 
-module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup, CEnemyAI, CScreech, CScore, CGameRunning, CEnemyAnim, CAttacker, CLevelState};
+const CBoss = (currentTeleportTime, maxTeleportTime, currentRegenTime, maxRegenTime, invincibilityTime) => ({name: "CBoss", currentTeleportTime, maxTeleportTime, currentRegenTime, maxRegenTime, invincibilityTime})
+
+module.exports = {CLifeSpan, CBoundingBox, CGravity, CHealth, CInput, CState, CTransform, CAnimation, CBar, CPowerup, CEnemyAI, CScreech, CScore, CGameRunning, CEnemyAnim, CAttacker, CLevelState, CBoss};
