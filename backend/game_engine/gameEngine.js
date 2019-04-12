@@ -160,7 +160,7 @@ class GameEngine {
         this.entity_manager.addModel.tile_ice_center(993, 418);
         this.entity_manager.addModel.tile_ice_right(1057, 418);
 
-        this.entity_manager.addModel.enemy_boss_seal(500,525);
+        this.entity_manager.addModel.enemy_boss_seal(700,525);
 
     }
 
@@ -1250,8 +1250,9 @@ class GameEngine {
 
     teleportBoss(boss){
         const bossTransform = boss.getComponent('CTransform');
-        const teleportPoints = [[600,525],[300,325],[500,200],[750,400]]
+        const teleportPoints = [[700,525],[289,400],[700,100],[950,290]]
         let location = teleportPoints[Math.floor(Math.random() * teleportPoints.length)];
+        console.log('teleport set to', location)
         bossTransform.position.x = location[0];
         bossTransform.position.y = location[1];
     }
@@ -1431,7 +1432,7 @@ class GameEngine {
     updateCounters(enemy){
         const bossEnemyAI = enemy.getComponent("CBoss")
         // Calculating the regeneration and teleportation factors
-        bossEnemyAI.currentTeleportTime -= 20;
+        bossEnemyAI.currentTeleportTime -= 30;
         bossEnemyAI.currentRegenTime -= 50;
         // Calling the teleportation and regeneration fucntions
         if(bossEnemyAI.currentTeleportTime <= 0){
