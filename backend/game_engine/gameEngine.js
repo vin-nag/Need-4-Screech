@@ -99,7 +99,6 @@ class GameEngine {
         
         if(this.isEditor){ //No more entities need to be created in editor mode
             this.entity_manager.update()
-            console.log(this.entity_manager.getEntitiesByTag("bg-img").length)
             return
         }
 
