@@ -1106,7 +1106,7 @@ class GameEngine {
             const enemyTransform = enemy.getComponent('CTransform');
             const enemyAI = enemy.getComponent("CEnemyAI");
             if(enemyAI.enemy_type == "boss"){
-                updateCounters(enemy)
+                this.updateCounters(enemy)
             }
 
             // if not aggro mode
@@ -1237,7 +1237,7 @@ class GameEngine {
 
     regenBoss(boss){
         const bossHealth = boss.getComponent('CHealth');
-        bossHealth.health = min(bossHealth.health + 2, bossHealth.maxHealth)
+        bossHealth.health = Math.min(bossHealth.health + 2, bossHealth.maxHealth)
     }
 
     teleportBoss(boss){
@@ -1423,8 +1423,8 @@ class GameEngine {
     updateCounters(enemy){
         const bossEnemyAI = enemy.getComponent("CBoss")
         // Calculating the regeneration and teleportation factors
-        bossEnemyAI.currentTeleportTime -= 100;
-        bossEnemyAI.currentRegenTime -= 100;
+        bossEnemyAI.currentTeleportTime -= 20;
+        bossEnemyAI.currentRegenTime -= 50;
         // Calling the teleportation and regeneration fucntions
         if(bossEnemyAI.currentTeleportTime <= 0){
             this.teleportBoss(enemy)
