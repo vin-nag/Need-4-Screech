@@ -46,7 +46,9 @@
         "delete": "46",
         "new": "78",
         "lastAni": "37",
-        "nextAni": "39"
+        "nextAni": "39",
+        "lastBg": "38",
+        "nextBg": "40"
     },
     "canvas": {
         "x": 1125,
