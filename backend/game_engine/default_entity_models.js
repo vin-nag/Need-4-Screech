@@ -268,13 +268,13 @@ class EntityModels {
 
     background_img_mun() {
         const img_entity = this.entity_manager.addEntity("bg-img");
-        img_entity.addComponent(components.CAnimation('ice_background', 1, 0, 0));
+        img_entity.addComponent(components.CAnimation('mun_background', 1, 0, 0));
         img_entity.addComponent(components.CTransform(new Vector(0, 0), new Vector(0, 0), 1));
     };
 
     background_img_cape() {
         const img_entity = this.entity_manager.addEntity("bg-img");
-        img_entity.addComponent(components.CAnimation('ice_background', 1, 0, 0));
+        img_entity.addComponent(components.CAnimation('cape_background', 1, 0, 0));
         img_entity.addComponent(components.CTransform(new Vector(0, 0), new Vector(0, 0), 1));
     };
 

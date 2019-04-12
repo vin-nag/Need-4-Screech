@@ -9,7 +9,7 @@ class MathService {
      * @param {*} n The base
      */
      mod(m,n){
-        ((m%n)+n)%n
+        return ((m%n)+n)%n
      }
 }
 

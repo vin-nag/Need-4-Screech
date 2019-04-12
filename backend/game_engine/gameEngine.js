@@ -97,7 +97,11 @@ class GameEngine {
             this.entity_manager.addModel.player(100,435);
         }
         
-        if(this.isEditor){ return } //No more entities need to be created in editor mode
+        if(this.isEditor){ //No more entities need to be created in editor mode
+            this.entity_manager.update()
+            console.log(this.entity_manager.getEntitiesByTag("bg-img").length)
+            return
+        }
 
         this.entity_manager.addModel.score();
         this.entity_manager.addModel.screech_remaining(15);
@@ -426,7 +430,7 @@ class GameEngine {
         const getNextBg = this.lastInput[config.controls.nextBg] === true
         const getLastBg = this.lastInput[config.controls.lastBg] === true
         if(getNextBg || getLastBg){
-            const offset = getNextModel ? 1 : -1
+            const offset = getNextBg ? 1 : -1
             this.editorBgIndex = MathService.mod(this.editorBgIndex + offset, this.editorBgs.length)
 
             this.entity_manager.getEntitiesByTag("bg-img")[0].destroy() //destroy current background
