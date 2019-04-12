@@ -1432,6 +1432,22 @@ class GameEngine {
         this.isEditor = isEditor
     }
 
+    updateCounters(enemy){
+        const bossEnemyAI = enemy.getComponent("CBoss")
+        // Calculating the regeneration and teleportation factors
+        bossEnemyAI.currentTeleportTime -= 100;
+        bossEnemyAI.currentRegenTime -= 100;
+        // Calling the teleportation and regeneration fucntions
+        if(bossEnemyAI.currentTeleportTime <= 0){
+            this.teleportBoss(enemy)
+            bossEnemyAI.currentTeleportTime = bossEnemyAI.maxTeleportTime
+        }
+        if(bossEnemyAI.currentRegenTime <= 0){
+            this.regenBoss(enemy)
+            bossEnemyAI.currentRegenTime = bossEnemyAI.maxRegenTime
+        }
+    }
+
 }
 
 module.exports = GameEngine;
