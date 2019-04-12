@@ -26,6 +26,8 @@ const engine = () => {
         "N - New Entity",
         "Left Arrow - Last Entity",
         "Right Arrow - Next Entity",
+        "Up Arrow - Last Background",
+        "Down Arrow - Next Background",
         "Delete - Delete Entity"
     ]
 
