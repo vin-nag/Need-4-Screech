@@ -82,6 +82,18 @@ class EntityModels {
         bullet_entity.addComponent(components.CAttacker(tag));
     };
 
+    bullet_snowball(x=0, y=0, scale, tag) {
+        const bullet_entity = this.entity_manager.addEntity("bullet");
+        let offsetX = scale === -1? x-42: x+5;
+        bullet_entity.addComponent(components.CTransform(new Vector(offsetX, y), new Vector(offsetX, y), scale, new Vector(scale*20, 0), 0));
+        bullet_entity.addComponent(components.CBoundingBox(new Vector(32, 32), new Vector(16, 16)));
+        bullet_entity.addComponent(components.CAnimation('snowball', 1, 0, 0));
+        bullet_entity.addComponent(components.CState('shooting'));
+        bullet_entity.addComponent(components.CLifeSpan(5000));
+        bullet_entity.addComponent(components.CAttacker(tag));
+        bullet_entity.addComponent(components.CGravity(config.game_engine.gravity));
+    };
+
     bullet_dropping(x=0, y=0, scale, velocity, tag) {
         const bullet_entity = this.entity_manager.addEntity("bullet");
         bullet_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), scale, new Vector(velocity.x*0.15, 15), 0));
