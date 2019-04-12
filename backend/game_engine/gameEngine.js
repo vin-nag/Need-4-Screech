@@ -149,11 +149,16 @@ class GameEngine {
         this.entity_manager.addModel.tile_ice_right(353, 590);
 
         // High platform
-        this.entity_manager.addModel.tile_ice_left(545, 390);
+        this.entity_manager.addModel.tile_ice_left(545, 290);
         for (let x = 609; x < 865; x+=64){
-            this.entity_manager.addModel.tile_ice_center(x, 390);
+            this.entity_manager.addModel.tile_ice_center(x, 290);
         }
-        this.entity_manager.addModel.tile_ice_right(865, 390);
+        this.entity_manager.addModel.tile_ice_right(865, 290);
+
+        // Random steps
+        this.entity_manager.addModel.tile_ice_left(929, 418);
+        this.entity_manager.addModel.tile_ice_center(993, 418);
+        this.entity_manager.addModel.tile_ice_right(1057, 418);
 
         // Boss start position
         this.entity_manager.addModel.enemy_boss_seal(500, 450);
