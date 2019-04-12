@@ -39,7 +39,7 @@ const engine = (activeWindow) => {
 const delegateRendering = (activeWindow) => {
 
     if(activeWindow === APP_WINDOWS.LEVEL_EDITOR){
-        gameRenderEngine(levelEditor.entities, "levelEditorCanvas")
+        gameRenderEngine(levelEditor.entities, gamePlay.sfx, "levelEditorCanvas")
     }
     else if(activeWindow === APP_WINDOWS.GAME_PLAY){
         gameRenderEngine(gamePlay.entities, gamePlay.sfx, "gamePlayCanvas")

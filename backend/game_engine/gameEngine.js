@@ -6,6 +6,7 @@ const EntityManager = require("./entity_manager");
 const config = require("./../../config-template.json");
 const Vector = require("./vector");
 const physics = require("./physics");
+const MathService = require("../services/MathService")
 
 class GameEngine {
 
@@ -19,7 +20,9 @@ class GameEngine {
         this.editorEntityType = "tile"
         this.isEditor = false
         this.editorModelIndex = 0
+        this.editorBgIndex = 0
         this.editorModels = this._getEditorModels()
+        this.editorBgs = this._getEditorBgs()
         this.showGrid = false
         this.sfx = []
 
@@ -36,6 +39,8 @@ class GameEngine {
         this.lastInput[config.controls.delete] = false;
         this.lastInput[config.controls.lastAni]=false;
         this.lastInput[config.controls.nextAni] = false;
+        this.lastInput[config.controls.lastBg]=false;
+        this.lastInput[config.controls.nextBg] = false;
     }
 
     loadSerializedEntities(entities){
@@ -70,6 +75,18 @@ class GameEngine {
         return entityModels.map(model => model.bind(this.entity_manager.addModel))
     }
 
+    _getEditorBgs(){
+        const { addModel: models } = this.entity_manager
+        const entityModels = [
+            models.background_img_george,
+            models.background_img_mun,
+            models.background_img_cape,
+            models.background_img_ice
+        ]
+
+        return entityModels.map(model => model.bind(this.entity_manager.addModel))
+    }
+
 
     init(){
         if(!this.entity_manager.getEntitiesByTag("bg-img").length){
@@ -80,7 +97,10 @@ class GameEngine {
             this.entity_manager.addModel.player(100,435);
         }
         
-        if(this.isEditor){ return } //No more entities need to be created in editor mode
+        if(this.isEditor){ //No more entities need to be created in editor mode
+            this.entity_manager.update()
+            return
+        }
 
         this.entity_manager.addModel.score();
         this.entity_manager.addModel.screech_remaining(15);
@@ -406,14 +426,23 @@ class GameEngine {
             this.showGrid = !this.showGrid
         }
 
+        const getNextBg = this.lastInput[config.controls.nextBg] === true
+        const getLastBg = this.lastInput[config.controls.lastBg] === true
+        if(getNextBg || getLastBg){
+            const offset = getNextBg ? 1 : -1
+            this.editorBgIndex = MathService.mod(this.editorBgIndex + offset, this.editorBgs.length)
+
+            this.entity_manager.getEntitiesByTag("bg-img")[0].destroy() //destroy current background
+            this.editorBgs[this.editorBgIndex]() //add the new background
+        }
+
         if(this.selectedEntity) {
             const getNextModel = this.lastInput[config.controls.nextAni] === true
             const getLastModel = this.lastInput[config.controls.lastAni] === true
 
             if (getNextModel || getLastModel) {
                 const offset = getNextModel ? 1 : -1
-                const mod = (m,n) => ((m%n)+n)%n //JS is stupid; % can return -ve numbers
-                this.editorModelIndex = mod(this.editorModelIndex + offset, this.editorModels.length)
+                this.editorModelIndex = MathService.mod(this.editorModelIndex + offset, this.editorModels.length)
                 
                 const oldPosition = this.selectedEntity.getComponent("CTransform").position
                 this.editorModels[this.editorModelIndex](oldPosition.x, oldPosition.y) //create a new model
