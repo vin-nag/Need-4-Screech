@@ -941,9 +941,17 @@ class GameEngine {
                     if (enemy.getComponent("CHealth").invincible === true){continue}
                     if (enemy.getComponent("CEnemyAI").enemy_type === "boss"){
                         enemy.getComponent('CHealth').health--;
-                        enemy.getComponent('CBoss').currentRegenTime = enemy.getComponent('CBoss').maxRegenTime;
-                        enemy.getComponent('CHealth').invincible = true;
-                        setTimeout(() => enemy.getComponent('CHealth').invincible = false, enemy.getComponent('CBoss').invincibilityTime);
+
+                        if (enemy.getComponent('CHealth').health === 0) {
+                            this.updateEnemyAnimation(enemy, true);
+                            setTimeout( () => {enemy.destroy();}, 50);
+                        }
+
+                        else {
+                            enemy.getComponent('CBoss').currentRegenTime = enemy.getComponent('CBoss').maxRegenTime;
+                            enemy.getComponent('CHealth').invincible = true;
+                            setTimeout(() => enemy.getComponent('CHealth').invincible = false, enemy.getComponent('CBoss').invincibilityTime);
+                        }
                     }
                     else {
                         enemy.destroy();
