@@ -139,10 +139,10 @@ class GameEngine {
         this.entity_manager.addModel.enemy_boss_seal(500,525);
         // ground
         this.entity_manager.addModel.tile_ice_left(0, 664);
-        for (let x = 64; x < 2560; x+=64){
+        for (let x = 64; x < 1280; x+=64){
             this.entity_manager.addModel.tile_ice_center(x, 664);
         }
-        this.entity_manager.addModel.tile_ice_right(2560, 664);
+        this.entity_manager.addModel.tile_ice_right(1280, 664);
         
         // Steps leading to platform
         this.entity_manager.addModel.tile_ice_left(225, 590);
@@ -161,8 +161,7 @@ class GameEngine {
         this.entity_manager.addModel.tile_ice_center(993, 418);
         this.entity_manager.addModel.tile_ice_right(1057, 418);
 
-
-        
+        this.entity_manager.addModel.enemy_boss_seal(500,525);
 
     }
 
@@ -943,8 +942,17 @@ class GameEngine {
                     if (enemy.getComponent("CHealth").invincible === true){continue}
                     if (enemy.getComponent("CEnemyAI").enemy_type === "boss"){
                         enemy.getComponent('CHealth').health--;
-                        enemy.getComponent('CHealth').invincible = true;
-                        setTimeout(() => enemy.getComponent('CHealth').invincible = false, enemy.getComponent('CBoss').invincibilityTime);
+
+                        if (enemy.getComponent('CHealth').health === 0) {
+                            this.updateEnemyAnimation(enemy, true);
+                            setTimeout( () => {enemy.destroy();}, 50);
+                        }
+
+                        else {
+                            enemy.getComponent('CBoss').currentRegenTime = enemy.getComponent('CBoss').maxRegenTime;
+                            enemy.getComponent('CHealth').invincible = true;
+                            setTimeout(() => enemy.getComponent('CHealth').invincible = false, enemy.getComponent('CBoss').invincibilityTime);
+                        }
                     }
                     else {
                         enemy.destroy();
@@ -1106,6 +1114,9 @@ class GameEngine {
         for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
             const enemyTransform = enemy.getComponent('CTransform');
             const enemyAI = enemy.getComponent("CEnemyAI");
+            if(enemyAI.enemy_type == "boss"){
+                this.updateCounters(enemy)
+            }
 
             // if not aggro mode
             if (enemyAI.player_detected === false){
@@ -1245,6 +1256,19 @@ class GameEngine {
                 enemyTransform.scale = 1;
             }
         }
+    }
+
+    regenBoss(boss){
+        const bossHealth = boss.getComponent('CHealth');
+        bossHealth.health = Math.min(bossHealth.health + 2, bossHealth.maxHealth)
+    }
+
+    teleportBoss(boss){
+        const bossTransform = boss.getComponent('CTransform');
+        const teleportPoints = [[600,525],[300,325],[500,200],[750,400]]
+        let location = teleportPoints[Math.floor(Math.random() * teleportPoints.length)];
+        bossTransform.position.x = location[0];
+        bossTransform.position.y = location[1];
     }
 
     sLifespan() {
@@ -1417,6 +1441,22 @@ class GameEngine {
 
     setEditorMode(isEditor){
         this.isEditor = isEditor
+    }
+
+    updateCounters(enemy){
+        const bossEnemyAI = enemy.getComponent("CBoss")
+        // Calculating the regeneration and teleportation factors
+        bossEnemyAI.currentTeleportTime -= 20;
+        bossEnemyAI.currentRegenTime -= 50;
+        // Calling the teleportation and regeneration fucntions
+        if(bossEnemyAI.currentTeleportTime <= 0){
+            this.teleportBoss(enemy)
+            bossEnemyAI.currentTeleportTime = bossEnemyAI.maxTeleportTime
+        }
+        if(bossEnemyAI.currentRegenTime <= 0){
+            this.regenBoss(enemy)
+            bossEnemyAI.currentRegenTime = bossEnemyAI.maxRegenTime
+        }
     }
 
 }
