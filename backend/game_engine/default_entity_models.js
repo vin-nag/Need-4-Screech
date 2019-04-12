@@ -222,10 +222,10 @@ class EntityModels {
         const enemy_entity = this.entity_manager.addEntity("enemy");
         enemy_entity.addComponent(components.CLifeSpan(config.enemy.melee.lifeSpan));
         enemy_entity.addComponent(components.CGravity(config.game_engine.gravity));
-        enemy_entity.addComponent(components.CHealth(10, 10, false, false));
+        enemy_entity.addComponent(components.CHealth(10, 10, false, true));
         enemy_entity.addComponent(components.CAnimation('seal_boss_standing', 4, 0, 0.25));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        enemy_entity.addComponent(components.CBoundingBox(new Vector(170, 128), new Vector(85, 64)));
+        enemy_entity.addComponent(components.CBoundingBox(new Vector(128, 170), new Vector(64, 85)));
         enemy_entity.addComponent(components.CEnemyAI("boss",  5, config.enemy.melee.roamDistance, 5000, config.enemy.melee.sight, false, false, new Vector(0, 0), true));
         enemy_entity.addComponent(components.CEnemyAnim("seal_boss_standing", 4, "seal_boss_attack", 9, "seal_boss_die", 6));
         enemy_entity.addComponent(components.CState("grounded"));

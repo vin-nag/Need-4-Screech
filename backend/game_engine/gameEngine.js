@@ -143,7 +143,7 @@ class GameEngine {
         }
         this.entity_manager.addModel.tile_ice_right(2560, 664);
 
-        this.entity_manager.addModel.enemy_melee_mini_seal(500, 600);
+        this.entity_manager.addModel.enemy_boss_seal(500, 450);
 
     }
 
@@ -1171,8 +1171,7 @@ class GameEngine {
                         offsetY = enemyTransform.position.y + bounds.size.y + 5;
 
                         if (enemyAI.canAttack){
-                            this.entity_manager.addModel.bullet_dropping(offsetX, offsetY, enemyTransform.scale, enemyTransform.velocity, enemy.tag);
-                            this.loadSfx("laser");
+                            this.entity_manager.addModel.enemy_melee_mini_seal(offsetX, offsetY);
                             enemyAI.canAttack = false;
                             setTimeout( () => {enemyAI.canAttack = true}, 2000)
                         }
