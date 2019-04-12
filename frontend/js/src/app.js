@@ -28,7 +28,7 @@ class App {
             levelEditor.run()
         }
         //Game play
-        else if(lastWindow === APP_WINDOWS.GAME_PLAY && newWindow !== APP_WINDOWS.GAME_PLAY){
+        if(lastWindow === APP_WINDOWS.GAME_PLAY && newWindow !== APP_WINDOWS.GAME_PLAY){
             gamePlay.stop()
         }
         else if(lastWindow !== APP_WINDOWS.GAME_PLAY && newWindow === APP_WINDOWS.GAME_PLAY){
