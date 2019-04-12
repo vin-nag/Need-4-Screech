@@ -79,7 +79,7 @@ const onLoadLevel = (socket, data) => {
     if(!data.levelId) { errors.push("Level id was not provided") }
 
     if(errors.length){
-        socket.emit("loadLevelResponse", {success: false, errors})
+        socket.emit("loadLevelResponse", {success: false, sessionId: data.sessionId, errors})
         return
     }
 
@@ -88,11 +88,11 @@ const onLoadLevel = (socket, data) => {
     db.levels.findOne({_id: mongoUid(data.levelId)}, function(err, res){
         if(err || res == null){
             console.log(res)
-            socket.emit('loadLevelResponse', {success: false, errors: [err]})
+            socket.emit('loadLevelResponse', {success: false, sessionId: data.sessionId, errors: [err]})
         }
         else{
             gameEngine.loadSerializedEntities(res.entities)
-            socket.emit('loadLevelResponse', {success: true, errors:[]})
+            socket.emit('loadLevelResponse', {success: true, sessionId: data.sessionId, errors:[]})
         }
     })
 }
