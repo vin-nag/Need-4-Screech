@@ -144,6 +144,8 @@ class GameEngine {
         this.entity_manager.addModel.tile_ice_right(2560, 664);
 
         this.entity_manager.addModel.enemy_melee_mini_seal(500, 600);
+        this.entity_manager.addModel.enemy_boss_seal(300,500);
+
 
     }
 
