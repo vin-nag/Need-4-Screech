@@ -1105,6 +1105,21 @@ class GameEngine {
         for (let enemy of this.entity_manager.getEntitiesByTag("enemy")){
             const enemyTransform = enemy.getComponent('CTransform');
             const enemyAI = enemy.getComponent("CEnemyAI");
+            if(enemyAI.enemy_type == "boss"){
+                const bossEnemyAI = enemy.getComponent("CBoss")
+                // Calculating the regeneration and teleportation factors
+                bossEnemyAI.currentTeleportTime -= 100;
+                bossEnemyAI.currentRegenTime -= 100;
+                // Calling the teleportation and regeneration fucntions
+                if(bossEnemyAI.currentTeleportTime <= 0){
+                    this.teleportBoss(enemy)
+                    bossEnemyAI.currentTeleportTime = bossEnemyAI.maxTeleportTime
+                }
+                if(bossEnemyAI.currentRegenTime <= 0){
+                    this.regenBoss(enemy)
+                    bossEnemyAI.currentRegenTime = bossEnemyAI.maxRegenTime
+                }
+            }
 
             // if not aggro mode
             if (enemyAI.player_detected === false){
@@ -1196,20 +1211,6 @@ class GameEngine {
                         direction.x += enemyTransform.velocity.x / 2;
                         enemyTransform.velocity = direction;
                         offsetY = enemyTransform.position.y + 55;
-                        const bossEnemyAI = enemy.getComponent("CBoss")
-                        // Calculating the regeneration and teleportation factors
-                        bossEnemyAI.currentTeleportTime -= 1;
-                        bossEnemyAI.currentRegenTime -= 1;
-                        
-                        // Calling the teleportation and regeneration fucntions
-                        if(bossEnemyAI.currentTeleportTime <= 0){
-                            this.regenBoss(enemy)
-                            bossEnemyAI.currentTeleportTime = bossEnemyAI.maxTeleportTime
-                        }
-                        if(bossEnemyAI.currentRegenTime <= 0){
-                            this.teleportBoss(enemy)
-                            bossEnemyAI.currentRegenTime = bossEnemyAI.maxRegenTime
-                        }
 
                         if (enemyAI.canAttack){
                             if (Math.random() < 0.7){
