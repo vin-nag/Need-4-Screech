@@ -241,7 +241,8 @@ class EntityModels {
         enemy_entity.addComponent(components.CEnemyAI("boss",  5, config.enemy.melee.roamDistance, 5000, 5000, false, false, new Vector(0, 0), true));
         enemy_entity.addComponent(components.CEnemyAnim("seal_boss_standing", 4, "seal_boss_attack", 9, "seal_boss_die", 6));
         enemy_entity.addComponent(components.CState("grounded"));
-    };
+        enemy_entity.addComponent(components.CBoss(1000, 10000,5000, 5000,500));
+    }
 
 
     tile_brick(x=0, y=0) {

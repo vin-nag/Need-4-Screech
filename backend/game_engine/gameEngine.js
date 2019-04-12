@@ -840,8 +840,9 @@ class GameEngine {
                 if (attacker === "enemy"){continue}
                 let overlap = physics.getOverLap(enemy, bullet);
                 if (overlap.x > 0 && overlap.y > 0){
-                    score.getComponent('CScore').score += 10;
                     bullet.destroy();
+                    if (enemy.getComponent("CEnemyAI").enemy_type === "boss"){continue}
+                    score.getComponent('CScore').score += 10;
                     enemy.getComponent('CHealth').show = true;
                     enemy.getComponent('CHealth').health--;
 
@@ -920,10 +921,18 @@ class GameEngine {
                 const score = this.entity_manager.getEntitiesByTag("score")[0];
                 let overlap = physics.getOverLap(bottle, enemy);
                 if (overlap.x > 0 && overlap.y > 0) {
+                    if (enemy.getComponent("CHealth").invincible === true){continue}
+                    if (enemy.getComponent("CEnemyAI").enemy_type === "boss"){
+                        enemy.getComponent('CHealth').health--;
+                        enemy.getComponent('CHealth').invincible = true;
+                        setTimeout(() => enemy.getComponent('CHealth').invincible = false, enemy.getComponent('CBoss').invincibilityTime);
+                    }
+                    else {
+                        enemy.destroy();
+                    }
                     score.getComponent('CScore').score += 35;
                     this.spawnBoom(bottle);
                     bottle.destroy();
-                    enemy.destroy();
                 }
             }
         }
@@ -1164,7 +1173,7 @@ class GameEngine {
 
                     case "boss":
                         direction.normalize();
-                        direction = direction.multiply(2 * 0.75);
+                        direction = direction.multiply( 0.25);
                         direction.y = enemyTransform.velocity.y;
                         direction.x += enemyTransform.velocity.x / 2;
                         enemyTransform.velocity = direction;
