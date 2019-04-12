@@ -138,10 +138,10 @@ class GameEngine {
 
         // ground
         this.entity_manager.addModel.tile_ice_left(0, 664);
-        for (let x = 64; x < 2560; x+=64){
+        for (let x = 64; x < 1280; x+=64){
             this.entity_manager.addModel.tile_ice_center(x, 664);
         }
-        this.entity_manager.addModel.tile_ice_right(2560, 664);
+        this.entity_manager.addModel.tile_ice_right(1280, 664);
         
         // Steps leading to platform
         this.entity_manager.addModel.tile_ice_left(225, 590);
@@ -160,8 +160,7 @@ class GameEngine {
         this.entity_manager.addModel.tile_ice_center(993, 418);
         this.entity_manager.addModel.tile_ice_right(1057, 418);
 
-
-        
+        this.entity_manager.addModel.enemy_boss_seal(500,525);
 
     }
 
@@ -942,6 +941,7 @@ class GameEngine {
                     if (enemy.getComponent("CHealth").invincible === true){continue}
                     if (enemy.getComponent("CEnemyAI").enemy_type === "boss"){
                         enemy.getComponent('CHealth').health--;
+                        enemy.getComponent('CBoss').currentRegenTime = enemy.getComponent('CBoss').maxRegenTime;
                         enemy.getComponent('CHealth').invincible = true;
                         setTimeout(() => enemy.getComponent('CHealth').invincible = false, enemy.getComponent('CBoss').invincibilityTime);
                     }
@@ -1230,6 +1230,19 @@ class GameEngine {
                 enemyTransform.scale = 1;
             }
         }
+    }
+
+    regenBoss(boss){
+        const bossHealth = boss.getComponent('CHealth');
+        bossHealth.health = min(bossHealth.health + 2, bossHealth.maxHealth)
+    }
+
+    teleportBoss(boss){
+        const bossTransform = boss.getComponent('CTransform');
+        const teleportPoints = [[600,525],[300,325],[500,200],[750,400]]
+        let location = teleportPoints[Math.floor(Math.random() * teleportPoints.length)];
+        bossTransform.position.x = location[0];
+        bossTransform.position.y = location[1];
     }
 
     sLifespan() {
