@@ -143,17 +143,19 @@ class GameEngine {
         }
         this.entity_manager.addModel.tile_ice_right(2560, 664);
         
+        // Steps leading to platform
         this.entity_manager.addModel.tile_ice_left(865, 580);
         this.entity_manager.addModel.tile_ice_center(865, 580);
         this.entity_manager.addModel.tile_ice_right(865, 580);
-        
+
+        // High platform
         this.entity_manager.addModel.tile_ice_left(545, 290);
         for (let x = 609; x < 865; x+=64){
             this.entity_manager.addModel.tile_ice_center(x, 290);
         }
         this.entity_manager.addModel.tile_ice_right(865, 290);
 
-        this.entity_manager.addModel.enemy_melee_mini_seal(500, 600);
+        this.entity_manager.addModel.enemy_boss_seal(500, 450);
 
     }
 
@@ -184,6 +186,7 @@ class GameEngine {
         this.entity_manager.addModel.tile_grey_center(364, 600);
         this.entity_manager.addModel.tile_grey_center(428, 600);
         this.entity_manager.addModel.tile_grey_right(492, 600);
+
         this.entity_manager.addModel.tile_grey_left(364, 536);
         this.entity_manager.addModel.tile_grey_center(428, 536);
         this.entity_manager.addModel.tile_grey_right(492, 536);
@@ -1170,6 +1173,28 @@ class GameEngine {
                             enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.flying.maxSpeed * 0.25);
                         }
                         break;
+
+                    case "boss":
+                        direction.normalize();
+                        direction = direction.multiply(config.enemy.flying.maxSpeed * 0.75);
+                        direction.y = enemyTransform.velocity.y;
+                        direction.x += enemyTransform.velocity.x / 2;
+                        enemyTransform.velocity = direction;
+                        offsetY = enemyTransform.position.y + bounds.size.y + 5;
+
+                        if (enemyAI.canAttack){
+                            this.entity_manager.addModel.enemy_melee_mini_seal(offsetX, offsetY);
+                            enemyAI.canAttack = false;
+                            setTimeout( () => {enemyAI.canAttack = true}, 2000)
+                        }
+
+                        // truncate speed if above max
+                        if (enemyTransform.velocity.length() > config.enemy.flying.maxSpeed) {
+                            enemyTransform.velocity.normalize();
+                            enemyTransform.velocity = enemyTransform.velocity.multiply(config.enemy.flying.maxSpeed * 0.25);
+                        }
+                        break;
+
                 }
             }
 
