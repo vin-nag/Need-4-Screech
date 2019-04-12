@@ -4,8 +4,7 @@ const APP_WINDOWS = {
     LEVEL_EDITOR: 3,
     MENU: 4,
     GAME_PLAY: 5,
-    OVERWORLD: 6,
-    INSTRUCTIONS: 7
+    OVERWORLD: 6
 }
 
 export default APP_WINDOWS

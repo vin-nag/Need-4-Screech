@@ -1,7 +1,6 @@
 import app from "../app"
 import APP_WINDOWS from "../../enums/app_windows"
 import gamePlay from "../gamePlay"
-import CAMPAIGN_LEVELS from "../../enums/campaignLevels"
 
 /**
  * Shows the overworld levels
@@ -86,19 +85,19 @@ const _menuOptions = {
     "George Street": {
         handler: () => {
             app.switchToWindow(APP_WINDOWS.GAME_PLAY)
-            gamePlay.setCurrentLevel(CAMPAIGN_LEVELS["George Street"])
+            gamePlay.setCurrentLevel("George Street")
         }
     },
     "Memorial University": {
         handler: () => {
             app.switchToWindow(APP_WINDOWS.GAME_PLAY)
-            gamePlay.setCurrentLevel(CAMPAIGN_LEVELS["Memorial University"])
+            gamePlay.setCurrentLevel("Memorial University")
         }
     },
     "Cape Spear": {
         handler: () => {
             app.switchToWindow(APP_WINDOWS.GAME_PLAY)
-            gamePlay.setCurrentLevel(CAMPAIGN_LEVELS["Cape Spear"])
+            gamePlay.setCurrentLevel("Cape Spear")
         }
     }
 }

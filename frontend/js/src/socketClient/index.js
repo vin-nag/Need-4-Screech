@@ -82,10 +82,8 @@ export const listen = () => {
 
     socket.on('loadLevelResponse', function(data){
         if(data.success){
-            if(data.sessionId === levelEditor.sessionId){
-                alert("Level Loaded Successfully.")
-                domService.hideElement("loadLevelModal")
-            }
+            alert("Level Loaded Successfully.")
+            domService.hideElement("loadLevelModal")
         }
         else{
             alert(data.errors[0])
@@ -110,10 +108,6 @@ export const listen = () => {
         }
         else{
             gamePlay.setSession(data.session)
-            socket.emit('loadLevel', {
-                levelId: gamePlay.currentLevel,
-                sessionId: gamePlay.sessionID
-            })
         }
     }) 
     
