@@ -327,6 +327,18 @@ class EntityModels {
         img_entity.addComponent(components.CTransform(new Vector(0, 0), new Vector(0, 0), 1));
     };
 
+    background_img_mun() {
+        const img_entity = this.entity_manager.addEntity("bg-img");
+        img_entity.addComponent(components.CAnimation('mun_background', 1, 0, 0));
+        img_entity.addComponent(components.CTransform(new Vector(0, 0), new Vector(0, 0), 1));
+    };
+
+    background_img_cape() {
+        const img_entity = this.entity_manager.addEntity("bg-img");
+        img_entity.addComponent(components.CAnimation('cape_background', 1, 0, 0));
+        img_entity.addComponent(components.CTransform(new Vector(0, 0), new Vector(0, 0), 1));
+    };
+
     powerup_speed(x=0, y=0) {
         const powerup_entity = this.entity_manager.addEntity("powerup");
         powerup_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
