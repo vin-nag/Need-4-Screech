@@ -143,7 +143,7 @@ class GameEngine {
         }
         this.entity_manager.addModel.tile_ice_right(2560, 664);
 
-        this.entity_manager.addModel.enemy_boss_seal(500, 450);
+        this.entity_manager.addModel.enemy_boss_seal(500, 525);
 
     }
 
@@ -1164,14 +1164,19 @@ class GameEngine {
 
                     case "boss":
                         direction.normalize();
-                        direction = direction.multiply(config.enemy.flying.maxSpeed * 0.75);
+                        direction = direction.multiply(2 * 0.75);
                         direction.y = enemyTransform.velocity.y;
                         direction.x += enemyTransform.velocity.x / 2;
                         enemyTransform.velocity = direction;
-                        offsetY = enemyTransform.position.y + bounds.size.y + 5;
+                        offsetY = enemyTransform.position.y + 55;
 
                         if (enemyAI.canAttack){
-                            this.entity_manager.addModel.enemy_melee_mini_seal(offsetX, offsetY);
+                            if (Math.random() < 0.7){
+                                this.entity_manager.addModel.bullet_knife(offsetX, offsetY, enemyTransform.scale, enemy.tag);
+                            }
+                            else {
+                                this.entity_manager.addModel.enemy_melee_mini_seal(offsetX, offsetY);
+                            }
                             enemyAI.canAttack = false;
                             setTimeout( () => {enemyAI.canAttack = true}, 2000)
                         }
