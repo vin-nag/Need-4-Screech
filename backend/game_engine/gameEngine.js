@@ -1196,6 +1196,17 @@ class GameEngine {
                         direction.x += enemyTransform.velocity.x / 2;
                         enemyTransform.velocity = direction;
                         offsetY = enemyTransform.position.y + 55;
+                        const bossEnemyAI = enemy.getComponent("CBoss")
+                        bossEnemyAI.currentTeleportTime -= 1;
+                        bossEnemyAI.currentRegenTime -= 1;
+                        if(bossEnemyAI.currentTeleportTime <= 0){
+                            this.regenBoss(enemy)
+                            bossEnemyAI.currentTeleportTime = bossEnemyAI.maxTeleportTime
+                        }
+                        if(bossEnemyAI.currentRegenTime <= 0){
+                            this.teleportBoss(enemy)
+                            bossEnemyAI.currentRegenTime = bossEnemyAI.maxRegenTime
+                        }
 
                         if (enemyAI.canAttack){
                             if (Math.random() < 0.7){
