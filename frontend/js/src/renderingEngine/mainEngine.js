@@ -2,6 +2,7 @@ import APP_WINDOWS from "../../enums/app_windows"
 import gameRenderEngine from "./gameRenderEngine"
 import menuRenderEngine from "./menuRenderEngine"
 import overworldRenderEngine from "./overworldRenderEngine";
+import instructionsRenderingEngine from "./instructionsRenderingEngine"
 
 import levelEditor from "../levelEditor"
 import gamePlay from '../gamePlay'
@@ -16,7 +17,8 @@ const windowToElement = {
     [APP_WINDOWS.LEVEL_EDITOR]: "levelEditor",
     [APP_WINDOWS.MENU]: "menu",
     [APP_WINDOWS.GAME_PLAY]: "gamePlay",
-    [APP_WINDOWS.OVERWORLD]: "overworld"
+    [APP_WINDOWS.OVERWORLD]: "overworld",
+    [APP_WINDOWS.INSTRUCTIONS]: "instructions"
 }
 
 const engine = (activeWindow) => {
@@ -50,6 +52,9 @@ const delegateRendering = (activeWindow) => {
     }
     else if(activeWindow === APP_WINDOWS.OVERWORLD){
         overworldRenderEngine(overworldService.getActiveMenuItems(), overworldService.getSelectedItemIndex())
+    }
+    else if(activeWindow === APP_WINDOWS.INSTRUCTIONS){
+        instructionsRenderingEngine()
     }
     
 }
