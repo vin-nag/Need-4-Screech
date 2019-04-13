@@ -57,14 +57,30 @@ class GameEngine {
             models.decorator_pole_3,
             models.decorator_lantern,
             models.decorator_van,
+            models.decorator_boat,
             models.level_end_taxi,
+            models.enemy_boss_seal,
             models.enemy_melee_moose,
+            models.enemy_melee_thug,
+            models.enemy_melee_prof,
+            models.enemy_melee_mini_seal,
             models.enemy_ranged_chef,
+            models.enemy_ranged_ghost,
             models.enemy_flying_blackbird,
-            models.tile_brick,
+            models.enemy_flying_greenbird,
+            models.enemy_flying_pinkbird,
             models.tile_grey_left,
             models.tile_grey_right,
             models.tile_grey_center,
+            models.tile_red_left,
+            models.tile_red_right,
+            models.tile_red_center,
+            models.tile_ice_left,
+            models.tile_ice_right,
+            models.tile_ice_center,
+            models.tile_desert_left,
+            models.tile_desert_right,
+            models.tile_desert_center,
             models.powerup_speed,
             models.powerup_invincible,
             models.powerup_shield,
@@ -159,7 +175,7 @@ class GameEngine {
         const checkpoint_success = this.entity_manager.addEntity("checkpoint_success");
         checkpoint_success.addComponent(components.CTransform(position, prevPos, 1, velocity, 0));
         checkpoint_success.addComponent(components.CAnimation('checkpoint_success', 1, 0, 0));
-        checkpoint_success.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+        checkpoint_success.addComponent(components.CBoundingBox(new Vector(36, 64), new Vector(18, 32)));
         this.loadSfx("collect_key")
     }
 
@@ -1037,6 +1053,7 @@ class GameEngine {
                         direction.x += enemyTransform.velocity.x / 2;
                         enemyTransform.velocity = direction;
                         offsetY = enemyTransform.position.y + bounds.size.y + 5;
+                        offsetX = enemyTransform.position.x + bounds.halfSize.x;
 
                         if (enemyAI.canAttack){
                             this.entity_manager.addModel.bullet_dropping(offsetX, offsetY, enemyTransform.scale, enemyTransform.velocity, enemy.tag);

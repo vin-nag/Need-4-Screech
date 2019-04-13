@@ -73,9 +73,9 @@ class EntityModels {
 
     bullet_knife(x=0, y=0, scale, tag) {
         const bullet_entity = this.entity_manager.addEntity("bullet");
-        let offsetX = scale === -1? x-58: x+5;
+        let offsetX = scale === -1? x-37: x+5;
         bullet_entity.addComponent(components.CTransform(new Vector(offsetX, y), new Vector(offsetX, y), scale, new Vector(scale*20, 0), 0));
-        bullet_entity.addComponent(components.CBoundingBox(new Vector(48, 10), new Vector(24, 5)));
+        bullet_entity.addComponent(components.CBoundingBox(new Vector(32, 7), new Vector(16, 4)));
         bullet_entity.addComponent(components.CAnimation('knife', 1, 0, 0));
         bullet_entity.addComponent(components.CState('shooting'));
         bullet_entity.addComponent(components.CLifeSpan(1000));
@@ -84,7 +84,7 @@ class EntityModels {
 
     bullet_snowball(x=0, y=0, scale, tag) {
         const bullet_entity = this.entity_manager.addEntity("bullet");
-        let offsetX = scale === -1? x-42: x+5;
+        let offsetX = scale === -1? x-37: x+5;
         bullet_entity.addComponent(components.CTransform(new Vector(offsetX, y), new Vector(offsetX, y), scale, new Vector(scale*20, 0), 0));
         bullet_entity.addComponent(components.CBoundingBox(new Vector(32, 32), new Vector(16, 16)));
         bullet_entity.addComponent(components.CAnimation('snowball', 1, 0, 0));
@@ -96,12 +96,12 @@ class EntityModels {
 
     bullet_dropping(x=0, y=0, scale, velocity, tag) {
         const bullet_entity = this.entity_manager.addEntity("bullet");
-        bullet_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), scale, new Vector(velocity.x*0.15, 15), 0));
+        bullet_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), scale, new Vector(velocity.x*0.05, 15), 0));
         bullet_entity.addComponent(components.CGravity(config.game_engine.gravity));
-        bullet_entity.addComponent(components.CBoundingBox(new Vector(32, 67), new Vector(16, 34)));
+        bullet_entity.addComponent(components.CBoundingBox(new Vector(16, 32), new Vector(8, 16)));
         bullet_entity.addComponent(components.CAnimation('bullet_dropping', 1, 0, 0));
         bullet_entity.addComponent(components.CState('shooting'));
-        bullet_entity.addComponent(components.CLifeSpan(1000));
+        bullet_entity.addComponent(components.CLifeSpan(2000));
         bullet_entity.addComponent(components.CAttacker(tag));
     };
 
@@ -135,11 +135,17 @@ class EntityModels {
         van_entity.addComponent(components.CAnimation("van", 1, 0, 0));
     }
 
+    decorator_boat(x=0, y=0) {
+        const van_entity = this.entity_manager.addEntity("decorator");
+        van_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        van_entity.addComponent(components.CAnimation("boat", 1, 0, 0));
+    }
+
     level_end_taxi(x=0, y=0) {
         const taxi_entity = this.entity_manager.addEntity("taxi");
         taxi_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         taxi_entity.addComponent(components.CAnimation("jiffy", 1, 0, 0));
-        taxi_entity.addComponent(components.CBoundingBox(new Vector(200, 120), new Vector(100, 60)));
+        taxi_entity.addComponent(components.CBoundingBox(new Vector(128, 56), new Vector(64, 28)));
     }
 
     enemy_melee_moose(x=0, y=0) {
@@ -162,9 +168,22 @@ class EntityModels {
         enemy_entity.addComponent(components.CHealth(2, 2, false, false));
         enemy_entity.addComponent(components.CAnimation('thug_walk', 5, 0, 0.25));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        enemy_entity.addComponent(components.CBoundingBox(new Vector(64, 120), new Vector(32, 60)));
+        enemy_entity.addComponent(components.CBoundingBox(new Vector(40, 64), new Vector(20, 32)));
         enemy_entity.addComponent(components.CEnemyAI("melee",  5, config.enemy.melee.roamDistance, 5000, config.enemy.melee.sight, false, false, new Vector(0, 0), true));
         enemy_entity.addComponent(components.CEnemyAnim("thug_walk", 5, "thug_punch", 6, "thug_die", 5));
+        enemy_entity.addComponent(components.CState("grounded"));
+    };
+
+    enemy_melee_prof(x=0, y=0) {
+        const enemy_entity = this.entity_manager.addEntity("enemy");
+        enemy_entity.addComponent(components.CLifeSpan(config.enemy.melee.lifeSpan));
+        enemy_entity.addComponent(components.CGravity(config.game_engine.gravity));
+        enemy_entity.addComponent(components.CHealth(2, 2, false, false));
+        enemy_entity.addComponent(components.CAnimation('prof_walk', 4, 0, 0.25));
+        enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        enemy_entity.addComponent(components.CBoundingBox(new Vector(36, 64), new Vector(18, 32)));
+        enemy_entity.addComponent(components.CEnemyAI("melee",  5, config.enemy.melee.roamDistance, 5000, config.enemy.melee.sight, false, false, new Vector(0, 0), true));
+        enemy_entity.addComponent(components.CEnemyAnim("prof_walk", 4, "prof_walk", 4, "prof_walk", 4));
         enemy_entity.addComponent(components.CState("grounded"));
     };
 
@@ -188,9 +207,22 @@ class EntityModels {
         enemy_entity.addComponent(components.CHealth(2, 2, false, false));
         enemy_entity.addComponent(components.CAnimation('chef_walk', 16, 0, 0.5));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        enemy_entity.addComponent(components.CBoundingBox(new Vector(98.4, 75), new Vector(49.2, 37.5)));
+        enemy_entity.addComponent(components.CBoundingBox(new Vector(84, 64), new Vector(42, 32)));
         enemy_entity.addComponent(components.CEnemyAI("ranged",  10, config.enemy.ranged.roamDistance, 5000, config.enemy.ranged.sight, false, false, new Vector(0, 0), true));
         enemy_entity.addComponent(components.CEnemyAnim("chef_walk", 16, "chef_attack", 12, "chef_die", 12));
+        enemy_entity.addComponent(components.CState("grounded"));
+    };
+
+    enemy_ranged_ghost(x=0, y=0) {
+        const enemy_entity = this.entity_manager.addEntity("enemy");
+        enemy_entity.addComponent(components.CLifeSpan(config.player.lifeSpan));
+        enemy_entity.addComponent(components.CGravity(config.game_engine.gravity));
+        enemy_entity.addComponent(components.CHealth(2, 2, false, false));
+        enemy_entity.addComponent(components.CAnimation('ghost_walk', 4, 0, 0.5));
+        enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        enemy_entity.addComponent(components.CBoundingBox(new Vector(52, 64), new Vector(26,32)));
+        enemy_entity.addComponent(components.CEnemyAI("ranged",  10, config.enemy.ranged.roamDistance, 5000, config.enemy.ranged.sight, false, false, new Vector(0, 0), true));
+        enemy_entity.addComponent(components.CEnemyAnim("ghost_walk", 4, "ghost_attack", 4, "ghost_walk", 4));
         enemy_entity.addComponent(components.CState("grounded"));
     };
 
@@ -200,7 +232,7 @@ class EntityModels {
         enemy_entity.addComponent(components.CHealth(2, 2, false, false));
         enemy_entity.addComponent(components.CAnimation('black_bird_fly', 8, 0, 0.75));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        enemy_entity.addComponent(components.CBoundingBox(new Vector(110, 101), new Vector(55, 50)));
+        enemy_entity.addComponent(components.CBoundingBox(new Vector(64, 60), new Vector(32, 30)));
         enemy_entity.addComponent(components.CEnemyAI("flying",  0, config.enemy.flying.roamDistance, 5000, config.enemy.flying.sight, false, false, new Vector(0, 0), true));
         enemy_entity.addComponent(components.CEnemyAnim("black_bird_fly", 8, "black_bird_fly", 8, "black_bird_die", 8));
         enemy_entity.addComponent(components.CState("grounded"));
@@ -212,7 +244,7 @@ class EntityModels {
         enemy_entity.addComponent(components.CHealth(2, 2, false, false));
         enemy_entity.addComponent(components.CAnimation('pink_bird_fly', 8, 0, 0.75));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        enemy_entity.addComponent(components.CBoundingBox(new Vector(110, 101), new Vector(55, 50)));
+        enemy_entity.addComponent(components.CBoundingBox(new Vector(64, 60), new Vector(32, 30)));
         enemy_entity.addComponent(components.CEnemyAI("flying",  0, config.enemy.flying.roamDistance, 5000, config.enemy.flying.sight, false, false, new Vector(0, 0), true));
         enemy_entity.addComponent(components.CEnemyAnim("pink_bird_fly", 8, "pink_bird_fly", 8, "pink_bird_die", 8));
         enemy_entity.addComponent(components.CState("grounded"));
@@ -224,7 +256,7 @@ class EntityModels {
         enemy_entity.addComponent(components.CHealth(2, 2, false, false));
         enemy_entity.addComponent(components.CAnimation('green_bird_fly', 8, 0, 0.75));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        enemy_entity.addComponent(components.CBoundingBox(new Vector(110, 101), new Vector(55, 50)));
+        enemy_entity.addComponent(components.CBoundingBox(new Vector(64, 60), new Vector(32, 30)));
         enemy_entity.addComponent(components.CEnemyAI("flying",  0, config.enemy.flying.roamDistance, 5000, config.enemy.flying.sight, false, false, new Vector(0, 0), true));
         enemy_entity.addComponent(components.CEnemyAnim("green_bird_fly", 8, "green_bird_fly", 8, "green_bird_die", 8));
         enemy_entity.addComponent(components.CState("grounded"));
@@ -243,14 +275,6 @@ class EntityModels {
         enemy_entity.addComponent(components.CState("grounded"));
         enemy_entity.addComponent(components.CBoss(1000, 10000,5000, 5000,500));
     }
-
-
-    tile_brick(x=0, y=0) {
-        const tile_brick_entity = this.entity_manager.addEntity("tile");
-        tile_brick_entity.addComponent(components.CAnimation('GreyTile', 1, 0, 0));
-        tile_brick_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        tile_brick_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
-    };
 
     tile_grey_left(x=0, y=0) {
         const tile_brick_entity = this.entity_manager.addEntity("tile");
@@ -315,6 +339,27 @@ class EntityModels {
         tile_brick_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
     };
 
+    tile_desert_left(x=0, y=0) {
+        const tile_brick_entity = this.entity_manager.addEntity("tile");
+        tile_brick_entity.addComponent(components.CAnimation('desert_tile_left', 1, 0, 0));
+        tile_brick_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        tile_brick_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+    };
+
+    tile_desert_right(x=0, y=0) {
+        const tile_brick_entity = this.entity_manager.addEntity("tile");
+        tile_brick_entity.addComponent(components.CAnimation('desert_tile_right', 1, 0, 0));
+        tile_brick_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        tile_brick_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+    };
+
+    tile_desert_center(x=0, y=0) {
+        const tile_brick_entity = this.entity_manager.addEntity("tile");
+        tile_brick_entity.addComponent(components.CAnimation('desert_tile_center', 1, 0, 0));
+        tile_brick_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        tile_brick_entity.addComponent(components.CBoundingBox(new Vector(64, 64), new Vector(32, 32)));
+    };
+
     background_img_george() {
         const img_entity = this.entity_manager.addEntity("bg-img");
         img_entity.addComponent(components.CAnimation('george_background', 1, 0, 0));
@@ -343,7 +388,7 @@ class EntityModels {
         const powerup_entity = this.entity_manager.addEntity("powerup");
         powerup_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         powerup_entity.addComponent(components.CAnimation('SuperSpeed', 1, 0, 0));
-        powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 10), new Vector(10, 5)));
+        powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 32), new Vector(10, 16)));
         return powerup_entity
     };
 
@@ -351,28 +396,28 @@ class EntityModels {
         const powerup_entity = this.entity_manager.addEntity("powerup");
         powerup_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         powerup_entity.addComponent(components.CAnimation('Invincibility', 1, 0, 0));
-        powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 10), new Vector(10, 5)));
+        powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 32), new Vector(10, 16)));
     };
 
     powerup_shield(x=0, y=0) {
         const powerup_entity = this.entity_manager.addEntity("powerup");
         powerup_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         powerup_entity.addComponent(components.CAnimation('Shield', 1, 0, 0));
-        powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 10), new Vector(10, 5)));
+        powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 32), new Vector(10, 16)));
     };
 
     powerup_health(x=0, y=0) {
         const powerup_entity = this.entity_manager.addEntity("powerup");
         powerup_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         powerup_entity.addComponent(components.CAnimation('health_pack', 1, 0, 0));
-        powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 10), new Vector(10, 5)));
+        powerup_entity.addComponent(components.CBoundingBox(new Vector(20, 32), new Vector(10, 16)));
     }
 
     checkpoints(x=0, y=0) {
         const checkpoint = this.entity_manager.addEntity("checkpoint");
         checkpoint.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
         checkpoint.addComponent(components.CAnimation('checkpoint_small', 1, 0, 0));
-        checkpoint.addComponent(components.CBoundingBox(new Vector(64, 130), new Vector(32, 70)));
+        checkpoint.addComponent(components.CBoundingBox(new Vector(36, 64), new Vector(18, 32)));
     }
 
     deliveries_left(deliveries_left, x=210, y=140) {
