@@ -105,7 +105,6 @@ export const listen = () => {
     })
 
     socket.on('newSessionID', (data) => {
-        console.log(data)
         if(data.issuer === "LEVEL_EDITOR"){
             levelEditor.setSession(data.session)
         }
