@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"main.levels"},{"v":2,"unique":true,"key":{"levelName":1,"owner":1},"name":"levelName_1_owner_1","ns":"main.levels"}],"uuid":"12d6fa2701a643b6a4f68ab6f844925b"}
