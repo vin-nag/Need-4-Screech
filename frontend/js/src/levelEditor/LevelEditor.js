@@ -4,6 +4,9 @@ import { controls } from "../../../../config-template"
 import assetManager from "../services/assetManager"
 import canvasService from "../services/canvas"
 import domService from "../services/dom"
+import gamePlay from "../gamePlay"
+import app from "../app"
+import APP_WINDOWS from "../../enums/app_windows"
 
 class LevelEditor {
     constructor(){
@@ -13,6 +16,7 @@ class LevelEditor {
         this.inSelection = false
         this.updateStateInterval = null
         this.showGrid = false
+        this.currentLevel = null
 
 
         this.entityType = {
@@ -75,6 +79,7 @@ class LevelEditor {
     }
 
     loadLevel(levelId){
+        this.currentLevel = levelId
         socketClient.emit('loadLevel', {
             levelId,
             sessionId: this.sessionId
@@ -82,17 +87,9 @@ class LevelEditor {
 
     }
 
-    changeEntityType(){
-        //Increment with wrap around the set of available entity type options
-        this.entityType.selectedIndex = (this.entityType.selectedIndex + 1) % this.entityType.options.length
-        const entityType = this.entityType.options[this.entityType.selectedIndex]
-        
-        socketClient.emit("updateEditorEntityType", {
-            sessionId: this.sessionId,
-            entityType: this.entityType.options[this.entityType.selectedIndex]
-        })
-
-        alert(`Switched editor entity type to: ${entityType}`)
+    runLevel(){
+        gamePlay.currentLevel = this.currentLevel
+        app.switchToWindow(APP_WINDOWS.GAME_PLAY)
     }
 
 
