@@ -1,10 +1,11 @@
 {
     "db": {
-        "user": "",
-        "password": "",
-        "clusterString": "",
-        "database": "",
-        "options": {}
+        "user": null,
+        "password": null,
+        "clusterString": "localhost:27017",
+        "database": "need-for-screech",
+        "options": {
+        }
     },
     "gameSessionService": {
         "tickRate": 20
