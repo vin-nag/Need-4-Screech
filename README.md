@@ -22,6 +22,16 @@ otherwise, please see [Installing MongoDB on Ubuntu](https://docs.mongodb.com/ma
 1. `sudo service mongod start` to start the mongodb daemon server
 2. With your current working directory at the root of this repository, run `mongorestore --db need-for-screech ./db-snapshot` to populate your local database.
 
+_If_ you are having an issue running step 2 due to mongodb permissions, try the following:
+
+1. Open `/etc/mongod.conf` with your preferred text editor
+2. Disable authorization by ensuring the following is included in the configuration file:
+
+    ```
+    security:
+        authorization: "disabled"
+    ```
+
 ## Authors
 
 Alaa, Liam, Moustafa, Vineel, Riley
