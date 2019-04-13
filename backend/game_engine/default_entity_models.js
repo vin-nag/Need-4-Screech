@@ -155,7 +155,7 @@ class EntityModels {
         enemy_entity.addComponent(components.CHealth(2, 2, false, false));
         enemy_entity.addComponent(components.CAnimation('moose_run', 15, 0, 0.25));
         enemy_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        enemy_entity.addComponent(components.CBoundingBox(new Vector(124, 124), new Vector(62, 62)));
+        enemy_entity.addComponent(components.CBoundingBox(new Vector(68, 64), new Vector(34, 32)));
         enemy_entity.addComponent(components.CEnemyAI("melee",  5, config.enemy.melee.roamDistance, 5000, config.enemy.melee.sight, false, false, new Vector(0, 0), true));
         enemy_entity.addComponent(components.CEnemyAnim("moose_charge", 15, "moose_run", 15, "moose_die", 5));
         enemy_entity.addComponent(components.CState("grounded"));
