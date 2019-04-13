@@ -346,37 +346,54 @@ class GameEngine {
 
         if (CInput.interact){
             // open door logic
-            console.log("E pressed")
+            //console.log("E pressed")
         }
 
         if (CInput.screech){
             // throw screech
             let game_running = player.getComponent("CGameRunning");
-            console.log("O pressed");
-            if (game_running.running) {
-                if (CInput.canScreech) {
-                    const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
-                    const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
-                    let screech_count = screech_remaining.getComponent('CScreech').screechCount;
-                    let deliveries = deliveries_left.getComponent('CScore').score;
-                    this.entity_manager.addModel.screech(playerTransform.position.x, playerTransform.position.y + 15, playerTransform.velocity, playerTransform.scale, player.tag);
-                    this.loadSfx("RiftToGo");
-                    screech_remaining.getComponent('CScreech').screechCount -= 1;
-                    CInput.canScreech = false;
-                    if (screech_count === 0 && deliveries > 0) {
-                        game_running.running = false;
-                        screech_remaining.getComponent('CScreech').screechCount = 0;
-                    }
-                    setTimeout(() => CInput.canScreech = true, 400)
+            //console.log("O pressed");
+            if (CInput.canScreech) {
+                const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
+                const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
+                let screech_count = screech_remaining.getComponent('CScreech').screechCount;
+                let deliveries = deliveries_left.getComponent('CScore').score;
+
+                if (screech_count < deliveries) {
+                    game_running.running = false;
+                    return
                 }
+                if (screech_count === 0){
+                    return
+                }
+
+                this.entity_manager.addModel.screech(playerTransform.position.x, playerTransform.position.y + 15, playerTransform.velocity, playerTransform.scale, player.tag);
+                this.loadSfx("RiftToGo");
+                screech_remaining.getComponent('CScreech').screechCount -= 1;
+                CInput.canScreech = false;
+                setTimeout(() => CInput.canScreech = true, 500)
             }
         }
 
         if (CInput.drink){
             // drink screech
-            const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
-            console.log("F pressed")
+            let game_running = player.getComponent("CGameRunning");
+            //console.log("F pressed")
             if (CInput.canDrink) {
+                const screech_remaining = this.entity_manager.getEntitiesByTag("screech_remaining")[0];
+                const deliveries_left = this.entity_manager.getEntitiesByTag("deliveries_left")[0];
+                let screech_count = screech_remaining.getComponent('CScreech').screechCount;
+                let deliveries = deliveries_left.getComponent('CScore').score;
+
+                if (screech_count < deliveries) {
+                    game_running.running = false;
+                    return
+                }
+
+                if (screech_count === 0){
+                    return
+                }
+
                 let player_powerup = player.getComponent('CPowerup');
                 player_powerup.drunk = true
                 screech_remaining.getComponent('CScreech').screechCount -= 1;
@@ -703,7 +720,6 @@ class GameEngine {
             for (let bullet of this.entity_manager.getEntitiesByTag("bullet")) {
                 const score = this.entity_manager.getEntitiesByTag("score")[0];
                 let attacker = bullet.getComponent("CAttacker").attacker;
-                console.log('attacker', attacker);
                 if (attacker === "enemy"){continue}
                 let overlap = physics.getOverLap(enemy, bullet);
                 if (overlap.x > 0 && overlap.y > 0){
@@ -1117,7 +1133,6 @@ class GameEngine {
         const bossTransform = boss.getComponent('CTransform');
         const teleportPoints = [[700,525],[289,400],[700,100],[950,290]]
         let location = teleportPoints[Math.floor(Math.random() * teleportPoints.length)];
-        console.log('teleport set to', location)
         bossTransform.position.x = location[0];
         bossTransform.position.y = location[1];
     }
@@ -1233,11 +1248,6 @@ class GameEngine {
             // show level restart screen
         }
 
-        if (screech === 0 && deliveries > 0) {
-            console.log("You ran out of screech, game over!");
-            level_state.level_state = "failed"
-            // show level restart screen
-        }
         if (deliveries === 0){
             console.log("level complete");
             level_state.level_state = "complete"
@@ -1264,7 +1274,7 @@ class GameEngine {
 
         if (!game_running) {
 
-            if (screech <= 0 && deliveries > 0) {
+            if (screech < deliveries) {
                 console.log("Ran out of screech!")
                 level_state.level_state = "failed"
             }
