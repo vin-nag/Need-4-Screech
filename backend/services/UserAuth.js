@@ -43,12 +43,10 @@ class UserAuth {
 
     // login user if credentials correct
     login(data, cb){
-        // bcrypt.compare(data.password, hash).then(function(res) {
-           
-        // });
         db.users.findOne({
-            username: data.username, password: data.password
+            username: data.username
         }, function(err, doc) {
+            
             if(err || doc == null) {
                 cb({
                     success: false,
@@ -56,10 +54,23 @@ class UserAuth {
                 });
             } 
             else {
-                cb({
-                    success: true,
-                    errors: []
+                bcrypt.compare(data.password, doc.password).then(function(res) {
+
+                    if (res) {
+                        cb({
+                            success: true,
+                            errors: []
+                        });
+                    }
+                    else {
+                        cb({
+                            success: false,
+                            errors: ["Missing or Incorrect Login Details."]
+                        });
+                    }
+
                 });
+
             }
         })
 
