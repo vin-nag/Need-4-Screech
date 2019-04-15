@@ -55,3 +55,7 @@ body {
 #failedLevelModal select {
     min-width: 500px;
 }
+
+#profile h3 {
+    color: red;
+}
