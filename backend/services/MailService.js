@@ -1,5 +1,4 @@
 const nodemailer = require('nodemailer');
-const db = require('./db')
 const UserAuth = require('./UserAuth')
 
 class MailService {
@@ -24,7 +23,6 @@ class MailService {
         };
 
         transporter.sendMail(mailOptions, function(error, info){
-            UserAuth.tempPassword(recipient.email, tempPass)
             if (error) {
                 console.log(error);
                 cb({
@@ -32,6 +30,7 @@ class MailService {
                     errors: ["Error"]
                 });
             } else {
+                UserAuth.tempPassword(recipient.email, tempPass)
                 console.log('Email sent: ' + info.response);
                 cb({
                     success: true,
