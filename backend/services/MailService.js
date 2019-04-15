@@ -30,7 +30,7 @@ class MailService {
                     errors: ["Error"]
                 });
             } else {
-                UserAuth.tempPassword(recipient.email, tempPass)
+                UserAuth.tempPassword(recipient.email, tempPass, cb)
                 console.log('Email sent: ' + info.response);
                 cb({
                     success: true,
