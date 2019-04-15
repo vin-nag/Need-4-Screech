@@ -59,7 +59,7 @@ export const listen = () => {
 
     socket.on('changePasswordResponse', (data) => {
         if(data.success){
-            alert("Success! your password has been changed.")
+            alert("Success! your password has been changed. Hit Escape to go to Main Menu.")
         }
         else{
             alert(data.errors[0]);
