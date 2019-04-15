@@ -1,6 +1,7 @@
 const { db } = require("./db")
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const MailService = require('./MailService')
 
 class UserAuth {
     
@@ -55,6 +56,7 @@ class UserAuth {
             else {
                 bcrypt.compare(data.password, doc.password).then(function(res) {
                     if (res) {
+                        MailService.transporter();
                         cb({
                             success: true,
                             errors: []
