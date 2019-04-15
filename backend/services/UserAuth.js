@@ -135,20 +135,16 @@ class UserAuth {
         }
     }
 
-    tempPassword(recipEmail, tempPass) {
-        bcrypt.hash(tempPass, saltRounds, function(err, hash) {
-            db.users.updateOne(
-                { email: recipEmail },
-                { $set: { password: hash} }
-            );
-            cb({
-                success: true,
-                errors: []
-            })
-        });
-
+    tempPassword(email, tempPass, cb) {
+        const hash = bcrypt.hash(tempPass, 10, function(err, hash) {
+            if (!err){
+                db.users.update(
+                    {email: email},
+                    {$set: {password: hash}}
+                );
+            }
+        })
     }
-
 }
 
 module.exports = new UserAuth()
