@@ -136,9 +136,10 @@ class EntityModels {
     }
 
     decorator_boat(x=0, y=0) {
-        const van_entity = this.entity_manager.addEntity("decorator");
-        van_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
-        van_entity.addComponent(components.CAnimation("boat", 1, 0, 0));
+        const boat_entity = this.entity_manager.addEntity("taxi");
+        boat_entity.addComponent(components.CTransform(new Vector(x, y), new Vector(x, y), 1, new Vector(0, 0), 0));
+        boat_entity.addComponent(components.CAnimation("boat", 1, 0, 0));
+        boat_entity.addComponent(components.CBoundingBox(new Vector(128, 80), new Vector(64, 40)));
     }
 
     level_end_taxi(x=0, y=0) {
