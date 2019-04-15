@@ -1,5 +1,6 @@
 import app from "../app"
 import APP_WINDOWS from "../../enums/app_windows"
+import profileService from "./profile"
 
 /**
  * Shows the menu items for the given menu label
@@ -72,7 +73,7 @@ const _menuOptions = {
     "Host Session": {handler: () => openHostSession(), children: []},
     "Join Session": {handler: () => openJoinSession(), children: []},
     "Change Username": {handler: () => openChangeUsername(), children: []},
-    "Change Password": {handler: () => openChangePassword(), children: []}
+    "Change Password": {handler: () => profileService.showModal(), children: []}
 }
 
 const _menuState = {
