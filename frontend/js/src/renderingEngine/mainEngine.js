@@ -9,6 +9,7 @@ import gamePlay from '../gamePlay'
 import menuService from "../services/menu"
 import overworldService from "../services/overworld"
 import assetManager from "../services/assetManager"
+import profileService from "../services/profile"
 
 
 const windowToElement = {
@@ -21,6 +22,7 @@ const windowToElement = {
     [APP_WINDOWS.OVERWORLD]: "overworld",
     [APP_WINDOWS.INSTRUCTIONS]: "instructions",
     [APP_WINDOWS.FORGOT]: "forgot",
+    [APP_WINDOWS.PROFILE]: "profile"
 }
 
 const engine = (activeWindow) => {
@@ -60,6 +62,7 @@ const delegateRendering = (activeWindow) => {
     }
     else if(activeWindow === APP_WINDOWS.PROFILE){
         profileRenderingEngine()
+        profileService.showModal();
     }
 }
 

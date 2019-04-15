@@ -73,7 +73,7 @@ const _menuOptions = {
     "Host Session": {handler: () => openHostSession(), children: []},
     "Join Session": {handler: () => openJoinSession(), children: []},
     "Change Username": {handler: () => openChangeUsername(), children: []},
-    "Change Password": {handler: () => profileService.showModal(), children: []}
+    "Change Password": {handler: () => app.switchToWindow(APP_WINDOWS.PROFILE), children: []}
 }
 
 const _menuState = {
