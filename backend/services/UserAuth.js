@@ -74,7 +74,6 @@ class UserAuth {
     // save user to database if unique and no errors
     registerUser(user, cb){
         bcrypt.hash(user.password, saltRounds, function(err, hash) {
-            // Store hash in your password DB.
             user.password = hash
             db.users.createIndex({email : 1}, {unique : true});
             db.users.createIndex({username : 1}, {unique : true});
