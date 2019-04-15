@@ -21,6 +21,14 @@ export const onLogin = () => {
     });
 }
 
+export const onForgot = () => {
+    socketClient.emit('onForgot',{
+        
+        email: document.getElementById('emailForgot').value
+
+    });
+}
+
 export default {
 	onSignUp,
     onLogin

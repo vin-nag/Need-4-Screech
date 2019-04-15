@@ -5,7 +5,8 @@ const APP_WINDOWS = {
     MENU: 4,
     GAME_PLAY: 5,
     OVERWORLD: 6,
-    INSTRUCTIONS: 7
+    INSTRUCTIONS: 7,
+    FORGOT: 8
 }
 
 export default APP_WINDOWS

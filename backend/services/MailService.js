@@ -1,8 +1,10 @@
 const nodemailer = require('nodemailer');
+const db = require('./db')
+const UserAuth = require('./UserAuth')
 
 class MailService {
 
-    transporter() {
+    transporter(recipient, cb) {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -13,9 +15,9 @@ class MailService {
 
         const mailOptions = {
             from: 'team.need4screech@gmail.com',
-            to: 'liamreardon14@gmail.com',
-            subject: 'Sending Email using Node.js',
-            text: 'That was easy!'
+            to: recipient.email,
+            subject: 'Forgot Password',
+            text: 'Your new password is ' + this.tempPassword() + '. Please navigate to Profile > Change Password to change your password.'
         };
 
         transporter.sendMail(mailOptions, function(error, info){

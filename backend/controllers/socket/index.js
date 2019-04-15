@@ -5,6 +5,7 @@ const authController = require("./auth")
 const inputController = require("./input")
 const gameStateController = require("./gameState")
 const assetsController = require("./assets")
+const mailController = require("./mail")
 
 const models = require("../../models/models")
 
@@ -26,6 +27,7 @@ const connectControllers = (socket) => {
     socket.on("test", data => testController(socket, data))
     socket.on("onSignUp", data => authController.onSignUp(socket, data))
     socket.on("onLogin", data => authController.onLogin(socket, data))
+    socket.on("onForgot", data => mailController.onForgot(socket, data))
     socket.on("onKeyDown", data => inputController.onKeyDown(socket, data))
     socket.on("onKeyUp", data => inputController.onKeyUp(socket, data)) 
     socket.on("newSessionID", data => inputController.onNewSession(socket, data))

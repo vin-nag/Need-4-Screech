@@ -18,7 +18,8 @@ const windowToElement = {
     [APP_WINDOWS.MENU]: "menu",
     [APP_WINDOWS.GAME_PLAY]: "gamePlay",
     [APP_WINDOWS.OVERWORLD]: "overworld",
-    [APP_WINDOWS.INSTRUCTIONS]: "instructions"
+    [APP_WINDOWS.INSTRUCTIONS]: "instructions",
+    [APP_WINDOWS.FORGOT]: "forgot",
 }
 
 const engine = (activeWindow) => {

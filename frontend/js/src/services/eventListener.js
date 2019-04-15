@@ -11,8 +11,10 @@ import overworldService from "./overworld"
 export const listen = () => {
     document.getElementById("goToSignup").addEventListener("click", () => app.switchToWindow(APP_WINDOWS.REGISTER))
     document.getElementById("goToLogin").addEventListener("click", () => app.switchToWindow(APP_WINDOWS.LOGIN))
+    document.getElementById("goToForgot").addEventListener("click", () => app.switchToWindow(APP_WINDOWS.FORGOT))
     document.getElementById("onSignUp").addEventListener("click", () => services.onSignUp())
     document.getElementById("onLogin").addEventListener("click", () => services.onLogin())
+    document.getElementById("onForgot").addEventListener("click", () => services.onForgot())
 
     document.getElementById("levelEditorLoadLevel").addEventListener("click", () => {
         domService.showElement("loadLevelModal")
