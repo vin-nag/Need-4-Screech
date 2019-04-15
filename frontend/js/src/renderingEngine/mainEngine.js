@@ -61,7 +61,6 @@ const delegateRendering = (activeWindow) => {
         instructionsRenderingEngine()
     }
     else if(activeWindow === APP_WINDOWS.PROFILE){
-        profileRenderingEngine()
         profileService.showModal();
     }
 }
