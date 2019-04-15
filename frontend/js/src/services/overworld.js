@@ -25,28 +25,26 @@ const getActiveMenuItems = () => {
 
         let levelArray = []
 
-        // if (gamePlay.levelsCompleted[0] && !gamePlay.levelsCompleted[1] && !gamePlay.levelsCompleted[2]) {
-        //     levelArray = ["George Street", "Memorial University"];
-        // }
-        // else if (gamePlay.levelsCompleted[0] && gamePlay.levelsCompleted[1] && !gamePlay.levelsCompleted[2]) {
-        //     levelArray = ["George Street", "Memorial University", "Cape Spear"];
-        // }
-        // else if (gamePlay.levelsCompleted[0] &&
-        //          gamePlay.levelsCompleted[1] &&
-        //          gamePlay.levelsCompleted[2] && 
-        //          !gamePlay.levelsCompleted[3]) {
-        //             levelArray = ["George Street", "Memorial University", "Cape Spear", "Boss Level"];
-        // }
-        // else if (gamePlay.levelsCompleted[0] && gamePlay.levelsCompleted[1] && gamePlay.levelsCompleted[2] && gamePlay.levelsCompleted[3]) {
-        //     levelArray = ["George Street", "Memorial University", "Cape Spear", "Boss Level"];
-        // }
-        // else {
-        //     levelArray = ["George Street"];
-        // }
+        if (gamePlay.levelsCompleted[0] && !gamePlay.levelsCompleted[1] && !gamePlay.levelsCompleted[2]) {
+            levelArray = ["George Street", "Memorial University"];
+        }
+        else if (gamePlay.levelsCompleted[0] && gamePlay.levelsCompleted[1] && !gamePlay.levelsCompleted[2]) {
+            levelArray = ["George Street", "Memorial University", "Cape Spear"];
+        }
+        else if (gamePlay.levelsCompleted[0] &&
+                 gamePlay.levelsCompleted[1] &&
+                 gamePlay.levelsCompleted[2] &&
+                 !gamePlay.levelsCompleted[3]) {
+                    levelArray = ["George Street", "Memorial University", "Cape Spear", "Boss Level"];
+        }
+        else if (gamePlay.levelsCompleted[0] && gamePlay.levelsCompleted[1] && gamePlay.levelsCompleted[2] && gamePlay.levelsCompleted[3]) {
+            levelArray = ["George Street", "Memorial University", "Cape Spear", "Boss Level"];
+        }
+        else {
+            levelArray = ["George Street"];
+        }
 
-        return ["George Street", "Memorial University", "Cape Spear", "Boss Level"];
-        
-        //return levelArray
+        return levelArray
     
     }
 

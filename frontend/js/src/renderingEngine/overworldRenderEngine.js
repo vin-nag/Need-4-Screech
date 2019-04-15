@@ -34,7 +34,7 @@ const engine = (menuItems, selectedItemIndex) => {
             canvasService.draw.text(ctx, menuItems[i], 1050, 160, "30px", color, "Permanent Marker")
         }
         else if (menuItems[i] === "Boss Level") {
-            canvasService.draw.rectangle(ctx, 960, 125, 187, 50, "rgba(0, 0, 0, 0.6)")
+            canvasService.draw.rectangle(ctx, 1070, 660, 175, 50, "rgba(0, 0, 0, 0.6)")
             canvasService.draw.text(ctx, menuItems[i], 1160, 695, "30px", color, "Permanent Marker")
         }
 
