@@ -46,7 +46,7 @@ class UserAuth {
         // bcrypt.compare(data.password, hash).then(function(res) {
            
         // });
-        db.users.find({
+        db.users.findOne({
             username: data.username, password: data.password
         }, function(err, doc) {
             if(err || doc == null) {
