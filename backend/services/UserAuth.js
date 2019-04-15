@@ -101,6 +101,7 @@ class UserAuth {
     }
 
     changePassword(data, cb) {
+        console.log('reached here with: ', data)
         let emptyFields = (data.username === "" || data.password === "" || data.newPass === "" || data.confirmPass === "")
         let incorrectFields = (data.newPass.length < 6 || data.newPass !== data.confirmPass)
 

@@ -18,7 +18,6 @@ export const listen = () => {
     document.getElementById("onForgot").addEventListener("click", () => services.onForgot())
     document.getElementById("onChangePassword").addEventListener("click", () => services.onChangePassword())
 
-
     document.getElementById("levelEditorLoadLevel").addEventListener("click", () => {
         domService.showElement("loadLevelModal")
         socketClient.emit("listLevels", {})
