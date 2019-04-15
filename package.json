@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/moustafaelsisy/COMP4770#readme",
   "dependencies": {
-    "bcrypt": "^3.0.3",
+    "bcrypt": "^3.0.6",
     "bootstrap": "^4.2.1",
     "express": "^4.16.4",
     "mongojs": "^2.6.0",

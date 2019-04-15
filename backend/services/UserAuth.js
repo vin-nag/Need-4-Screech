@@ -1,4 +1,6 @@
 const { db } = require("./db")
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 class UserAuth {
     
@@ -41,7 +43,10 @@ class UserAuth {
 
     // login user if credentials correct
     login(data, cb){
-        db.users.findOne({
+        // bcrypt.compare(data.password, hash).then(function(res) {
+           
+        // });
+        db.users.find({
             username: data.username, password: data.password
         }, function(err, doc) {
             if(err || doc == null) {
@@ -62,23 +67,28 @@ class UserAuth {
 
     // save user to database if unique and no errors
     registerUser(user, cb){
-        db.users.createIndex({email : 1}, {unique : true});
-        db.users.createIndex({username : 1}, {unique : true});
-        db.users.save(user, function(error, savedUser){
-            if (error || !savedUser) { 
-                cb({
-                    success: false,
-                    errors: [error]
-                });
-            }
-            else {
-                cb({
-                    success: true,
-                    errors: []
-                });
-            }
-
+        bcrypt.hash(user.password, saltRounds, function(err, hash) {
+            // Store hash in your password DB.
+            user.password = hash
+            db.users.createIndex({email : 1}, {unique : true});
+            db.users.createIndex({username : 1}, {unique : true});
+            db.users.save(user, function(error, savedUser){
+                if (error || !savedUser) { 
+                    cb({
+                        success: false,
+                        errors: [error]
+                    });
+                }
+                else {
+                    cb({
+                        success: true,
+                        errors: []
+                    });
+                }
+    
+            });
         });
+
 
     }
 
