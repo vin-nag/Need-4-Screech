@@ -194,8 +194,16 @@
         <canvas id="instructionsCanvas" width="1280" height="720"></canvas>
     </div>
 
-    <div id="profile" class="centeredCanvas">
-        <canvas id="profileCanvas" width="1280" height="720"></canvas>
+    <div id="profile" class="centeredModal">
+        <h3 class="nes-text">Change Password</h3>
+        <form>
+            <div class="nes-text">
+                <input id="password" type="password" placeholder="current password" class="nes-input"><br>
+                <input id="newPass" type="password" placeholder="new password" class="nes-input"><br>
+                <input id="confirmPass" type="password" placeholder="confirm password" class="nes-input"><br>
+                <button id="onChangePassword" class="nes-btn is-primary">Confirm</button><br>
+            </div>
+        </form>
     </div>
 
 </body>
