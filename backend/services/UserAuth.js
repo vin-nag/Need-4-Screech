@@ -46,7 +46,6 @@ class UserAuth {
         db.users.findOne({
             username: data.username
         }, function(err, doc) {
-            
             if(err || doc == null) {
                 cb({
                     success: false,
@@ -55,7 +54,6 @@ class UserAuth {
             } 
             else {
                 bcrypt.compare(data.password, doc.password).then(function(res) {
-
                     if (res) {
                         cb({
                             success: true,
@@ -68,12 +66,9 @@ class UserAuth {
                             errors: ["Missing or Incorrect Login Details."]
                         });
                     }
-
                 });
-
             }
         })
-
     }
 
     // save user to database if unique and no errors
