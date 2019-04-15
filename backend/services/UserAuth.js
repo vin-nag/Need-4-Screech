@@ -11,7 +11,7 @@ class UserAuth {
         if (emptyFields) {
             cb({
                 success: false,
-                errors: ["One or more fields are emtpy."]
+                errors: ["One or more fields are empty."]
             })
         }
         else if(incorrectFields){
@@ -99,6 +99,43 @@ class UserAuth {
         let re = /\S+@\S+\.\S+/;
         return re.test(email);
     }
+
+    changePassword(data, cb) {
+        let emptyFields = (data.username === "" || data.password === "" || data.newPass === "" || data.confirmPass === "")
+        let incorrectFields = (data.newPass.length < 6 || data.newPass !== data.confirmPass)
+
+        if (emptyFields) {
+            cb({
+                success: false,
+                errors: ["One or more fields are empty."]
+            })
+        }
+        else if (incorrectFields) {
+            let errorArray = []
+            if (data.newPass.length < 6) {
+                errorArray.push("Password must be at least 6 characters.")
+            }
+            if (data.newPass !== data.confirmPass) {
+                errorArray.push("Passwords do not match.")
+            }
+            cb({
+                success: false,
+                errors: errorArray
+            })
+        }
+        else {
+            db.users.updateOne(
+                { username: data.username },
+                { $set: { password: bcrypt.hash(data.newPass, 10, cb)} }
+            );
+            cb({
+                success: true,
+                errors: []
+            })
+        }
+
+    }
+
 }
 
 module.exports = new UserAuth()

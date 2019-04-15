@@ -6,7 +6,8 @@ const APP_WINDOWS = {
     GAME_PLAY: 5,
     OVERWORLD: 6,
     INSTRUCTIONS: 7,
-    FORGOT: 8
+    FORGOT: 8,
+    PROFILE: 9
 }
 
 export default APP_WINDOWS
