@@ -124,13 +124,23 @@ class UserAuth {
             })
         }
         else {
-            db.users.updateOne(
-                { username: data.username },
-                { $set: { password: bcrypt.hash(data.newPass, 10, cb)} }
-            );
-            cb({
-                success: true,
-                errors: []
+            const hash = bcrypt.hash(data.newPass, 10, function (err, hash) {
+                if (!err){
+                    db.users.update(
+                        { username: data.username },
+                        { $set: { password: hash } }
+                    );
+                    cb({
+                        success: true,
+                        errors: []
+                    })
+                }
+                else {
+                    cb({
+                        success: false,
+                        errors: ['error connecting db']
+                    })
+                }
             })
         }
     }
