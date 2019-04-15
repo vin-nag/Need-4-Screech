@@ -31,9 +31,14 @@ const getActiveMenuItems = () => {
         else if (gamePlay.levelsCompleted[0] && gamePlay.levelsCompleted[1] && !gamePlay.levelsCompleted[2]) {
             levelArray = ["George Street", "Memorial University", "Cape Spear"];
         }
-        else if (gamePlay.levelsCompleted[0] && gamePlay.levelsCompleted[1] && gamePlay.levelsCompleted[2]) {
-            levelArray = ["George Street", "Memorial University", "Cape Spear"];
-            // show boss level
+        else if (gamePlay.levelsCompleted[0] &&
+                 gamePlay.levelsCompleted[1] &&
+                 gamePlay.levelsCompleted[2] && 
+                 !gamePlay.levelsCompleted[3]) {
+                    levelArray = ["George Street", "Memorial University", "Cape Spear", "Boss Level"];
+        }
+        else if (gamePlay.levelsCompleted[0] && gamePlay.levelsCompleted[1] && gamePlay.levelsCompleted[2] && gamePlay.levelsCompleted[3]) {
+            levelArray = ["George Street", "Memorial University", "Cape Spear", "Boss Level"];
         }
         else {
             levelArray = ["George Street"];
@@ -99,6 +104,12 @@ const _menuOptions = {
         handler: () => {
             app.switchToWindow(APP_WINDOWS.GAME_PLAY)
             gamePlay.setCurrentLevel(CAMPAIGN_LEVELS["Cape Spear"])
+        }
+    },
+    "Boss Level": {
+        handler: () => {
+            app.switchToWindow(APP_WINDOWS.GAME_PLAY)
+            gamePlay.setCurrentLevel(CAMPAIGN_LEVELS["Boss Level"])
         }
     }
 }
