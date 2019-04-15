@@ -128,18 +128,23 @@ class UserAuth {
                 if (!err){
                     db.users.update(
                         { username: data.username },
-                        { $set: { password: hash } }
+                        { $set: { password: hash } },
+                        function (err, result) {
+                            if (err){
+                                cb({
+                                    success: false,
+                                    errors: ['error connecting db']
+                                })
+                            }
+                            else {
+                                cb({
+                                    success: true,
+                                    errors: []
+                                })
+
+                            }
+                        }
                     );
-                    cb({
-                        success: true,
-                        errors: []
-                    })
-                }
-                else {
-                    cb({
-                        success: false,
-                        errors: ['error connecting db']
-                    })
                 }
             })
         }
@@ -150,7 +155,22 @@ class UserAuth {
             if (!err){
                 db.users.update(
                     {email: email},
-                    {$set: {password: hash}}
+                    {$set: {password: hash}},
+                    function (err, result) {
+                        if (err){
+                            cb({
+                                success: false,
+                                errors: ["That email does not exist"]
+                            })
+                        }
+                        else {
+                            cb({
+                                success: true,
+                                errors: []
+                            })
+                        }
+                        
+                    }
                 );
             }
         })
