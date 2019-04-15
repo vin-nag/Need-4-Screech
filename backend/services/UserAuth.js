@@ -135,15 +135,18 @@ class UserAuth {
         }
     }
 
-    tempPassword(email, tempPass) {
-        db.users.updateOne(
-            { email: email },
-            { $set: { password: bcrypt.hash(tempPass, 10, cb)} }
-        );
-        cb({
-            success: true,
-            errors: []
-        })
+    tempPassword(recipEmail, tempPass) {
+        bcrypt.hash(tempPass, saltRounds, function(err, hash) {
+            db.users.updateOne(
+                { email: recipEmail },
+                { $set: { password: hash} }
+            );
+            cb({
+                success: true,
+                errors: []
+            })
+        });
+
     }
 
 }
