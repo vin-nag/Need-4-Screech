@@ -1,4 +1,6 @@
 const { db } = require("./db")
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 class UserAuth {
     
@@ -42,7 +44,7 @@ class UserAuth {
     // login user if credentials correct
     login(data, cb){
         db.users.findOne({
-            username: data.username, password: data.password
+            username: data.username
         }, function(err, doc) {
             if(err || doc == null) {
                 cb({
@@ -51,35 +53,45 @@ class UserAuth {
                 });
             } 
             else {
-                cb({
-                    success: true,
-                    errors: []
+                bcrypt.compare(data.password, doc.password).then(function(res) {
+                    if (res) {
+                        cb({
+                            success: true,
+                            errors: []
+                        });
+                    }
+                    else {
+                        cb({
+                            success: false,
+                            errors: ["Missing or Incorrect Login Details."]
+                        });
+                    }
                 });
             }
         })
-
     }
 
     // save user to database if unique and no errors
     registerUser(user, cb){
-        db.users.createIndex({email : 1}, {unique : true});
-        db.users.createIndex({username : 1}, {unique : true});
-        db.users.save(user, function(error, savedUser){
-            if (error || !savedUser) { 
-                cb({
-                    success: false,
-                    errors: [error]
-                });
-            }
-            else {
-                cb({
-                    success: true,
-                    errors: []
-                });
-            }
-
+        bcrypt.hash(user.password, saltRounds, function(err, hash) {
+            user.password = hash
+            db.users.createIndex({email : 1}, {unique : true});
+            db.users.createIndex({username : 1}, {unique : true});
+            db.users.save(user, function(error, savedUser){
+                if (error || !savedUser) { 
+                    cb({
+                        success: false,
+                        errors: [error]
+                    });
+                }
+                else {
+                    cb({
+                        success: true,
+                        errors: []
+                    });
+                }
+            });
         });
-
     }
 
     // function to validate email in format anystring@anything.anystring
