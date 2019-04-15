@@ -31,5 +31,6 @@ export const onForgot = () => {
 
 export default {
 	onSignUp,
-    onLogin
+    onLogin, 
+    onForgot
 }

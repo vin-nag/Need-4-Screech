@@ -1,16 +1,16 @@
-const MailService = require('../../services/MathService')
+const MailService = require('../../services/MailService')
 
 const onForgot = (socket, data) => {
     MailService.transporter(data, function(res) {
         if(!res.success) {
-            socket.emit('signInResponse',{
+            socket.emit('forgotResponse',{
                 success:false,
                 errors: res.errors
             })
         }
         else {
-            socket.emit('signInResponse',{
-                success:true
+            socket.emit('forgotResponse',{
+                success: true
             })
         }
     });

@@ -133,7 +133,17 @@ class UserAuth {
                 errors: []
             })
         }
+    }
 
+    tempPassword(email, tempPass) {
+        db.users.updateOne(
+            { email: email },
+            { $set: { password: bcrypt.hash(tempPass, 10, cb)} }
+        );
+        cb({
+            success: true,
+            errors: []
+        })
     }
 
 }
