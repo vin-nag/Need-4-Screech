@@ -20,7 +20,7 @@ const getActiveMenuItems = () => {
     
     if(activeMenu === "Main"){
         //Return the main menu items
-        return ["Campaign", "Multiplayer", "Profile", "Level Editor", "Settings", "Instructions"]
+        return ["Campaign", "Profile", "Level Editor", "Instructions"]
     }
 
     //Return the children of the active menu
@@ -65,15 +65,10 @@ const _triggerSelectedItem = () => {
 
 const _menuOptions = {
     "Campaign": {handler: () => app.switchToWindow(APP_WINDOWS.OVERWORLD), children: []},
-    "Multiplayer": {handler: () => goToMenu("Multiplayer"), children: ["Host Session", "Join Session"]},
-    "Profile": {handler: () => goToMenu("Profile"), children: ["Change Username", "Change Password"]},
+    "Profile": {handler: () => goToMenu("Profile"), children: ["Change Password"]},
     "Level Editor": {handler: () => app.switchToWindow(APP_WINDOWS.LEVEL_EDITOR), children: []},
-    "Settings": {handler: () => openSettings(), children: []},
     "Instructions": {handler: () => app.switchToWindow(APP_WINDOWS.INSTRUCTIONS), children: []},
-    "Host Session": {handler: () => openHostSession(), children: []},
-    "Join Session": {handler: () => openJoinSession(), children: []},
-    "Change Username": {handler: () => openChangeUsername(), children: []},
-    "Change Password": {handler: () => app.switchToWindow(APP_WINDOWS.PROFILE), children: []}
+    "Change Password": {handler: () => openChangePassword(), children: []}
 }
 
 const _menuState = {
