@@ -89,16 +89,19 @@ class GamePlay {
         if (state === "complete") {
             domService.showElement("completeLevelModal")
             if (this.currentLevel === CAMPAIGN_LEVELS["George Street"]) {
-                this.levelsCompleted = [true, false, false]
+                this.levelsCompleted = [true, false, false, false]
             }
             else if (this.currentLevel === CAMPAIGN_LEVELS["Memorial University"]) {
-                this.levelsCompleted = [true, true, false]
+                this.levelsCompleted = [true, true, false, false]
             }
             else if (this.currentLevel === CAMPAIGN_LEVELS["Cape Spear"]) {
-                this.levelsCompleted = [true, true, true]
+                this.levelsCompleted = [true, true, true, false]
+            }
+            else if (this.currentLevel === CAMPAIGN_LEVELS["Boss Level"]){
+                this.levelsCompleted = [true, true, true, true]
             }
 
-            console.log(this.levelsCompleted)
+            //console.log(this.levelsCompleted)
         }
         else if (state === "failed") {
             domService.showElement("failedLevelModal")

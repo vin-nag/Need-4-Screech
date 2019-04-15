@@ -10,6 +10,9 @@ const engine = (menuItems, selectedItemIndex) => {
     let bg_img = assetManager.getAnimationImage(bg_name);
     let title_img = assetManager.getAnimationImage(title);
     const sub_title_color = "#000"
+    const completed_text1 = `Congrats! you saved Tibb's Eve`
+    const completed_text2 = `Now select any level to replay b'y.`
+
 
     ctx.setTransform(1,0,0,1,0,0); //reset the transform matrix as it is cumulative
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -37,6 +40,12 @@ const engine = (menuItems, selectedItemIndex) => {
             canvasService.draw.rectangle(ctx, 1070, 660, 175, 50, "rgba(0, 0, 0, 0.6)")
             canvasService.draw.text(ctx, menuItems[i], 1160, 695, "30px", color, "Permanent Marker")
         }
+        else if (menuItems[i] === "Completed") {
+            canvasService.draw.rectangle(ctx, 500, 335, 400, 60, "rgba(0, 0, 0, 0.6)")
+            canvasService.draw.text(ctx, completed_text1, 700, 360, "22px", color, "Permanent Marker")
+            canvasService.draw.text(ctx, completed_text2, 700, 390, "22px", color, "Permanent Marker")
+        }
+
 
     }
 }

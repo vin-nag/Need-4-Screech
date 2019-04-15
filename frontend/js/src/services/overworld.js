@@ -25,10 +25,10 @@ const getActiveMenuItems = () => {
 
         let levelArray = []
 
-        if (gamePlay.levelsCompleted[0] && !gamePlay.levelsCompleted[1] && !gamePlay.levelsCompleted[2]) {
+        if (gamePlay.levelsCompleted[0] && !gamePlay.levelsCompleted[1] && !gamePlay.levelsCompleted[2] && !gamePlay.levelsCompleted[3]) {
             levelArray = ["George Street", "Memorial University"];
         }
-        else if (gamePlay.levelsCompleted[0] && gamePlay.levelsCompleted[1] && !gamePlay.levelsCompleted[2]) {
+        else if (gamePlay.levelsCompleted[0] && gamePlay.levelsCompleted[1] && !gamePlay.levelsCompleted[2] && !gamePlay.levelsCompleted[3]) {
             levelArray = ["George Street", "Memorial University", "Cape Spear"];
         }
         else if (gamePlay.levelsCompleted[0] &&
@@ -38,14 +38,14 @@ const getActiveMenuItems = () => {
                     levelArray = ["George Street", "Memorial University", "Cape Spear", "Boss Level"];
         }
         else if (gamePlay.levelsCompleted[0] && gamePlay.levelsCompleted[1] && gamePlay.levelsCompleted[2] && gamePlay.levelsCompleted[3]) {
-            levelArray = ["George Street", "Memorial University", "Cape Spear", "Boss Level"];
+            levelArray = ["George Street", "Memorial University", "Cape Spear", "Boss Level", "Completed"];
         }
         else {
             levelArray = ["George Street"];
         }
 
         return levelArray
-    
+
     }
 
     //Return the children of the active menu
