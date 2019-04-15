@@ -29,8 +29,19 @@ export const onForgot = () => {
     });
 }
 
+export const onChangePassword = () => {
+    socketClient.emit('onChangePassword',{
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value,
+        newPass: document.getElementById('newPass').value,
+        confirmPass: document.getElementById('confirmPass').value
+    });
+}
+
+
 export default {
 	onSignUp,
     onLogin, 
-    onForgot
+    onForgot,
+    onChangePassword
 }

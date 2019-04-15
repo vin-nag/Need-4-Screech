@@ -45,9 +45,9 @@ const onLogin = (socket, data) => {
     });
 }
 
-const onPasswordReset = (socket, data) => {
+const onChangePassword = (socket, data) => {
     user = models.change(data.username, data.password, data.newPass, data.confirmPass)
-    UserAuth.changePassword(data, function(res) {
+    UserAuth.changePassword(user, function(res) {
         if(!res.success) {
             socket.emit('changePasswordResponse',{
                 success:false,
@@ -65,5 +65,5 @@ const onPasswordReset = (socket, data) => {
 module.exports = {
     onSignUp,
     onLogin,
-    onPasswordReset
+    onChangePassword
 }

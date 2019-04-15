@@ -27,6 +27,7 @@ const connectControllers = (socket) => {
     socket.on("test", data => testController(socket, data))
     socket.on("onSignUp", data => authController.onSignUp(socket, data))
     socket.on("onLogin", data => authController.onLogin(socket, data))
+    socket.on("onChangePassword", data => authController.onChangePassword(socket, data))
     socket.on("onForgot", data => mailController.onForgot(socket, data))
     socket.on("onKeyDown", data => inputController.onKeyDown(socket, data))
     socket.on("onKeyUp", data => inputController.onKeyUp(socket, data)) 
