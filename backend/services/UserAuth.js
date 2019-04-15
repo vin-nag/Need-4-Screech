@@ -91,11 +91,8 @@ class UserAuth {
                         errors: []
                     });
                 }
-    
             });
         });
-
-
     }
 
     // function to validate email in format anystring@anything.anystring
