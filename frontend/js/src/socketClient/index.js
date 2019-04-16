@@ -48,6 +48,27 @@ export const listen = () => {
         }
     });
 
+    socket.on('forgotResponse', (data) => {
+        if(data.success){
+            alert("Success! Check your email for new temporary password.")
+        } 
+        else{
+            alert(data.errors[0]);
+        }
+    });
+
+    socket.on('changePasswordResponse', (data) => {
+        if(data.success){
+            alert("Success! your password has been changed. Hit Escape to go to Main Menu.")
+        }
+        else{
+            alert(data.errors[0]);
+        }
+    });
+
+
+
+
 
 
     // ****************************** Level Editor Listeners ******************************

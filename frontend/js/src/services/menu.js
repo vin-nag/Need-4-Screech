@@ -1,5 +1,6 @@
 import app from "../app"
 import APP_WINDOWS from "../../enums/app_windows"
+import profileService from "./profile"
 
 /**
  * Shows the menu items for the given menu label

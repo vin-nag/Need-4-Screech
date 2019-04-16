@@ -11,7 +11,7 @@ class UserAuth {
         if (emptyFields) {
             cb({
                 success: false,
-                errors: ["One or more fields are emtpy."]
+                errors: ["One or more fields are empty."]
             })
         }
         else if(incorrectFields){
@@ -98,6 +98,83 @@ class UserAuth {
     validateEmail(email){
         let re = /\S+@\S+\.\S+/;
         return re.test(email);
+    }
+
+    changePassword(data, cb) {
+        console.log('reached here with: ', data)
+        let emptyFields = (data.username === "" || data.password === "" || data.newPass === "" || data.confirmPass === "")
+        let incorrectFields = (data.newPass.length < 6 || data.newPass !== data.confirmPass)
+
+        if (emptyFields) {
+            cb({
+                success: false,
+                errors: ["One or more fields are empty."]
+            })
+        }
+        else if (incorrectFields) {
+            let errorArray = []
+            if (data.newPass.length < 6) {
+                errorArray.push("Password must be at least 6 characters.")
+            }
+            if (data.newPass !== data.confirmPass) {
+                errorArray.push("Passwords do not match.")
+            }
+            cb({
+                success: false,
+                errors: errorArray
+            })
+        }
+        else {
+            const hash = bcrypt.hash(data.newPass, 10, function (err, hash) {
+                if (!err){
+                    db.users.update(
+                        { username: data.username },
+                        { $set: { password: hash } },
+                        function (err, result) {
+                            if (err){
+                                cb({
+                                    success: false,
+                                    errors: ['error connecting db']
+                                })
+                            }
+                            else {
+                                cb({
+                                    success: true,
+                                    errors: []
+                                })
+
+                            }
+                        }
+                    );
+                }
+            })
+        }
+    }
+
+    tempPassword(email, tempPass, cb) {
+        const hash = bcrypt.hash(tempPass, 10, function(err, hash) {
+            if (!err){
+                db.users.update(
+                    {email: email},
+                    {$set: {password: hash}},
+                    function (err, result) {
+                        if (err){
+                            cb({
+                                success: false,
+                                errors: ["That email does not exist"]
+                            })
+                        }
+                        else {
+                            cb({
+                                success: true,
+                                errors: []
+                            })
+                        }
+                        
+                    }
+                );
+            }
+        })
     }
 }
 

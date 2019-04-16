@@ -48,6 +48,8 @@
                     
                         <span>Don't have an account?</span>
                         <a href="#" id="goToSignup">Sign Up Now</a>
+                        <hr>
+                        <a href="#" id="goToForgot">Forgot Password?</a>
                     </div>
                 </div>
 
@@ -92,6 +94,42 @@
                         
                         <span>Already have an account?</span>
                         <a href="#" id="goToLogin">Login</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="forgot" style="display: none;">
+                <div class="fullscreen-bg">
+                    <div class="fullscreen-bg">
+                        <video loop muted autoplay class="fullscreen-bg__video">
+                            <source src="assets/video/City.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="title" style="margin:0 auto;">
+                        <img src="assets/images/Need-4-Screech.png">
+                    </div>
+                    <div class="crush">
+                        <img src="assets/images/crush.png" height="250px" style="transform:rotate(340deg);">
+                    </div>
+                    <div class="screech">
+                        <img src="assets/images/screech.png" height="250px" style="transform:rotate(19deg);">
+                    </div>
+                    <div class="fishnchips">
+                        <img src="assets/images/blue_star.png" height="200px">
+                    </div>
+                    <div class="purity">
+                        <img src="assets/images/purity.png" height="200px">
+                    </div>
+                    <div class="fries">
+                        <img src="assets/images/fries.png" height="200px">
+                    </div>
+                </div>
+                <div class="nes-container">
+                    <div class="nes-field">
+                        <input id="emailForgot" type="text" placeholder="enter email" class="nes-input"><br>
+                        <button id="onForgot" class="nes-btn is-primary">Send</button><br>
+                        <hr>
+                        <a href="#" id="goToLogin2">Back to Login</a>
                     </div>
                 </div>
             </div>
@@ -154,6 +192,19 @@
 
     <div id="instructions" class="centeredCanvas">
         <canvas id="instructionsCanvas" width="1280" height="720"></canvas>
+    </div>
+
+    <div id="profile" class="centeredCanvas">
+        <h3 class="nes-text">Change Password</h3>
+        <form>
+            <div class="nes-text">
+                <input id="username" type="text" placeholder="username" class="nes-input"><br>
+                <input id="password" type="password" placeholder="current password" class="nes-input"><br>
+                <input id="newPass" type="password" placeholder="new password" class="nes-input"><br>
+                <input id="confirmPass" type="password" placeholder="confirm password" class="nes-input"><br>
+                <button id="onChangePassword" class="nes-btn is-primary">Confirm</button><br>
+            </div>
+        </form>
     </div>
 
 </body>
