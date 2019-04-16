@@ -68,7 +68,7 @@ const _menuOptions = {
     "Profile": {handler: () => goToMenu("Profile"), children: ["Change Password"]},
     "Level Editor": {handler: () => app.switchToWindow(APP_WINDOWS.LEVEL_EDITOR), children: []},
     "Instructions": {handler: () => app.switchToWindow(APP_WINDOWS.INSTRUCTIONS), children: []},
-    "Change Password": {handler: () => openChangePassword(), children: []}
+    "Change Password": {handler: () => app.switchToWindow(APP_WINDOWS.PROFILE), children: []}
 }
 
 const _menuState = {

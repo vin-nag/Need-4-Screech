@@ -20,7 +20,6 @@ class DomService {
             const option = new Option(labels[i], values[i])
             selectMenu.options[i] = option
         }
-
     }
 }
 
