@@ -31,7 +31,7 @@ export const listen = () => {
         else{
             let errMsg = ""
             for (let i in data.errors){
-                errMsg += data.errors[i] + " \n"
+                errMsg += JSON.stringify(data.errors[i]) + " \n"
             }
             alert(errMsg)
         }

@@ -118,15 +118,18 @@ class GameEngine {
             return
         }
 
-        this.entity_manager.addModel.score();
-        this.entity_manager.addModel.screech_remaining(15);
+        if(!this.entity_manager.getEntitiesByTag("score").length){
+            this.entity_manager.addModel.score();
+            this.entity_manager.addModel.screech_remaining(15);
+            const numOfDeliviers = this.entity_manager.getEntitiesByTag("checkpoint").length
+            this.entity_manager.addModel.deliveries_left(numOfDeliviers);
+        }
 
-        this.entity_manager.addModel.bar_timer();
-        this.entity_manager.addModel.bar_health();
-        this.entity_manager.addModel.bar_screech();
-
-        const numOfDeliviers = this.entity_manager.getEntitiesByTag("checkpoint").length
-        this.entity_manager.addModel.deliveries_left(numOfDeliviers);
+        if(!this.entity_manager.getEntitiesByTag("bar").length){
+            this.entity_manager.addModel.bar_timer();
+            this.entity_manager.addModel.bar_health();
+            this.entity_manager.addModel.bar_screech();
+        }
 
         this.entity_manager.update()
     }
