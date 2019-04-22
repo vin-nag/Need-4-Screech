@@ -20,17 +20,17 @@
   "homepage": "https://github.com/moustafaelsisy/COMP4770#readme",
   "dependencies": {
     "bcrypt": "^3.0.6",
-    "bootstrap": "^4.2.1",
+    "bootstrap": "^4.3.1",
     "express": "^4.16.4",
     "mongojs": "^2.6.0",
-    "nes.css": "^2.1.0",
-    "nodemailer": "^6.1.0",
+    "nes.css": "^2.1.1",
+    "nodemailer": "^6.1.1",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "webpack": "^4.29.4",
-    "webpack-cli": "^3.2.1"
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.1"
   }
 }
