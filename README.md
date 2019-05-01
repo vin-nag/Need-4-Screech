@@ -1,11 +1,11 @@
-# COMP4770
+# Need 4 Screech
 
 ## Getting Started
 
 Make sure you have [node and npm installed](https://nodejs.org)
 
 1. Clone this repository
-2. `cd COMP4770`
+2. `cd Need-4-Screech`
 3. `npm install`
 4. `cp config-template.json config.json`
 5. Set up your database (see the following subsection)
