@@ -4,7 +4,7 @@ A Newfoundland-inspired 2D Platformer Game built using JavaScript, HTML/CSS, Nod
 Find the trailer video 
 
 
-[![here](https://img.youtube.com/vi/PUMXhMushR0/1.jpg)]](https://www.youtube.com/watch?v=PUMXhMushR0)
+[[here](https://img.youtube.com/vi/PUMXhMushR0/2.jpg)]](https://www.youtube.com/watch?v=PUMXhMushR0)
 
 
 
