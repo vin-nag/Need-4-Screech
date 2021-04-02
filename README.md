@@ -3,8 +3,7 @@
 A Newfoundland-inspired 2D Platformer Game built using JavaScript, HTML/CSS, Node.js and MongoDB.
 Find the trailer video 
 
-
-[![here](https://img.youtube.com/vi/PUMXhMushR0/2.jpg)]](https://www.youtube.com/watch?v=PUMXhMushR0)
+[!(https://img.youtube.com/vi/PUMXhMushR0/2.jpg)](https://www.youtube.com/watch?v=PUMXhMushR0)
 
 
 
