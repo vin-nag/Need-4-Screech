@@ -1,5 +1,10 @@
 # Need 4 Screech
 
+A Newfoundland-inspired 2D Platformer Game built using JavaScript, HTML/CSS, Node.js and MongoDB as part of the group project course at Memorial University.
+Find the trailer video [here](https://www.youtube.com/watch?v=PUMXhMushR0)
+
+
+
 ## Getting Started
 
 Make sure you have [node and npm installed](https://nodejs.org)
